@@ -1,0 +1,1454 @@
+<!doctype html>
+<html lang="th" data-theme="paper">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inkfold — โต๊ะเขียนนิยาย</title>
+<meta name="description" content="Inkfold — เครื่องมือช่วยเขียนนิยาย วางโครงเรื่อง เก็บข้อมูลตัวละคร และส่งออกต้นฉบับ ทำงานออฟไลน์ ข้อมูลอยู่ในเครื่องของคุณ">
+<meta name="theme-color" content="#5E7A6C">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&family=Noto+Serif+Thai:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+:root{--display:'Cormorant Garamond','Noto Serif Thai',Georgia,serif;--r:14px;--r-sm:9px;--ui:'IBM Plex Sans Thai','Leelawadee UI','Noto Sans Thai',Tahoma,system-ui,sans-serif;--serif:'Noto Serif Thai','Sarabun','Leelawadee UI',Georgia,serif}
+:root,[data-theme=paper]{--bg:#ECE6DC;--bg2:#E4DDD1;--surface:#F5F1EA;--surface2:#EDE7DD;--paper:#FAF7F1;--line:#D7CEC0;--line2:#E3DBCE;--text:#3B3732;--muted:#655C52;--faint:#73695E;--accent:#5B7A6C;--accent-2:#4A675A;--accent-ink:#fff;--accent-soft:#DCE5DE;--warm:#BC9168;--warm-ink:#85592F;--warm-soft:#EEDFCD;--danger:#A65A4E;--danger-soft:#F2DED9;--shadow:0 1px 2px rgba(70,55,40,.05),0 6px 20px rgba(70,55,40,.07);--grid:rgba(90,75,60,.11)}
+[data-theme=matcha]{--bg:#E1E6DD;--bg2:#D7DED2;--surface:#EEF1EA;--surface2:#E5EAE0;--paper:#F5F7F2;--line:#C8D1C2;--line2:#D8DFD2;--text:#35403A;--muted:#56625B;--faint:#64706A;--accent:#577A66;--accent-2:#476553;--accent-ink:#fff;--accent-soft:#D3E0D6;--warm:#B39260;--warm-ink:#7A5C2E;--warm-soft:#E8E0CC;--danger:#A65A4E;--danger-soft:#EED9D4;--shadow:0 1px 2px rgba(40,60,45,.05),0 6px 20px rgba(40,60,45,.07);--grid:rgba(50,80,60,.11)}
+[data-theme=dusk]{--bg:#2F3238;--bg2:#2A2C32;--surface:#383B42;--surface2:#40444C;--paper:#3B3E46;--line:#50545D;--line2:#464A53;--text:#E3DED5;--muted:#C2BBB0;--faint:#ACA59A;--accent:#98B4A5;--accent-2:#AECAB9;--accent-ink:#1F2B26;--accent-soft:#3F4B46;--warm:#D3AD83;--warm-ink:#D3AD83;--warm-soft:#4B4339;--danger:#E0978B;--danger-soft:#503D3A;--shadow:0 1px 2px rgba(0,0,0,.18),0 8px 24px rgba(0,0,0,.16);--grid:rgba(255,255,255,.065)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--ui);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+button:disabled{opacity:.35;cursor:default}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2,h3{font-family:var(--serif);font-weight:700;margin:0;line-height:1.3}
+.hidden{display:none!important}
+svg.i{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;background:var(--surface2);border:1px solid var(--line2);font-weight:500;font-size:14px;white-space:nowrap;transition:.15s}
+.btn:hover{border-color:var(--line);filter:brightness(.98)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{background:var(--accent-2)}
+.btn.ghost{background:transparent;border-color:transparent}
+.btn.ghost:hover{background:var(--surface2)}
+.btn.sm{padding:5px 11px;font-size:13px}
+.btn.danger{color:var(--danger)}
+.btn.danger:hover{background:var(--danger-soft)}
+.icon-btn{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:10px;color:var(--muted);transition:.15s}
+.icon-btn:hover{background:var(--surface2);color:var(--text)}
+.icon-btn.on{background:var(--accent-soft);color:var(--accent-2)}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:2px 10px;border-radius:999px;font-size:12px;background:var(--surface2);color:var(--muted);border:1px solid var(--line2);white-space:nowrap}
+.chip.accent{background:var(--accent-soft);color:var(--accent-2);border-color:transparent}
+.chip.warm{background:var(--warm-soft);color:var(--warm-ink);border-color:transparent}
+button.chip{cursor:pointer}
+.chip.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.field{display:flex;flex-direction:column;gap:6px}
+.field>label,.lbl{font-size:12px;font-weight:500;letter-spacing:.02em;color:var(--muted)}
+.in,textarea.in,select.in{width:100%;background:var(--paper);border:1px solid var(--line2);border-radius:var(--r-sm);padding:9px 12px;outline:none;transition:border .15s,box-shadow .15s}
+.in:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+textarea.in{resize:vertical;min-height:90px;line-height:1.65}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:var(--surface);border:1px solid var(--line2);border-radius:var(--r);box-shadow:var(--shadow)}
+.muted{color:var(--muted)}
+.empty{padding:40px 20px;text-align:center;color:var(--muted)}
+.empty .big{font-family:var(--serif);font-size:20px;color:var(--text);margin-bottom:6px}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:var(--line);border-radius:10px;border:3px solid transparent;background-clip:content-box}
+.banner{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:var(--r);background:var(--warm-soft);color:var(--text);margin-bottom:20px;flex-wrap:wrap;font-size:14px}
+.banner .grow{flex:1;min-width:200px}
+.banner b{color:var(--warm-ink)}
+
+/* top */
+.top{height:60px;display:flex;align-items:center;gap:12px;padding:0 20px;border-bottom:1px solid var(--line2);background:var(--surface)}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-weight:700;font-size:19px;color:var(--accent-2)}
+.brand .logo{width:32px;height:32px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center}
+.top .spacer{flex:1}
+.themes{display:flex;gap:6px;padding:4px;border-radius:999px;background:var(--surface2);border:1px solid var(--line2)}
+.themes button{width:22px;height:22px;border-radius:50%;border:2px solid transparent}
+.themes button.on{border-color:var(--accent)}
+.saved{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.saved .dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.saved.busy .dot{background:var(--warm)}
+.ntitle{font-family:var(--serif);font-weight:700;font-size:17px;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vsep{width:1px;height:22px;background:var(--line)}
+
+/* library */
+.lib{max-width:1180px;margin:0 auto;padding:40px 28px 80px}
+.lib-head{display:flex;align-items:flex-end;gap:16px;margin-bottom:28px;flex-wrap:wrap}
+.lib-head h1{font-size:34px}
+.lib-head p{margin:4px 0 0;color:var(--muted)}
+.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px}
+.ncard{position:relative;overflow:hidden;cursor:pointer;transition:transform .18s,box-shadow .18s;display:flex;flex-direction:column}
+.ncard:hover{transform:translateY(-3px)}
+.ncard .cover{height:96px;position:relative}
+.ncard .cover.img{height:150px}
+.ncard .cover img{width:100%;height:100%;object-fit:cover;display:block}
+.ncard .cover span{position:absolute;left:18px;bottom:-22px;width:46px;height:58px;border-radius:6px 10px 10px 6px;background:var(--paper);box-shadow:var(--shadow);display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:20px}
+.ncard .nbody{padding:32px 18px 16px;flex:1;display:flex;flex-direction:column;gap:6px}
+.ncard .cover.img~.nbody{padding-top:16px}
+.ncard h3{font-size:19px}
+.ncard .syn{color:var(--muted);font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:42px}
+.ncard .meta{display:flex;gap:14px;font-size:12px;color:var(--faint);border-top:1px solid var(--line2);padding-top:10px;margin-top:6px}
+.ncard .menu{position:absolute;top:10px;right:10px;display:flex;gap:4px;opacity:0;transition:.15s}
+.ncard:hover .menu,.ncard:focus-within .menu{opacity:1}
+.ncard .menu .icon-btn{background:rgba(255,255,255,.85);color:#4a443d}
+.newcard{border:2px dashed var(--line);border-radius:var(--r);display:grid;place-items:center;min-height:250px;color:var(--muted);cursor:pointer;transition:.15s;background:transparent}
+.newcard:hover{border-color:var(--accent);color:var(--accent-2);background:var(--surface)}
+.foot{margin-top:40px;text-align:center;font-size:12.5px;color:var(--faint)}
+
+/* shell */
+.shell{height:100vh;display:flex;flex-direction:column}
+.body{flex:1;display:flex;min-height:0}
+.nav{width:228px;flex:none;border-right:1px solid var(--line2);background:var(--bg2);padding:16px 12px;display:flex;flex-direction:column;gap:2px;overflow:auto;transition:width .2s}
+.nav .nlabel{font-size:11px;letter-spacing:.08em;color:var(--faint);padding:4px 12px 8px;font-weight:600}
+.nav a{display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:11px;color:var(--muted);cursor:pointer;font-size:14.5px;transition:.15s;white-space:nowrap}
+.nav a:hover{background:var(--surface2);color:var(--text)}
+.nav a.on{background:var(--surface);color:var(--accent-2);font-weight:600;box-shadow:var(--shadow)}
+.nav a .cnt{margin-left:auto;font-size:12px;color:var(--faint);font-weight:400}
+.nav .grow{flex:1}
+.shell.collapsed .nav{width:64px}
+.shell.collapsed .nav .txt,.shell.collapsed .nav .cnt,.shell.collapsed .nav .nlabel{display:none}
+.main{flex:1;min-width:0;overflow:auto;position:relative}
+.page{max-width:1000px;margin:0 auto;padding:32px 32px 80px}
+.page-h{display:flex;align-items:center;gap:12px;margin-bottom:22px;flex-wrap:wrap}
+.page-h h2{font-size:26px}
+.page-h p{margin:2px 0 0;color:var(--muted);font-size:14px}
+
+/* split list */
+.split{display:flex;height:100%}
+.list{width:290px;flex:none;border-right:1px solid var(--line2);display:flex;flex-direction:column;background:var(--bg)}
+.list-head{padding:16px 16px 10px;display:flex;align-items:center;gap:8px}
+.list-head .t{font-weight:600;font-size:13px;letter-spacing:.04em;color:var(--muted);flex:1}
+.list-tools{padding:0 16px 10px;display:flex;flex-direction:column;gap:8px}
+.folders{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.folders .chip{cursor:pointer}
+.folders .tl-lbl{font-size:11.5px;color:var(--faint)}
+.search{position:relative}
+.search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--faint)}
+.search input{padding-left:34px}
+.list-items{flex:1;overflow:auto;padding:4px 10px 20px;display:flex;flex-direction:column;gap:4px}
+.li{padding:10px 12px;border-radius:11px;cursor:pointer;border:1px solid transparent;transition:.12s}
+.li:hover{background:var(--surface2)}
+.li.on{background:var(--surface);border-color:var(--line2);box-shadow:var(--shadow)}
+.li.drop-before{box-shadow:inset 0 3px 0 var(--accent)}
+.li.drop-after{box-shadow:inset 0 -3px 0 var(--accent)}
+.li.dragging{opacity:.4}
+.li .li-k{font-size:11px;letter-spacing:.06em;color:var(--faint);display:flex;align-items:center;gap:6px}
+.li .li-name{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.li .li-sub{font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.li .li-tags{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap}
+.li .li-tags .chip{font-size:10.5px;padding:0 7px}
+.pane{flex:1;min-width:0;overflow:auto}
+.pane-in{max-width:820px;margin:0 auto;padding:28px 32px 80px}
+.ent-head{display:flex;gap:12px;align-items:center;margin-bottom:20px}
+.ent-name{flex:1;min-width:0;font-family:var(--serif);font-size:26px;font-weight:700;background:transparent;border:0;border-bottom:2px solid transparent;outline:none;padding:4px 0}
+.ent-name:focus{border-color:var(--accent-soft)}
+.ent-form{display:flex;flex-direction:column;gap:16px}
+.avatar{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:22px;color:#fff;flex:none;object-fit:cover;padding:0}
+.seg{display:flex;gap:4px;padding:4px;background:var(--surface2);border-radius:12px;border:1px solid var(--line2);flex-wrap:wrap}
+.seg button{flex:1;padding:7px 10px;border-radius:9px;color:var(--muted);font-size:13.5px;white-space:nowrap}
+.seg button.on{background:var(--surface);color:var(--accent-2);font-weight:600;box-shadow:var(--shadow)}
+.check{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line2);border-radius:var(--r-sm);background:var(--surface);cursor:pointer}
+.check input{margin-top:4px;accent-color:var(--accent);width:16px;height:16px}
+.check small{display:block;color:var(--muted)}
+.fblock{border:1px solid var(--line2);border-radius:var(--r);padding:12px 14px;background:var(--surface);display:flex;flex-direction:column;gap:8px}
+.fblock .fb-h{display:flex;gap:8px;align-items:center}
+.fblock .fb-h input{flex:1;background:transparent;border:0;outline:none;font-weight:600}
+.appear{display:flex;flex-wrap:wrap;gap:6px}
+
+/* editor */
+.edwrap{flex:1;min-width:0;display:flex;flex-direction:column}
+.ed-head{display:flex;align-items:center;gap:6px;padding:16px 28px 10px;flex-wrap:wrap}
+.ed-title{flex:1;min-width:120px;font-family:var(--serif);font-size:24px;font-weight:700;background:transparent;border:0;outline:none}
+.ed-bar{display:flex;align-items:center;gap:2px;margin:0 28px;padding:6px 8px;background:var(--surface);border:1px solid var(--line2);border-radius:12px;flex-wrap:wrap}
+.ed-bar .sep{width:1px;height:20px;background:var(--line2);margin:0 6px}
+.ed-bar .tb{min-width:32px;height:32px;border-radius:8px;display:inline-grid;place-items:center;color:var(--muted);font-weight:600}
+.ed-bar .tb:hover{background:var(--surface2);color:var(--text)}
+.ed-bar .zoom{display:flex;align-items:center;gap:2px;font-size:12.5px;color:var(--muted)}
+.ed-scroll{flex:1;overflow:auto;padding:18px 28px 30px}
+.ed-paper{max-width:780px;margin:0 auto;background:var(--paper);border:1px solid var(--line2);border-radius:var(--r);box-shadow:var(--shadow);min-height:100%;padding:48px 60px}
+.ed-body{outline:none;min-height:60vh;line-height:1.95;font-family:var(--serif);white-space:pre-wrap;word-wrap:break-word}
+.ed-body.sans{font-family:var(--ui)}
+.ed-body:empty:before{content:'เริ่มเขียนเรื่องราวของคุณที่นี่…';color:var(--faint)}
+.ed-foot{display:flex;gap:18px;padding:8px 32px;border-top:1px solid var(--line2);font-size:12.5px;color:var(--muted);background:var(--surface);flex-wrap:wrap}
+.ed-foot .sp{flex:1}
+.st-dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
+.shell.focus .top,.shell.focus .nav,.shell.focus .list,.shell.focus .ref{display:none}
+.shell.focus .ed-paper{max-width:760px}
+.ref{width:340px;flex:none;border-left:1px solid var(--line2);display:flex;flex-direction:column;background:var(--bg)}
+.ref-h{display:flex;align-items:center;padding:14px 16px 8px}
+.ref-h h3{flex:1;font-size:17px}
+.ref .seg button{font-size:12.5px;padding:6px 8px}
+.ref-items{flex:1;overflow:auto;padding:0 10px 20px}
+.ref-body{flex:1;overflow:auto;padding:4px 16px 24px;display:flex;flex-direction:column;gap:14px}
+.ref-it{border-radius:11px;padding:9px 12px;cursor:pointer}
+.ref-it:hover{background:var(--surface2)}
+.ref-it.open{background:var(--surface);box-shadow:var(--shadow)}
+.ref-it .ref-d{display:none;font-size:13px;color:var(--muted);margin-top:8px;white-space:pre-wrap}
+.ref-it.open .ref-d{display:block}
+.ref-d b{color:var(--text);font-weight:600}
+.tagpick{display:flex;flex-wrap:wrap;gap:6px}
+.fres{display:flex;flex-direction:column;gap:4px}
+.fres .fr{padding:8px 10px;border-radius:9px;cursor:pointer;font-size:13px;line-height:1.5}
+.fres .fr:hover{background:var(--surface)}
+.fres .fr small{display:block;color:var(--faint);font-size:11.5px}
+.fres mark{background:var(--warm-soft);color:var(--warm-ink);border-radius:3px;padding:0 2px;font-weight:600}
+.ac{position:fixed;z-index:60;min-width:220px;max-width:320px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.14);padding:5px;font-size:14px}
+.ac .ac-h{font-size:11px;color:var(--faint);padding:4px 9px 3px}
+.ac .ac-i{display:flex;align-items:center;gap:8px;padding:6px 9px;border-radius:8px;cursor:pointer}
+.ac .ac-i.on{background:var(--accent-soft)}
+.ac .ac-i small{margin-left:auto;color:var(--faint);font-size:11px}
+.ac kbd{font-family:var(--ui);font-size:10px;border:1px solid var(--line);border-radius:4px;padding:0 4px}
+
+/* overview */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.stat{padding:16px 18px}
+.stat .v{font-family:var(--serif);font-size:28px;font-weight:700}
+.stat .k{font-size:13px;color:var(--muted)}
+.ov-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
+.ov-box{padding:18px 20px}
+.ov-box h3{font-size:16px;margin-bottom:12px;font-family:var(--ui);font-weight:600}
+.bars{display:flex;align-items:flex-end;gap:6px;height:130px;padding-top:10px}
+.bars .b{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.bars .b i{width:100%;border-radius:6px 6px 3px 3px;background:var(--accent);opacity:.85;min-height:3px}
+.bars .b.zero i{background:var(--line);opacity:1}
+.bars .b span{font-size:10.5px;color:var(--faint)}
+.prog{height:9px;border-radius:9px;background:var(--surface2);overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent);border-radius:9px;transition:width .3s}
+.moods{display:flex;gap:6px;margin:8px 0}
+.moods button{font-size:20px;width:40px;height:40px;border-radius:12px;border:1px solid var(--line2);background:var(--surface2);filter:grayscale(.6);opacity:.75}
+.moods button.on{filter:none;opacity:1;border-color:var(--accent);background:var(--accent-soft)}
+.row-list{display:flex;flex-direction:column;gap:6px}
+.row-list .r{display:flex;align-items:center;gap:10px;font-size:14px;padding:6px 0;border-bottom:1px dashed var(--line2)}
+.row-list .r:last-child{border:0}
+
+/* ideas */
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.idea{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:11px;background:var(--surface);border:1px solid var(--line2)}
+.idea input[type=checkbox]{margin-top:5px;accent-color:var(--accent);width:16px;height:16px}
+.idea textarea{flex:1;background:transparent;border:0;outline:none;resize:none;min-height:24px;line-height:1.6;overflow:hidden}
+.idea.done textarea{text-decoration:line-through;color:var(--faint)}
+.thread{padding:14px;display:flex;flex-direction:column;gap:10px}
+.thread .th-h{display:flex;gap:8px;align-items:center}
+.thread .th-h input{flex:1;font-weight:600;background:transparent;border:0;outline:none;font-size:15.5px}
+
+/* board */
+.bd{display:flex;flex-direction:column;height:100%}
+.bd-bar{display:flex;align-items:center;gap:8px;padding:12px 18px;flex-wrap:wrap;border-bottom:1px solid var(--line2);background:var(--surface)}
+.bd-canvas{flex:1;position:relative;overflow:hidden;background-color:var(--bg);background-image:radial-gradient(var(--grid) 1.3px,transparent 1.3px);background-size:24px 24px;cursor:grab;touch-action:none}
+.bd-canvas.panning{cursor:grabbing}
+.bd-world{position:absolute;left:0;top:0;transform-origin:0 0}
+.bd-svg{position:absolute;left:0;top:0;width:1px;height:1px;overflow:visible;pointer-events:none}
+.bd-card{position:absolute;width:250px;background:var(--surface);border:1px solid var(--line2);border-radius:14px;box-shadow:var(--shadow);cursor:grab;user-select:none}
+.bd-card .ch{display:flex;align-items:center;gap:6px;padding:9px 10px 4px 12px}
+.bd-card .ch .chip{font-size:11px}
+.bd-card .ch .grow{flex:1}
+.bd-card .ch .icon-btn{width:26px;height:26px}
+.bd-card .ch .icon-btn svg{width:15px;height:15px}
+.bd-card .cb{padding:2px 12px 12px;display:flex;flex-direction:column;gap:6px}
+.bd-card input.ct{font-weight:600;font-family:var(--serif);font-size:15.5px;background:transparent;border:0;outline:none;width:100%}
+.bd-card textarea{width:100%;background:var(--surface2);border:1px solid transparent;border-radius:9px;padding:7px 9px;resize:vertical;min-height:52px;font-size:13px;outline:none;line-height:1.55}
+.bd-card textarea:focus{border-color:var(--accent)}
+.bd-card .sf{display:grid;grid-template-columns:62px 1fr;gap:4px 6px;align-items:start;font-size:12px;color:var(--muted)}
+.bd-card .sf textarea{min-height:34px}
+.bd-card.linking{outline:3px solid var(--accent);outline-offset:2px}
+.bd-card .band{height:5px;border-radius:14px 14px 0 0}
+.bd-label{position:absolute;z-index:3;transform:translate(-50%,-50%);padding:3px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-size:12px;white-space:nowrap;cursor:pointer;box-shadow:var(--shadow)}
+.bd-label:hover{border-color:var(--accent)}
+.bd-hint{position:absolute;left:50%;top:14px;transform:translateX(-50%);background:var(--accent);color:var(--accent-ink);padding:7px 16px;border-radius:999px;font-size:13.5px;z-index:5;box-shadow:var(--shadow)}
+.bd-zoom{position:absolute;right:14px;bottom:14px;display:flex;gap:4px;background:var(--surface);border:1px solid var(--line2);border-radius:12px;padding:4px;box-shadow:var(--shadow);z-index:5}
+.bd-node{position:absolute;width:120px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:grab;user-select:none;text-align:center}
+.bd-node .avatar{width:64px;height:64px;font-size:26px;box-shadow:var(--shadow);border:3px solid var(--surface);pointer-events:none}
+.bd-node .nm{font-weight:600;font-size:13.5px;line-height:1.3;background:var(--surface);padding:2px 8px;border-radius:8px}
+.bd-node .rl{font-size:11.5px;color:var(--muted)}
+.bd-node .lk{opacity:0;transition:.15s;position:absolute;top:-6px;right:14px;background:var(--surface);box-shadow:var(--shadow);width:28px;height:28px}
+.bd-node:hover .lk,.bd-node .lk:focus-visible{opacity:1}
+.bd-node.linking .avatar{outline:3px solid var(--accent);outline-offset:2px}
+.tl{flex:1;overflow:auto;padding:40px 30px}
+.tl-track{display:flex;gap:22px;align-items:flex-start;position:relative;padding-top:34px;min-width:max-content}
+.tl-track:before{content:'';position:absolute;left:0;right:0;top:12px;height:3px;background:var(--line);border-radius:3px}
+.tl-ev{width:260px;position:relative;padding:14px;display:flex;flex-direction:column;gap:8px}
+.tl-ev:before{content:'';position:absolute;top:-29px;left:22px;width:14px;height:14px;border-radius:50%;background:var(--accent);border:3px solid var(--bg)}
+.tl-ev .when{font-size:12.5px;color:var(--accent-2);font-weight:600;background:transparent;border:0;outline:none}
+.tl-ev .ti{font-weight:600;font-family:var(--serif);font-size:16px;background:transparent;border:0;outline:none}
+.tl-ev textarea{min-height:70px;font-size:13.5px}
+.tl-ev select{font-size:12.5px;padding:5px 8px}
+.tl-ev .acts{display:flex;gap:2px;justify-content:flex-end;align-items:center}
+.tl-add{width:200px;min-height:150px;border:2px dashed var(--line);border-radius:var(--r);display:grid;place-items:center;color:var(--muted);cursor:pointer}
+.tl-add:hover{border-color:var(--accent);color:var(--accent-2)}
+
+/* export */
+.ex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.ex{padding:20px;display:flex;flex-direction:column;gap:10px}
+.ex .ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center}
+.ex h3{font-size:17px}
+.ex p{margin:0;color:var(--muted);font-size:13.5px;flex:1}
+
+/* modal */
+.modal-bg{position:fixed;inset:0;background:rgba(40,35,30,.32);backdrop-filter:blur(3px);display:grid;place-items:center;z-index:50;padding:20px;animation:fade .15s}
+.modal{width:min(520px,100%);max-height:90vh;overflow:auto;padding:24px;display:flex;flex-direction:column;gap:16px;animation:pop .18s}
+.modal.wide{width:min(880px,100%)}
+.modal-h{display:flex;align-items:center}
+.modal-h h3{flex:1;font-size:20px}
+.modal-f{display:flex;gap:8px;justify-content:flex-end;align-items:center;flex-wrap:wrap}
+.modal-f .grow{flex:1}
+.colors{display:flex;gap:8px;flex-wrap:wrap}
+.colors button{width:30px;height:30px;border-radius:50%;border:3px solid transparent;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+.colors button.on{border-color:var(--text)}
+.opt{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line2);border-radius:11px;cursor:pointer;background:var(--surface)}
+.opt.on{border-color:var(--accent);background:var(--accent-soft)}
+.opt small{margin-left:auto;color:var(--faint)}
+.pick{max-height:320px;overflow:auto;display:flex;flex-direction:column;gap:4px}
+.imgpick{display:flex;gap:14px;align-items:center}
+.imgpick .prev{width:72px;height:96px;border-radius:8px;background:var(--surface2);border:1px dashed var(--line);display:grid;place-items:center;overflow:hidden;color:var(--faint);flex:none}
+.imgpick .prev img{width:100%;height:100%;object-fit:cover}
+.hist{display:grid;grid-template-columns:260px 1fr;gap:16px;min-height:340px}
+.hist .hl{display:flex;flex-direction:column;gap:4px;max-height:52vh;overflow:auto}
+.hist .hp{background:var(--paper);border:1px solid var(--line2);border-radius:var(--r-sm);padding:16px 18px;max-height:52vh;overflow:auto;white-space:pre-wrap;font-family:var(--serif);line-height:1.8;font-size:14.5px}
+.trow{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;background:var(--surface2)}
+.trow .grow{flex:1;min-width:0}
+.trow .grow div{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kv{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px dashed var(--line2);font-size:14px}
+#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:70;display:flex;align-items:center;gap:12px;max-width:calc(100vw - 32px)}
+#toast.show{opacity:1;transform:translateX(-50%)}
+#toast button{color:var(--bg);font-weight:600;text-decoration:underline;padding:0}
+@keyframes fade{from{opacity:0}}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.98)}}
+
+@media (max-width:980px){
+ .stats{grid-template-columns:repeat(2,1fr)}.ov-grid,.cols2{grid-template-columns:1fr}
+ .ref{position:absolute;right:0;top:0;bottom:0;z-index:10;box-shadow:var(--shadow)}
+ .hist{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+ .nav{width:64px}.nav .txt,.nav .cnt,.nav .nlabel{display:none}
+ .list{width:200px}.grid2{grid-template-columns:1fr}.ed-paper{padding:28px 22px}.page,.pane-in{padding:22px 16px 60px}
+ .top{padding:0 12px}.ntitle{max-width:120px}.top .hide-sm{display:none}
+}
+html.no-anim *,html.no-anim *::before,html.no-anim *::after{transition:none!important;animation:none!important}
+
+/* ---------- Inkfold: paper feel ---------- */
+body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .28 0 0 0 0 .2 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.brand-name{font-family:var(--display);font-size:25px;font-weight:700;letter-spacing:.02em;line-height:1}
+.lib-art .art{margin:0;width:78px;height:auto}
+.art{display:block;margin:0 auto 14px;animation:floaty 4.5s ease-in-out infinite}
+@keyframes floaty{50%{transform:translateY(-5px)}}
+.ed-paper{position:relative;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .32 0 0 0 0 .22 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");border-bottom-right-radius:0}
+.ed-paper::after{content:'';position:absolute;right:-1px;bottom:-1px;width:30px;height:30px;background:linear-gradient(315deg,var(--bg) 0 50%,var(--line) 50%,var(--surface2) 100%);box-shadow:-2px -2px 4px rgba(60,45,30,.06)}
+.nav a.on{position:relative}
+.nav a.on::before{content:'';position:absolute;left:-12px;top:9px;bottom:9px;width:4px;border-radius:0 4px 4px 0;background:var(--accent)}
+.pg-in{animation:pageIn .42s cubic-bezier(.2,.8,.2,1) both}
+@keyframes pageIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
+/* novel cards look like books */
+.lib-grid{perspective:1400px}
+.lib-grid>*{animation:cardIn .55s cubic-bezier(.2,.8,.2,1) both}
+.lib-grid>:nth-child(2){animation-delay:.06s}.lib-grid>:nth-child(3){animation-delay:.12s}.lib-grid>:nth-child(4){animation-delay:.18s}.lib-grid>:nth-child(5){animation-delay:.24s}.lib-grid>:nth-child(n+6){animation-delay:.3s}
+@keyframes cardIn{from{opacity:0;transform:translateY(18px) rotateX(-8deg)}to{opacity:1;transform:none}}
+.ncard{transform-style:preserve-3d;transition:transform .4s cubic-bezier(.2,.8,.2,1),box-shadow .4s}
+.ncard:hover{transform:translateY(-5px) rotateX(4deg) rotateY(-5deg);box-shadow:0 22px 44px -20px rgba(60,45,30,.4)}
+.ncard .cover::before{content:'';position:absolute;left:0;top:0;bottom:0;width:16px;z-index:1;background:linear-gradient(to right,rgba(0,0,0,.2),rgba(255,255,255,.1) 45%,rgba(0,0,0,.08))}
+.ncard .cover span::after{content:'';position:absolute;right:8px;top:-3px;width:8px;height:18px;background:var(--warm);clip-path:polygon(0 0,100% 0,100% 100%,50% 76%,0 100%)}
+
+/* ---------- Inkfold: opening book ---------- */
+#intro{position:fixed;inset:0;z-index:200;display:grid;place-items:center;perspective:2200px;perspective-origin:50% 38%;background:radial-gradient(ellipse at 50% 42%,#F7F1E7 0%,#E9E0D0 55%,#D5C8B2 100%);overflow:hidden;cursor:pointer;transition:opacity .65s ease}
+[data-theme=dusk] #intro{background:radial-gradient(ellipse at 50% 42%,#474A52 0%,#34373D 60%,#25272C 100%)}
+[data-theme=matcha] #intro{background:radial-gradient(ellipse at 50% 42%,#F1F4EE 0%,#DCE3D7 55%,#C7D1C1 100%)}
+#intro.out{opacity:0;pointer-events:none}
+#intro.quick{transition-duration:.3s}
+#intro .i-zoom{position:relative;width:min(640px,88vw);aspect-ratio:64/43;transform-style:preserve-3d;transition:transform var(--z-d) cubic-bezier(.55,0,.8,.25)}
+#intro.zoom .i-zoom{transform:scale(2.5) translateY(5%)}
+#intro .i-pos{position:absolute;inset:0;transform-style:preserve-3d;animation:iAppear var(--a-d) cubic-bezier(.2,.8,.2,1) both}
+#intro .book{position:absolute;inset:0;transform-style:preserve-3d;animation:iCenter var(--c-d) cubic-bezier(.45,.05,.25,1) var(--c-s) both}
+@keyframes iAppear{from{opacity:0;transform:translateY(50px) scale(.86)}to{opacity:1;transform:none}}
+@keyframes iCenter{from{transform:translateX(-25%) rotateX(16deg)}to{transform:translateX(0) rotateX(16deg)}}
+#intro .b-half{position:absolute;left:50%;top:1.5%;width:48.5%;height:97%;transform-style:preserve-3d;transform-origin:left center}
+#intro .b-back{top:-1%;height:102%;width:50.5%;background-color:var(--cover);background-image:linear-gradient(90deg,rgba(0,0,0,.25),rgba(0,0,0,0) 8%),linear-gradient(160deg,rgba(255,255,255,.1),rgba(0,0,0,.18));border-radius:2px 10px 10px 2px;transform:translateZ(-6px);box-shadow:0 46px 70px -28px rgba(50,35,20,.6),0 14px 26px rgba(50,35,20,.18)}
+#intro .b-block,#intro .lf,#intro .lb{background-color:#FBF6EC}
+#intro .b-block{border-radius:0 5px 5px 0;transform:translateZ(-3px);box-shadow:inset 20px 0 26px -18px rgba(80,60,30,.3),2px 0 0 #EFE5D2,4px 0 0 #E2D5BC,6px 0 0 #EFE5D2,8px 0 0 #DCCFB5}
+#intro .b-leaf{animation:iFlip var(--l-d) cubic-bezier(.4,.05,.3,1) var(--l-s) both}
+@keyframes iFlip{from{transform:rotateY(0)}to{transform:rotateY(var(--end))}}
+#intro .lf,#intro .lb{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+#intro .lf{border-radius:0 5px 5px 0;box-shadow:inset 18px 0 24px -18px rgba(80,60,30,.28)}
+#intro .lb{transform:rotateY(180deg);border-radius:5px 0 0 5px;box-shadow:inset -18px 0 24px -18px rgba(80,60,30,.28)}
+#intro .lf::before,#intro .lb::before{content:'';position:absolute;inset:16% 14%;background:repeating-linear-gradient(to bottom,transparent 0 12px,rgba(120,95,60,.13) 12px 13.5px)}
+#intro .b-leaf.last .lb::before{display:none}
+#intro .b-cover{top:-1%;height:102%;width:50.5%;--end:-180deg;animation:iFlip var(--c-d) cubic-bezier(.5,.05,.3,1) var(--c-s) both}
+#intro .cf,#intro .cb{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
+#intro .cf{border-radius:2px 10px 10px 2px;background-color:var(--cover);background-image:linear-gradient(90deg,rgba(0,0,0,.3),rgba(255,255,255,.08) 4%,rgba(0,0,0,.1) 7%,rgba(0,0,0,0) 12%),radial-gradient(ellipse at 30% 18%,rgba(255,255,255,.18),transparent 60%),linear-gradient(170deg,rgba(255,255,255,.05),rgba(0,0,0,.2));color:#F4E6C2}
+#intro .cf img{width:100%;height:100%;object-fit:cover;display:block}
+#intro .cf-frame{position:absolute;inset:7% 8% 7% 13%;border:1.5px solid rgba(240,222,176,.8);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:10px;box-shadow:inset 0 0 0 5px transparent,inset 0 0 0 6.5px rgba(240,222,176,.4)}
+#intro .cf-title{font-family:var(--display);font-weight:700;font-size:clamp(24px,5.2vw,46px);line-height:1.1;letter-spacing:.03em;text-shadow:0 1px 0 rgba(0,0,0,.28);overflow-wrap:anywhere}
+#intro .cf-sub{font-family:var(--serif);font-size:clamp(11px,1.8vw,14px);opacity:.92}
+#intro .cb{transform:rotateY(180deg);border-radius:10px 2px 2px 10px;background-color:color-mix(in srgb,var(--cover) 50%,#F3EBDD);background-image:radial-gradient(rgba(255,255,255,.3) 1px,transparent 1.6px);background-size:12px 12px}
+#intro .sp{position:absolute;inset:12%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;color:#5A4F42;animation:iFade .6s ease var(--tx-s) both}
+#intro .sp-t{font-family:var(--display);font-size:clamp(22px,4.4vw,40px);font-weight:700;line-height:1.15;overflow-wrap:anywhere}
+#intro .sp-s{font-family:var(--serif);font-size:clamp(10px,1.6vw,14px);opacity:.75;line-height:1.6}
+#intro .sp-r{font-family:var(--serif);font-size:clamp(11px,1.8vw,15px)}
+#intro .sp-orn{font-size:clamp(20px,3.4vw,30px);color:#B08A5A}
+@keyframes iFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+#intro .intro-skip{position:absolute;right:22px;bottom:20px;padding:7px 16px;border-radius:999px;background:rgba(255,255,255,.6);color:#4B4237;font-size:13px;backdrop-filter:blur(4px)}
+[data-theme=dusk] #intro .intro-skip{background:rgba(255,255,255,.14);color:#E3DED5}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="modalRoot"></div>
+<div id="ac" class="ac hidden" role="listbox"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="fileIn" accept=".json,application/json" class="hidden">
+<input type="file" id="imgIn" accept="image/*" class="hidden">
+<script>
+'use strict';
+const APP_NAME='Inkfold';const APP_VERSION='1.0.0';
+/* ---------- helpers ---------- */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4);
+const pad=n=>String(n).padStart(2,'0');
+const dkey=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const today=()=>dkey(new Date());
+const fmtDate=t=>new Date(t).toLocaleDateString('th-TH',{day:'numeric',month:'short',year:'2-digit'});
+const fmtDT=t=>new Date(t).toLocaleString('th-TH',{day:'numeric',month:'short',year:'2-digit',hour:'2-digit',minute:'2-digit'});
+const num=n=>(n||0).toLocaleString('th-TH');
+const initial=s=>((s||'?').trim()[0]||'?');
+const escRe=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+const seg=(window.Intl&&Intl.Segmenter)?new Intl.Segmenter('th',{granularity:'word'}):null;
+function countWords(t){t=(t||'').trim();if(!t)return 0;if(seg){let c=0;for(const s of seg.segment(t))if(s.isWordLike)c++;return c}return t.split(/\s+/).length}
+function toast(m,act){const t=$('#toast');t.innerHTML=`<span>${esc(m)}</span>${act?`<button type="button">${esc(act.label)}</button>`:''}`;t.classList.add('show');t.style.pointerEvents=act?'auto':'none';
+ if(act)t.querySelector('button').onclick=()=>{t.classList.remove('show');act.fn()};clearTimeout(t._t);t._t=setTimeout(()=>{t.classList.remove('show');t.style.pointerEvents='none'},act?7000:2400)}
+const IC={
+ book:'<path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/>',
+ plus:'<path d="M12 5v14M5 12h14"/>',back:'<path d="M19 12H5M12 19l-7-7 7-7"/>',
+ home:'<path d="M3 13h8V3H3zM13 21h8V11h-8zM13 3v6h8V3zM3 21h8v-6H3z"/>',
+ outline:'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+ file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/>',
+ users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+ pin:'<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
+ mark:'<path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>',
+ grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+ bulb:'<path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/>',
+ down:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
+ up:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>',
+ trash:'<path d="M3 6h18M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6M10 11v6M14 11v6M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>',
+ search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
+ link:'<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',
+ x:'<path d="M18 6L6 18M6 6l12 12"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+ expand:'<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>',side:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M15 3v18"/>',
+ left:'<path d="M15 18l-6-6 6-6"/>',right:'<path d="M9 18l6-6-6-6"/>',chevU:'<path d="M18 15l-6-6-6 6"/>',chevD:'<path d="M6 9l6 6 6-6"/>',arrowR:'<path d="M5 12h14M12 5l7 7-7 7"/>',
+ folder:'<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>',
+ undo:'<path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-15-6.7L3 13"/>',redo:'<path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 15-6.7L21 13"/>',
+ al:'<path d="M17 10H3M21 6H3M21 14H3M17 18H3"/>',ac:'<path d="M18 10H6M21 6H3M21 14H3M18 18H6"/>',ar:'<path d="M21 10H7M21 6H3M21 14H3M21 18H7"/>',aj:'<path d="M21 10H3M21 6H3M21 14H3M21 18H3"/>',
+ edit:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>',heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/>',
+ film:'<rect x="2" y="2" width="20" height="20" rx="2.5"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5"/>',
+ note:'<path d="M15.5 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5z"/><path d="M15 3v6h6"/>',
+ refresh:'<path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.5 9a9 9 0 0 1 14.9-3.4L23 10M1 14l4.6 4.4A9 9 0 0 0 20.5 15"/>',
+ minus:'<path d="M5 12h14"/>',history:'<path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/>',
+ image:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>',
+ save:'<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/>',
+ install:'<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 7v7M9 11l3 3 3-3"/>',swap:'<path d="M16 3l4 4-4 4M20 7H4M8 21l-4-4 4-4M4 17h16"/>',
+};
+const ic=(n,s)=>`<svg class="i" viewBox="0 0 24 24" aria-hidden="true" ${s?`style="width:${s}px;height:${s}px"`:''}>${IC[n]||''}</svg>`;
+
+/* ---------- constants ---------- */
+const KEY='inkfold.v1';
+const COLORS=['#7F9C8C','#B98F6B','#C48A8A','#8A9BB8','#A68DB3','#C9A863','#6E9C9A','#9A8F82'];
+const ROLES=['ตัวเอก','ตัวร้าย','สมทบ','ตัวประกอบ','ที่ปรึกษา / อาจารย์','คนรัก','ครอบครัว'];
+const STATUS={draft:{n:'ร่าง',c:'#C9A863'},revise:{n:'แก้ไข',c:'#8A9BB8'},done:{n:'เสร็จแล้ว',c:'#7F9C8C'},idea:{n:'วางแผน',c:'#B5ADA2'}};
+const GKIND={
+ power:{n:'พลัง / เวทมนตร์',fields:['ที่มาของพลัง','เงื่อนไข / ข้อจำกัด','ราคาที่ต้องจ่าย']},
+ lore:{n:'เกร็ดโลก / ตำนาน',fields:['ประวัติและที่มา','กฎเกณฑ์หรือผลกระทบ']},
+ item:{n:'ไอเทม',fields:['ลักษณะ','ความสามารถ','ผู้ครอบครอง']},
+ creature:{n:'เผ่าพันธุ์ / มอนสเตอร์',fields:['รูปลักษณ์','ถิ่นที่อยู่','จุดอ่อน']},
+ culture:{n:'วัฒนธรรม / องค์กร',fields:['ความเชื่อ','ธรรมเนียม']},
+ term:{n:'ศัพท์เฉพาะทั่วไป',fields:['ความหมาย']},
+};
+const FLOW={cause:{n:'เพราะฉะนั้น (นำไปสู่)',c:'#5F9E85',d:''},twist:{n:'แต่ทว่า (จุดพลิกผัน)',c:'#D09A55',d:'7 6'},parallel:{n:'ในเวลาเดียวกัน (คู่ขนาน)',c:'#6E9CC0',d:'7 6'},flashback:{n:'ย้อนอดีต (Flashback)',c:'#9A86C2',d:'7 6'},skip:{n:'ข้ามเวลา (Time Skip)',c:'#9A958C',d:'3 6'}};
+const REL={love:{n:'ความรัก',c:'#D48A9E',d:''},family:{n:'ครอบครัว',c:'#C9A15F',d:''},ally:{n:'พันธมิตร',c:'#6FA58C',d:''},rival:{n:'คู่แข่ง',c:'#D19A6A',d:'7 6'},hate:{n:'ความแค้น',c:'#C46A5E',d:''},secret:{n:'ความลับ',c:'#9A86C2',d:'3 6'},other:{n:'อื่น ๆ',c:'#9A958C',d:'5 5'}};
+const MOODS=['😄','🙂','😐','😩','🔥'];
+const CARD_TYPES=['note','scene','characters','locations','chapters'];
+const TRASH_KIND={novel:'นิยาย',chapters:'บท',characters:'ตัวละคร',locations:'สถานที่',glossary:'คำศัพท์',ideas:'ไอเดีย',threads:'ปมเรื่อง',timeline:'เหตุการณ์',board:'กระดาน'};
+const TRASH_DAYS=30, SNAP_MAX=30;
+
+/* ---------- safety: clean imported / stored content ---------- */
+const ID_RE=/^[\w-]{1,48}$/;
+const okColor=c=>typeof c==='string'&&/^#[0-9a-fA-F]{3,8}$/.test(c);
+const okImg=s=>typeof s==='string'&&/^data:image\/(png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(s);
+function cleanHtml(html){
+ const t=document.createElement('template');t.innerHTML=String(html||'');
+ (function walk(node){for(const n of [...node.childNodes]){
+  if(n.nodeType===3)continue;if(n.nodeType!==1){n.remove();continue}
+  if(/^(SCRIPT|STYLE|IFRAME|OBJECT|EMBED|LINK|META|SVG|MATH|TEMPLATE|NOSCRIPT|FORM|INPUT|TEXTAREA|SELECT|BUTTON|IMG|VIDEO|AUDIO)$/i.test(n.tagName)){n.remove();continue}
+  walk(n);
+  if(!/^(B|STRONG|I|EM|U|BR|DIV|P|SPAN)$/.test(n.tagName)){n.replaceWith(...n.childNodes);continue}
+  const st=n.style||{},al=st.textAlign,fw=st.fontWeight,fs=st.fontStyle;
+  for(const a of [...n.attributes])n.removeAttribute(a.name);
+  if(/^(left|right|center|justify)$/.test(al))n.style.textAlign=al;
+  if(fw==='bold'||+fw>=600)n.style.fontWeight='bold';if(fs==='italic')n.style.fontStyle='italic';
+ }})(t.content);
+ return t.innerHTML;
+}
+function checkIds(o){
+ const K=new Set(['id','ref','from','to','a','b','folder','planted','resolved','chapterId','pov','nid','bid']);
+ (function w(x){if(Array.isArray(x))return x.forEach(w);if(x&&typeof x==='object'){for(const k of Object.keys(x)){const v=x[k];
+  if(K.has(k)&&v!==''&&v!=null&&!(typeof v==='string'&&ID_RE.test(v)))throw new Error('unsafe id');
+  if((k==='chars'||k==='locs')&&Array.isArray(v)&&v.some(i=>typeof i!=='string'||!ID_RE.test(i)))throw new Error('unsafe id');
+  if(k==='relPos'&&v&&typeof v==='object'&&Object.keys(v).some(i=>!ID_RE.test(i)))throw new Error('unsafe id');
+  w(v)}}})(o);
+}
+
+/* ---------- data model ---------- */
+let db;
+function blankNovel(o={}){return Object.assign({id:uid(),title:'นิยายเรื่องใหม่',genre:'',synopsis:'',color:COLORS[0],cover:'',goal:1000,target:{words:0,date:''},created:Date.now(),updated:Date.now(),
+ outline:{},chapters:[],characters:[],locations:[],glossary:[],folders:{characters:[],locations:[],glossary:[]},
+ boards:[{id:uid(),name:'กระดานหลัก',cards:[],links:[]}],relations:[],relPos:{},timeline:[],ideas:[],threads:[],log:{},journal:{},base:null},o)}
+function normalize(n){
+ const b=blankNovel();for(const k in b)if(n[k]===undefined||n[k]===null)n[k]=b[k];
+ if(!ID_RE.test(String(n.id)))n.id=uid();
+ for(const k of ['chapters','characters','locations','glossary','boards','relations','timeline','ideas','threads'])if(!Array.isArray(n[k]))n[k]=[];
+ n.folders=n.folders&&typeof n.folders==='object'?n.folders:{};for(const k of ['characters','locations','glossary'])n.folders[k]=Array.isArray(n.folders[k])?n.folders[k]:[];
+ if(!okColor(n.color))n.color=COLORS[0];if(n.cover&&!okImg(n.cover))n.cover='';
+ n.goal=+n.goal||0;const tg=n.target||{};n.target={words:+tg.words||0,date:/^\d{4}-\d\d-\d\d$/.test(tg.date||'')?tg.date:''};
+ n.characters.forEach(c=>{if(!okColor(c.color))c.color=COLORS[0];if(c.img&&!okImg(c.img))c.img=''});
+ n.chapters.forEach(c=>{c.html=cleanHtml(c.html);c.words=+c.words||0;c.chars=Array.isArray(c.chars)?c.chars:[];c.locs=Array.isArray(c.locs)?c.locs:[];
+  c.snaps=Array.isArray(c.snaps)?c.snaps.map(s=>({t:+s.t||0,html:cleanHtml(s.html),words:+s.words||0,label:String(s.label||'')})):[];if(!STATUS[c.status])c.status='draft'});
+ if(!n.boards.length)n.boards=b.boards;
+ n.boards.forEach(bd=>{bd.name=String(bd.name||'กระดาน');bd.cards=(Array.isArray(bd.cards)?bd.cards:[]).filter(c=>CARD_TYPES.includes(c.type));bd.cards.forEach(c=>{c.x=+c.x||0;c.y=+c.y||0});bd.links=(Array.isArray(bd.links)?bd.links:[]);bd.links.forEach(l=>{if(!FLOW[l.style])l.style='cause'})});
+ const rp={};for(const k in (n.relPos||{})){const p=n.relPos[k]||{};rp[k]={x:+p.x||0,y:+p.y||0}}n.relPos=rp;
+ n.relations.forEach(r=>{if(!REL[r.type])r.type='other';r.mutual=!!r.mutual});
+ n.glossary.forEach(g=>{if(!GKIND[g.kind])g.kind='term';g.fields=Array.isArray(g.fields)?g.fields:[]});
+ n.timeline.forEach(e=>{e.chapterId=e.chapterId||''});
+ return n;
+}
+function blankDb(){return {novels:[],settings:{theme:'paper'},trash:[]}}
+function normalizeDb(d){d.settings=d.settings||{theme:'paper'};d.trash=Array.isArray(d.trash)?d.trash:[];d.novels=(d.novels||[]).filter(n=>{try{checkIds(n);normalize(n);return true}catch(e){return false}});
+ const cut=Date.now()-TRASH_DAYS*864e5;d.trash=d.trash.filter(t=>t&&t.at>cut&&TRASH_KIND[t.kind]);return d}
+
+/* ---------- storage (IndexedDB → localStorage fallback) + auto file backup ---------- */
+const IDB={db:null,
+ open(){return new Promise(res=>{if(!window.indexedDB)return res(null);let rq;try{rq=indexedDB.open('inkfold',1)}catch(e){return res(null)}
+  rq.onupgradeneeded=()=>rq.result.createObjectStore('kv');rq.onsuccess=()=>{IDB.db=rq.result;res(rq.result)};rq.onerror=()=>res(null);rq.onblocked=()=>res(null)})},
+ get(k){return new Promise(res=>{if(!IDB.db)return res(undefined);try{const r=IDB.db.transaction('kv').objectStore('kv').get(k);r.onsuccess=()=>res(r.result);r.onerror=()=>res(undefined)}catch(e){res(undefined)}})},
+ set(k,v){return new Promise((res,rej)=>{if(!IDB.db)return rej(new Error('no idb'));try{const tx=IDB.db.transaction('kv','readwrite');tx.objectStore('kv').put(v,k);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error);tx.onabort=()=>rej(tx.error)}catch(e){rej(e)}})},
+ del(k){return new Promise(res=>{if(!IDB.db)return res();try{const tx=IDB.db.transaction('kv','readwrite');tx.objectStore('kv').delete(k);tx.oncomplete=()=>res();tx.onerror=()=>res()}catch(e){res()}})}};
+const ST={mode:'idb',persisted:false};
+async function loadDb(){
+ await IDB.open();let raw=await IDB.get('data');
+ if(!IDB.db)ST.mode='local';
+ if(!raw){try{raw=localStorage.getItem(KEY)}catch(e){}}
+ let d=null;try{d=raw?JSON.parse(raw):null}catch(e){}
+ if(d&&Array.isArray(d.novels))return normalizeDb(d);
+ const fresh=blankDb();fresh.novels=[seed()];return fresh;
+}
+let saveT,writing=Promise.resolve();
+function save(){
+ const json=JSON.stringify(db);
+ writing=writing.then(async()=>{
+  if(ST.mode==='idb'){try{await IDB.set('data',json);try{localStorage.removeItem(KEY)}catch(e){}}catch(e){ST.mode='local'}}
+  if(ST.mode==='local'){try{localStorage.setItem(KEY,json)}catch(e){toast('บันทึกไม่สำเร็จ: พื้นที่เก็บข้อมูลเต็ม — โปรดสำรองเป็นไฟล์ทันที')}}
+  setSaved(false);backupSoon();
+ });
+}
+function saveSoon(){setSaved(true);clearTimeout(saveT);saveT=setTimeout(save,450)}
+function setSaved(busy){const el=$('#savedInd');if(!el)return;el.classList.toggle('busy',busy);el.lastChild.textContent=busy?' กำลังบันทึก…':(FS.ok?' บันทึกแล้ว (เครื่อง + ไฟล์)':' บันทึกในเครื่องแล้ว')}
+const FS={handle:null,ok:false,last:0,t:null,name:''};
+const backupJson=()=>JSON.stringify({app:'inkfold',type:'library',version:APP_VERSION,savedAt:new Date().toISOString(),novels:db.novels});
+function backupSoon(){if(!FS.ok||FS.t)return;FS.t=setTimeout(()=>{FS.t=null;writeBackupFile()},Math.max(0,15000-(Date.now()-FS.last)))}
+async function writeBackupFile(){if(!FS.handle||!FS.ok)return;try{const w=await FS.handle.createWritable();await w.write(backupJson());await w.close();FS.last=Date.now();db.settings.lastBackup=Date.now();await quietSave()}catch(e){FS.ok=false;toast('บันทึกลงไฟล์สำรองไม่ได้ — เปิดสิทธิ์อีกครั้งในหน้าตั้งค่า');refreshBanner()}}
+async function quietSave(){const json=JSON.stringify(db);if(ST.mode==='idb'){try{await IDB.set('data',json);return}catch(e){}}try{localStorage.setItem(KEY,json)}catch(e){}}
+async function initFileBackup(){try{const h=await IDB.get('fileHandle');if(!h||!h.queryPermission)return;FS.handle=h;FS.name=h.name;FS.ok=(await h.queryPermission({mode:'readwrite'}))==='granted'}catch(e){}}
+async function linkBackupFile(){
+ if(!window.showSaveFilePicker){toast('เบราว์เซอร์นี้ยังไม่รองรับ — ใช้ Chrome หรือ Edge บนคอมพิวเตอร์');return}
+ try{const h=await showSaveFilePicker({suggestedName:'Inkfold-autosave.json',types:[{description:'ไฟล์สำรอง JSON',accept:{'application/json':['.json']}}]});
+  FS.handle=h;FS.name=h.name;FS.ok=true;try{await IDB.set('fileHandle',h)}catch(e){}await writeBackupFile();toast('เชื่อมไฟล์แล้ว — งานจะถูกบันทึกลงไฟล์นี้อัตโนมัติ');reopenSettings()}catch(e){}
+}
+async function regrantBackup(){if(!FS.handle)return;try{FS.ok=(await FS.handle.requestPermission({mode:'readwrite'}))==='granted';if(FS.ok){await writeBackupFile();toast('กลับมาบันทึกลงไฟล์อัตโนมัติแล้ว')}}catch(e){}reopenSettings()}
+async function unlinkBackup(){FS.handle=null;FS.ok=false;FS.name='';await IDB.del('fileHandle');toast('ยกเลิกการบันทึกลงไฟล์แล้ว');reopenSettings()}
+function N(){return db.novels.find(n=>n.id===S.nid)}
+function touch(n){(n||N()).updated=Date.now()}
+
+/* ---------- sample novel ---------- */
+function seed(){
+ const n=blankNovel({title:'ดาบแห่งสายลม',genre:'แฟนตาซี',synopsis:'เด็กสาวจากหมู่บ้านชายขอบได้ครอบครองดาบที่ฟังเสียงลมได้ และต้องออกเดินทางเพื่อค้นหาความจริงของบิดาที่หายสาบสูญ',color:'#7F9C8C',target:{words:60000,date:''}});
+ const c1={id:uid(),name:'ลินิน วาเลนเทีย',role:'ตัวเอก',age:'17',tags:'ดื้อ, ใจดี',personality:'ดื้อรั้นแต่จริงใจ ชอบช่วยคนอื่นจนลืมตัวเอง',appearance:'ผมสีน้ำตาลอ่อน มัดหางม้า ตาสีเขียวหม่น',want:'ตามหาพ่อที่หายไป',fear:'การถูกทิ้งไว้คนเดียว',backstory:'เติบโตกับยายในหมู่บ้านเชิงเขา',notes:'',folder:'',color:'#7F9C8C',img:''};
+ const c2={id:uid(),name:'คาเอล โรว์แลนด์',role:'สมทบ',age:'19',tags:'เงียบ, เจ้าเล่ห์',personality:'พูดน้อย ช่างสังเกต',appearance:'ผมดำ มีแผลเป็นที่คิ้ว',want:'ล้างมลทินให้ตระกูล',fear:'อดีตของตัวเอง',backstory:'',notes:'',folder:'',color:'#8A9BB8',img:''};
+ const c3={id:uid(),name:'ท่านเซราฟ',role:'ตัวร้าย',age:'ไม่ทราบ',tags:'',personality:'สุภาพ ใจเย็น และน่ากลัว',appearance:'',want:'ครอบครองดาบแห่งสายลม',fear:'',backstory:'',notes:'',folder:'',color:'#C48A8A',img:''};
+ n.characters=[c1,c2,c3];
+ const l1={id:uid(),name:'หมู่บ้านเอลมอร์',type:'หมู่บ้าน',region:'เชิงเขาตะวันตก',tags:'บ้านเกิด',atmosphere:'สงบ ลมพัดแรงตลอดปี กลิ่นหญ้าแห้ง',description:'หมู่บ้านเล็ก ๆ บนเนินเขาทางตะวันตก',notes:'',folder:''};
+ n.locations=[l1];
+ n.glossary=[{id:uid(),name:'ดาบแห่งสายลม',kind:'item',folder:'',tags:'',ac:true,fields:[{label:'ลักษณะ',text:'ใบดาบใสราวแก้ว มีเสียงหวีดเบา ๆ เมื่อมีลมพัด'},{label:'ความสามารถ',text:'ฟังเสียงลมและรับรู้สิ่งที่ลมพาผ่านมา'},{label:'ผู้ครอบครอง',text:'ลินิน'}]}];
+ const html='ลมพัดผ่านทุ่งหญ้าเหมือนเสียงกระซิบ <b>ลินิน</b> หยุดเดินแล้วเงยหน้ามองท้องฟ้า<div><br></div><div>"วันนี้ลมแปลก ๆ" เธอพึมพำกับตัวเอง</div>';
+ n.chapters=[{id:uid(),title:'เสียงกระซิบของลม',html,status:'draft',words:0,summary:'ลินินรู้สึกถึงลมที่ผิดปกติระหว่างไปเก็บสมุนไพร',pov:c1.id,chars:[c1.id],locs:[l1.id],notes:'',snaps:[]},{id:uid(),title:'ชายแปลกหน้า',html:'',status:'idea',words:0,summary:'',pov:'',chars:[],locs:[],notes:'',snaps:[]}];
+ n.chapters.forEach(c=>c.words=countWords(htmlToText(c.html)));
+ const b=n.boards[0];const s1={id:uid(),type:'scene',x:120,y:110,title:'ลินินพบดาบ',goal:'หาสมุนไพรให้ยาย',conflict:'พายุลมพัดมาไม่ทันตั้งตัว',outcome:'พบดาบในโพรงไม้'};
+ const s2={id:uid(),type:'scene',x:470,y:170,title:'คาเอลปรากฏตัว',goal:'',conflict:'',outcome:''};
+ const s3={id:uid(),type:'note',x:300,y:470,title:'ปมเรื่องพ่อ',text:'พ่อเคยเป็นผู้พิทักษ์ดาบมาก่อน'};
+ b.cards=[s1,s2,s3];b.links=[{id:uid(),from:s1.id,to:s2.id,style:'cause',label:''},{id:uid(),from:s3.id,to:s1.id,style:'flashback',label:''}];
+ n.relations=[{id:uid(),a:c1.id,b:c2.id,type:'ally',label:'เพื่อนร่วมทาง',mutual:true},{id:uid(),a:c3.id,b:c1.id,type:'hate',label:'ต้องการดาบ',mutual:false}];
+ n.timeline=[{id:uid(),when:'ปีที่ 0',title:'พ่อของลินินหายตัวไป',text:'',chapterId:''},{id:uid(),when:'12 ปีต่อมา',title:'ลินินพบดาบ',text:'',chapterId:n.chapters[0].id}];
+ n.ideas=[{id:uid(),text:'ลมสามารถพาความทรงจำมาได้?',done:false},{id:uid(),text:'คาเอลเคยรู้จักพ่อของลินิน',done:false}];
+ n.threads=[{id:uid(),title:'พ่อหายไปไหน',status:'open',planted:n.chapters[0].id,resolved:'',notes:''}];
+ return n;
+}
+
+/* ---------- state ---------- */
+const S={nid:null,sec:'overview',sel:{},folder:{},tag:{},q:{},refOpen:false,refTab:'notes',refQ:'',focus:false,collapsed:false,
+ bmode:'free',bid:null,pan:{x:40,y:20},z:1,linkFrom:null,relFrom:null,jump:null,find:{q:'',r:'',case:false,scope:'all',data:false}};
+
+/* ---------- html → paragraphs ---------- */
+function htmlToParas(html){
+ const root=document.createElement('div');root.innerHTML=html||'';
+ const paras=[];let cur=[],al=null;
+ const flush=()=>{paras.push({runs:cur,align:al});cur=[];al=null};
+ (function walk(node,fmt){
+  for(const n of node.childNodes){
+   if(n.nodeType===3){if(n.textContent)cur.push({t:n.textContent.replace(/\n/g,' '),...fmt});continue}
+   if(n.nodeType!==1)continue;const tag=n.tagName;
+   if(tag==='BR'){if(!(n.nextSibling==null&&n.parentNode!==root))flush();continue}
+   const f={...fmt};if(/^(B|STRONG)$/.test(tag))f.b=1;if(/^(I|EM)$/.test(tag))f.i=1;if(tag==='U')f.u=1;
+   if(n.style){if(n.style.fontWeight==='bold'||+n.style.fontWeight>=600)f.b=1;if(n.style.fontStyle==='italic')f.i=1}
+   if(/^(DIV|P|H\d|BLOCKQUOTE|LI)$/.test(tag)){if(cur.length)flush();const a=(n.style&&n.style.textAlign)||n.getAttribute('align');walk(n,f);if(a)al=a;flush()}
+   else walk(n,f);
+  }
+ })(root,{});
+ if(cur.length)flush();
+ return paras;
+}
+const paraText=p=>p.runs.map(r=>r.t).join('');
+function htmlToText(html){return htmlToParas(html).map(paraText).join('\n')}
+function textNodes(root){const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);const a=[];while(w.nextNode())a.push(w.currentNode);return a}
+
+/* ---------- daily tracking ---------- */
+function totalWords(n){return n.chapters.reduce((a,c)=>a+(c.words||0),0)}
+function updateChapterWords(n,ch,words){
+ const prev=totalWords(n),d=today();
+ if(!n.base||n.base.date!==d)n.base={date:d,start:prev};
+ ch.words=words;
+ n.log[d]=Math.max(0,totalWords(n)-n.base.start);
+}
+function streak(n){let s=0;const d=new Date();if(!(n.log[dkey(d)]>0))d.setDate(d.getDate()-1);while(n.log[dkey(d)]>0){s++;d.setDate(d.getDate()-1)}return s}
+
+/* ---------- trash ---------- */
+function trashPut(kind,item,o={}){const t={id:uid(),kind,item,nid:o.nid||'',index:o.index??-1,extra:o.extra||null,at:Date.now()};db.trash.unshift(t);return t}
+function trashRestore(id){
+ const i=db.trash.findIndex(t=>t.id===id);if(i<0)return false;const t=db.trash[i];
+ if(t.kind==='novel'){if(db.novels.some(n=>n.id===t.item.id))t.item.id=uid();db.novels.push(t.item)}
+ else{const n=db.novels.find(x=>x.id===t.nid);if(!n){toast('นิยายต้นทางถูกลบไปแล้ว — กู้คืนนิยายก่อน');return false}
+  if(t.kind==='board')n.boards.push(t.item);
+  else{const arr=n[t.kind];arr.splice(t.index>=0?Math.min(t.index,arr.length):arr.length,0,t.item);
+   if(t.kind==='characters'&&t.extra){(t.extra.relations||[]).forEach(r=>{if(n.characters.some(c=>c.id===r.a)&&n.characters.some(c=>c.id===r.b))n.relations.push(r)});if(t.extra.pos)n.relPos[t.item.id]=t.extra.pos}}
+  touch(n)}
+ db.trash.splice(i,1);return true;
+}
+function softDelete(kind,item,o){const t=trashPut(kind,item,o);save();const label=TRASH_KIND[kind];
+ toast(`ย้าย${label}ไปถังขยะแล้ว`,{label:'เลิกทำ',fn:()=>{if(trashRestore(t.id)){save();S.nid&&N()?rerenderMain():render()}}})}
+
+/* ---------- render ---------- */
+const app=$('#app');
+function render(){
+ hideAC();
+ if(!S.nid||!N()){S.nid=null;app.innerHTML=renderLibrary();labelButtons();return}
+ app.innerHTML=renderNovel();afterRender();
+}
+function labelButtons(root=document){$$('button[title]:not([aria-label]),a[title]:not([aria-label])',root).forEach(b=>b.setAttribute('aria-label',b.title))}
+function themeSwitch(){const t=db.settings.theme;return `<div class="themes" role="group" aria-label="โทนสี">${[['paper','#E9E2D6','กระดาษ'],['matcha','#C9D6C8','ชาเขียว'],['dusk','#3B3E46','สนธยา']].map(([k,c,n])=>`<button data-act="theme" data-v="${k}" title="โทน${n}" class="${t===k?'on':''}" style="background:${c}"></button>`).join('')}</div>`}
+function backupBanner(){
+ if(FS.ok)return '';
+ if(FS.handle)return `<div class="banner" id="bkBanner"><span class="grow">การบันทึกลงไฟล์อัตโนมัติ <b>หยุดชั่วคราว</b> (เบราว์เซอร์ต้องการให้ยืนยันสิทธิ์อีกครั้ง)</span><button class="btn primary sm" data-act="regrant">เปิดอีกครั้ง</button></div>`;
+ const has=db.novels.some(n=>totalWords(n)>0||n.characters.length);if(!has)return '';
+ const last=db.settings.lastBackup,days=last?Math.floor((Date.now()-last)/864e5):null;
+ if(last&&days<7)return '';
+ return `<div class="banner" id="bkBanner"><span class="grow">${last?`ยังไม่ได้สำรองข้อมูลมา <b>${days} วัน</b>`:'<b>ยังไม่เคยสำรองข้อมูล</b>'} — ข้อมูลอยู่ในเบราว์เซอร์นี้เท่านั้น ถ้าล้างข้อมูลเบราว์เซอร์งานจะหาย</span>
+ <button class="btn sm" data-act="backupAll">${ic('down',14)} สำรองตอนนี้</button>${window.showSaveFilePicker?`<button class="btn primary sm" data-act="linkFile">${ic('save',14)} บันทึกลงไฟล์อัตโนมัติ</button>`:''}</div>`;
+}
+function refreshBanner(){const b=$('#bkBanner');const h=backupBanner();if(b){if(h)b.outerHTML=h;else b.remove()}else if(h){const host=$('.lib')||$('.ov-page');if(host)host.insertAdjacentHTML('afterbegin',h)}}
+
+function renderLibrary(){
+ const ns=[...db.novels].sort((a,b)=>b.updated-a.updated);
+ return `<header class="top"><div class="brand"><div class="logo">${ic('book')}</div><span class="brand-name">Inkfold</span></div><div class="spacer"></div>
+ <button class="btn primary sm install-btn ${installEvt?'':'hidden'}" data-act="install">${ic('install',15)} ติดตั้งเป็นแอป</button>
+ <button class="btn ghost sm hide-sm" data-act="importJson">${ic('up',16)} นำเข้า</button>
+ <button class="btn ghost sm hide-sm" data-act="backupAll">${ic('down',16)} สำรองทั้งคลัง</button>
+ <button class="icon-btn" data-act="trash" title="ถังขยะ">${ic('trash',17)}</button><button class="icon-btn" data-act="settings" title="ตั้งค่าและการบันทึกข้อมูล">${ic('gear',17)}</button>${themeSwitch()}</header>
+ <div class="lib">${backupBanner()}<div class="lib-head"><div class="lib-art">${ART.book}</div><div style="flex:1"><h1>คลังนิยายของฉัน</h1><p>วางโครง จดข้อมูล และเขียนเรื่องราวของคุณ — ข้อมูลทั้งหมดเก็บอยู่ในเครื่องนี้</p></div>
+ <button class="btn primary" data-act="newNovel">${ic('plus',16)} นิยายเรื่องใหม่</button></div>
+ <div class="lib-grid">${ns.map(n=>`<div class="card ncard" data-act="open" data-id="${n.id}" tabindex="0" role="button" aria-label="เปิด ${esc(n.title)}">
+  ${n.cover?`<div class="cover img"><img src="${n.cover}" alt=""></div>`:`<div class="cover" style="background:linear-gradient(135deg,${n.color},${n.color}aa)"><span style="color:${n.color}">${esc(initial(n.title))}</span></div>`}
+  <div class="menu"><button class="icon-btn" data-act="editNovel" data-id="${n.id}" title="แก้ไขข้อมูลนิยาย">${ic('edit',16)}</button><button class="icon-btn" data-act="delNovel" data-id="${n.id}" title="ย้ายนิยายไปถังขยะ">${ic('trash',16)}</button></div>
+  <div class="nbody">${n.genre?`<div><span class="chip">${esc(n.genre)}</span></div>`:''}<h3>${esc(n.title)}</h3><div class="syn">${esc(n.synopsis)||'<i>ยังไม่มีเรื่องย่อ</i>'}</div>
+  <div class="meta"><span>${n.chapters.length} บท</span><span>${num(totalWords(n))} คำ</span><span style="margin-left:auto">แก้ไข ${fmtDate(n.updated)}</span></div></div></div>`).join('')}
+  <button class="newcard" data-act="newNovel"><div style="text-align:center">${ic('plus',28)}<div style="margin-top:6px">เริ่มเรื่องใหม่</div></div></button></div>
+  <div class="foot">Inkfold เวอร์ชัน ${APP_VERSION} · ทำงานออฟไลน์ได้ · ไม่มีการส่งเนื้อหาของคุณออกไปที่ใด</div></div>`;
+}
+
+const SECS=[['overview','ภาพรวม','home'],['outline','โครงเรื่อง','outline'],['chapters','เนื้อหาบท','file'],['characters','ตัวละคร','users'],['locations','ฉากและสถานที่','pin'],['glossary','คำศัพท์และโลก','mark'],['board','กระดานวางแผน','grid'],['ideas','ไอเดียและปมเรื่อง','bulb']];
+function renderNovel(){
+ const n=N();const cnt={chapters:n.chapters.length,characters:n.characters.length,locations:n.locations.length,glossary:n.glossary.length,ideas:n.ideas.filter(i=>!i.done).length};
+ const tc=db.trash.filter(t=>t.nid===n.id).length;
+ return `<div class="shell ${S.focus?'focus':''} ${S.collapsed?'collapsed':''}" id="shell">
+ <header class="top"><button class="btn ghost sm" data-act="home">${ic('back',16)} <span class="hide-sm">คลังนิยาย</span></button><div class="vsep"></div>
+ <span class="st-dot" style="background:${n.color};width:10px;height:10px"></span><div class="ntitle">${esc(n.title)}</div>${n.genre?`<span class="chip hide-sm">${esc(n.genre)}</span>`:''}
+ <button class="icon-btn" data-act="editNovel" data-id="${n.id}" title="ตั้งค่านิยาย">${ic('gear',17)}</button>
+ <div class="spacer"></div><div class="saved hide-sm" id="savedInd"><span class="dot"></span> ${FS.ok?'บันทึกแล้ว (เครื่อง + ไฟล์)':'บันทึกในเครื่องแล้ว'}</div>${themeSwitch()}</header>
+ <div class="body"><nav class="nav" aria-label="เมนูนิยาย"><div style="display:flex;align-items:center"><div class="nlabel" style="flex:1">เมนู</div><button class="icon-btn" data-act="collapse" title="ย่อ/ขยายเมนู" style="width:28px;height:28px">${ic(S.collapsed?'right':'left',15)}</button></div>
+ ${SECS.map(([k,l,i])=>`<a class="${S.sec===k?'on':''}" data-act="sec" data-v="${k}" title="${l}" tabindex="0" role="button">${ic(i)}<span class="txt">${l}</span>${cnt[k]!=null?`<span class="cnt">${cnt[k]}</span>`:''}</a>`).join('')}
+ <div class="grow"></div><a data-act="trash" data-v="${n.id}" title="ถังขยะ" tabindex="0" role="button">${ic('trash')}<span class="txt">ถังขยะ</span><span class="cnt">${tc||''}</span></a>
+ <a class="${S.sec==='export'?'on':''}" data-act="sec" data-v="export" title="รวบรวมและส่งออก" tabindex="0" role="button">${ic('down')}<span class="txt">รวบรวมและส่งออก</span></a></nav>
+ <main class="main" id="main">${renderSection()}</main></div></div>`;
+}
+function renderSection(){
+ switch(S.sec){case 'overview':return secOverview();case 'outline':return secOutline();case 'chapters':return secChapters();
+ case 'characters':case 'locations':case 'glossary':return secEntities(S.sec);case 'board':return secBoard();case 'ideas':return secIdeas();case 'export':return secExport()}
+}
+function rerenderMain(){const m=$('#main');if(!m)return render();const st=m.scrollTop;hideAC();m.innerHTML=renderSection();if(S.animate){S.animate=false;const f=m.firstElementChild;if(f)f.classList.add('pg-in')}afterRender();m.scrollTop=st;
+ $$('.nav a[data-act="sec"]').forEach(a=>a.classList.toggle('on',a.dataset.v===S.sec))}
+function afterRender(){if(S.sec==='chapters')mountEditor();if(S.sec==='board')mountBoard();$$('textarea.auto').forEach(autoGrow);labelButtons()}
+function autoGrow(t){t.style.height='auto';t.style.height=t.scrollHeight+'px'}
+function avatar(c,sz=54){const fs=Math.round(sz*.42);return c.img?`<img class="avatar" src="${c.img}" alt="" style="width:${sz}px;height:${sz}px">`:`<span class="avatar" style="width:${sz}px;height:${sz}px;font-size:${fs}px;background:${c.color||COLORS[0]}">${esc(initial(c.name))}</span>`}
+
+/* ---------- overview ---------- */
+function secOverview(){
+ const n=N(),tw=totalWords(n),d=today(),tdy=n.log[d]||0,goal=+n.goal||0,pct=goal?Math.min(100,Math.round(tdy/goal*100)):0;
+ const days=[];for(let i=13;i>=0;i--){const x=new Date();x.setDate(x.getDate()-i);days.push([dkey(x),x])}
+ const mx=Math.max(1,...days.map(([k])=>n.log[k]||0));
+ const j=n.journal[d]||{};
+ const byS=k=>n.chapters.filter(c=>(c.status||'draft')===k).length;
+ const openTh=n.threads.filter(t=>t.status!=='resolved');
+ const tg=n.target;let tgBox='';
+ if(tg.words){const p=Math.min(100,Math.round(tw/tg.words*100)),rem=Math.max(0,tg.words-tw);let line='';
+  if(tg.date){const dl=Math.ceil((new Date(tg.date+'T23:59:59')-new Date())/864e5);
+   line=rem===0?'ถึงเป้าหมายแล้ว 🎉':dl>0?`เหลืออีก <b>${num(rem)}</b> คำ ใน ${dl} วัน → ต้องเขียนเฉลี่ย <b>${num(Math.ceil(rem/dl))}</b> คำต่อวัน`:`เลยกำหนด ${fmtDate(new Date(tg.date))} แล้ว · เหลืออีก ${num(rem)} คำ`}
+  else line=rem===0?'ถึงเป้าหมายแล้ว 🎉':`เหลืออีก <b>${num(rem)}</b> คำ`;
+  tgBox=`<div class="card ov-box" style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;margin-bottom:8px;gap:10px;flex-wrap:wrap"><h3 style="margin:0">เป้าหมายทั้งเรื่อง</h3><span class="muted" style="font-size:13.5px">${num(tw)} / ${num(tg.words)} คำ (${p}%)${tg.date?` · กำหนดเสร็จ ${fmtDate(new Date(tg.date))}`:''}</span></div><div class="prog"><i style="width:${p}%"></i></div><div style="margin-top:8px;font-size:14px">${line}</div></div>`}
+ return `<div class="page ov-page">${backupBanner()}<div class="page-h"><div style="flex:1"><h2>ภาพรวม</h2><p>${esc(n.synopsis)||'ภาพรวมของเรื่อง ยอดคำ และงานที่ยังค้างอยู่'}</p></div><button class="btn primary" data-act="writeNow">${ic('edit',16)} เขียนต่อ</button></div>
+ <div class="stats"><div class="card stat"><div class="v">${num(tw)}</div><div class="k">คำทั้งหมด</div></div>
+ <div class="card stat"><div class="v">${n.chapters.length}</div><div class="k">บท · เสร็จแล้ว ${byS('done')}</div></div>
+ <div class="card stat"><div class="v">${n.characters.length}</div><div class="k">ตัวละคร</div></div>
+ <div class="card stat"><div class="v">${streak(n)} <span style="font-size:16px">วัน</span></div><div class="k">เขียนต่อเนื่อง</div></div></div>
+ ${tgBox||`<div class="banner" style="background:var(--surface2)"><span class="grow">ตั้งเป้าหมายจำนวนคำทั้งเรื่องและวันกำหนดเสร็จ แล้วระบบจะคำนวณว่าต้องเขียนวันละกี่คำ</span><button class="btn sm" data-act="editNovel" data-id="${n.id}">ตั้งเป้าหมาย</button></div>`}
+ <div class="ov-grid"><div class="card ov-box"><h3>คำที่เขียนใน 14 วันที่ผ่านมา</h3>
+ <div class="bars" role="img" aria-label="กราฟจำนวนคำที่เขียนรายวัน">${days.map(([k,x])=>{const v=n.log[k]||0;return `<div class="b ${v?'':'zero'}" title="${fmtDate(x)}: ${num(v)} คำ"><i style="height:${Math.max(3,v/mx*100)}%"></i><span>${x.getDate()}</span></div>`}).join('')}</div>
+ <div style="margin-top:18px"><div style="display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:6px"><span>วันนี้ <b>${num(tdy)}</b> / ${num(goal)} คำ</span><span class="muted">${pct}%</span></div><div class="prog"><i style="width:${pct}%"></i></div></div></div>
+ <div class="card ov-box"><h3>บันทึกประจำวัน</h3><div class="lbl">วันนี้รู้สึกอย่างไรกับงานเขียน</div>
+ <div class="moods">${MOODS.map(m=>`<button data-act="mood" data-v="${m}" class="${j.mood===m?'on':''}" aria-pressed="${j.mood===m}">${m}</button>`).join('')}</div>
+ <textarea class="in" data-coll="journal" data-f="note" placeholder="จดสั้น ๆ ว่าวันนี้เขียนอะไรไป ติดตรงไหน…" style="min-height:96px" aria-label="บันทึกประจำวัน">${esc(j.note)}</textarea></div>
+ <div class="card ov-box"><h3>สถานะของบท</h3><div class="row-list">${Object.entries(STATUS).map(([k,s])=>`<div class="r"><span class="st-dot" style="background:${s.c}"></span>${s.n}<span style="margin-left:auto" class="muted">${byS(k)} บท</span></div>`).join('')}</div></div>
+ <div class="card ov-box"><h3>งานที่ยังค้าง</h3><div class="row-list">
+ ${openTh.slice(0,5).map(t=>`<div class="r">${ic('link',15)} ${esc(t.title||'(ปมไม่มีชื่อ)')}<span class="chip warm" style="margin-left:auto">ยังไม่คลี่คลาย</span></div>`).join('')}
+ ${n.ideas.filter(i=>!i.done).slice(0,4).map(i=>`<div class="r">${ic('bulb',15)} <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(i.text)}</span></div>`).join('')}
+ ${!openTh.length&&!n.ideas.some(i=>!i.done)?'<div class="muted">ไม่มีงานค้าง เยี่ยมมาก ✨</div>':''}</div></div></div></div>`;
+}
+
+/* ---------- outline ---------- */
+const OUT=[['logline','แก่นเรื่องในหนึ่งประโยค (Logline)','เมื่อ [ตัวเอก] ต้อง [เป้าหมาย] แต่ [อุปสรรค]…',2],['synopsis','เรื่องย่อ','เล่าเรื่องทั้งหมดแบบสั้น ๆ',5],['plot','พล็อตหลัก','เหตุการณ์สำคัญที่ขับเคลื่อนเรื่อง',5],['act1','องก์ 1 — ปูเรื่อง','',4],['act2','องก์ 2 — ขัดแย้ง','',4],['act3','องก์ 3 — คลี่คลาย','',4],['theme','ธีม / สารที่อยากสื่อ','',3],['tone','โทนและบรรยากาศ','เช่น อบอุ่น ลึกลับ หม่นหมอง ตลกร้าย',2],['ending','ตอนจบ','ตอนจบที่วางไว้ (ถึงจะเปลี่ยนภายหลังก็ได้)',3]];
+function secOutline(){const o=N().outline;
+ return `<div class="page" style="max-width:860px"><div class="page-h"><div><h2>โครงเรื่อง</h2><p>จดเรื่องย่อ พล็อตหลัก ธีม โทนเรื่อง และตอนจบ — บันทึกอัตโนมัติขณะพิมพ์</p></div></div>
+ <div class="ent-form">${OUT.map(([k,l,ph,r])=>`<div class="field"><label for="o_${k}">${l}</label><textarea id="o_${k}" class="in auto" rows="${r}" data-coll="outline" data-f="${k}" placeholder="${ph}">${esc(o[k])}</textarea></div>`).join('')}</div></div>`}
+
+/* ---------- chapters ---------- */
+function curChapter(){const n=N();let c=n.chapters.find(x=>x.id===S.sel.chapters);if(!c&&n.chapters.length){c=n.chapters[0];S.sel.chapters=c.id}return c}
+function chapterListHtml(){const n=N(),c=curChapter();
+ return n.chapters.map((x,i)=>`<div class="li ${c&&x.id===c.id?'on':''}" data-act="selChapter" data-id="${x.id}" data-li="${x.id}" draggable="true" data-chdrag="${x.id}" title="ลากเพื่อเรียงลำดับ" tabindex="0" role="button">
+  <div class="li-k"><span class="st-dot" style="background:${(STATUS[x.status]||STATUS.draft).c}"></span>บทที่ ${i+1}<span style="margin-left:auto" class="li-w">${num(x.words)} คำ</span></div><div class="li-name">${esc(x.title)||'(ไม่มีชื่อบท)'}</div>${x.summary?`<div class="li-sub">${esc(x.summary)}</div>`:''}</div>`).join('')||'<div class="empty">ยังไม่มีบท<br>กด “เพิ่มบท” เพื่อเริ่ม</div>'}
+function secChapters(){
+ const n=N(),c=curChapter();
+ const list=`<aside class="list"><div class="list-head"><span class="t">บททั้งหมด</span><button class="btn primary sm" data-act="addChapter">${ic('plus',14)} เพิ่มบท</button></div>
+ <div class="list-items" id="chList">${chapterListHtml()}</div></aside>`;
+ if(!c)return `<div class="split">${list}<div class="pane"><div class="empty" style="margin-top:12vh">${ART.quill}<div class="big">หน้ากระดาษว่างรออยู่</div>เพิ่มบทแรกของคุณเพื่อเริ่มเขียน<br><br><button class="btn primary" data-act="addChapter">${ic('plus',16)} เพิ่มบทแรก</button></div></div></div>`;
+ const fs=db.settings.edSize||18,font=db.settings.edFont||'serif',idx=n.chapters.indexOf(c);
+ return `<div class="split">${list}<div class="edwrap">
+ <div class="ed-head"><input class="ed-title" data-coll="chapters" data-id="${c.id}" data-f="title" value="${esc(c.title)}" placeholder="ชื่อบท" aria-label="ชื่อบท">
+  <select class="in" style="width:auto;padding:6px 10px;font-size:13px" data-coll="chapters" data-id="${c.id}" data-f="status" data-rr="list" aria-label="สถานะของบท">${Object.entries(STATUS).map(([k,s])=>`<option value="${k}" ${c.status===k?'selected':''}>${s.n}</option>`).join('')}</select>
+  <button class="icon-btn" data-act="moveCh" data-v="-1" title="เลื่อนบทขึ้น" ${idx===0?'disabled':''}>${ic('chevU',17)}</button><button class="icon-btn" data-act="moveCh" data-v="1" title="เลื่อนบทลง" ${idx===n.chapters.length-1?'disabled':''}>${ic('chevD',17)}</button>
+  <button class="icon-btn" data-act="history" title="ประวัติเวอร์ชันของบทนี้">${ic('history',17)}</button>
+  <button class="icon-btn" data-act="delChapter" title="ย้ายบทนี้ไปถังขยะ">${ic('trash',17)}</button>
+  <button class="icon-btn" data-act="openFind" title="ค้นหาและแทนที่ (Ctrl+F)">${ic('search',17)}</button>
+  <button class="icon-btn ${S.refOpen?'on':''}" data-act="toggleRef" title="โน้ตบทและข้อมูลอ้างอิง">${ic('side',17)}</button>
+  <button class="icon-btn ${S.focus?'on':''}" data-act="focus" title="โหมดโฟกัส (Esc เพื่อออก)">${ic('expand',17)}</button></div>
+ <div class="ed-bar" role="toolbar" aria-label="จัดรูปแบบข้อความ"><button class="tb" data-cmd="undo" title="ย้อนกลับ (Ctrl+Z)">${ic('undo',16)}</button><button class="tb" data-cmd="redo" title="ทำซ้ำ (Ctrl+Y)">${ic('redo',16)}</button><span class="sep"></span>
+  <button class="tb" data-cmd="bold" title="ตัวหนา (Ctrl+B)"><b>B</b></button><button class="tb" data-cmd="italic" title="ตัวเอียง (Ctrl+I)"><i style="font-family:serif">I</i></button><button class="tb" data-cmd="underline" title="ขีดเส้นใต้ (Ctrl+U)"><u>U</u></button><span class="sep"></span>
+  <button class="tb" data-cmd="justifyLeft" title="ชิดซ้าย">${ic('al',16)}</button><button class="tb" data-cmd="justifyCenter" title="กึ่งกลาง">${ic('ac',16)}</button><button class="tb" data-cmd="justifyRight" title="ชิดขวา">${ic('ar',16)}</button><button class="tb" data-cmd="justifyFull" title="เต็มบรรทัด">${ic('aj',16)}</button><span class="sep"></span>
+  <button class="tb" data-act="insSep" title="แทรกตัวคั่นฉาก">✻</button>
+  <span style="flex:1"></span>
+  <select class="in" data-act-change="edFont" style="width:auto;padding:4px 8px;font-size:12.5px;border:0;background:transparent" aria-label="แบบตัวอักษร"><option value="serif" ${font==='serif'?'selected':''}>ตัวอักษรมีหัว</option><option value="sans" ${font==='sans'?'selected':''}>ตัวอักษรไม่มีหัว</option></select>
+  <span class="zoom"><button class="tb" data-act="edSize" data-v="-1" title="ลดขนาดตัวอักษร">${ic('minus',14)}</button><span id="fsz">${fs}px</span><button class="tb" data-act="edSize" data-v="1" title="เพิ่มขนาดตัวอักษร">${ic('plus',14)}</button></span></div>
+ <div class="ed-scroll"><div class="ed-paper"><div id="editor" class="ed-body ${font==='sans'?'sans':''}" contenteditable="true" spellcheck="false" style="font-size:${fs}px" role="textbox" aria-multiline="true" aria-label="เนื้อหาบท"></div></div></div>
+ <div class="ed-foot"><span id="wc">0 คำ</span><span id="cc">0 ตัวอักษร</span><span class="sp"></span><span>พิมพ์ชื่อ 2 ตัวอักษรแรก แล้วกด <b>Tab</b> เพื่อเติมชื่อ</span></div></div>
+ ${S.refOpen?renderRef():''}</div>`;
+}
+const REFTABS=[['notes','โน้ตบท'],['find','ค้นหา'],['characters','ตัวละคร'],['locations','สถานที่'],['glossary','คำศัพท์']];
+function renderRef(){
+ const t=S.refTab;
+ const head=`<aside class="ref" aria-label="แผงข้อมูลอ้างอิง"><div class="ref-h"><h3>${t==='notes'?'โน้ตประจำบท':t==='find'?'ค้นหาและแทนที่':'ข้อมูลอ้างอิง'}</h3><button class="icon-btn" data-act="toggleRef" title="ปิดแผง">${ic('x',17)}</button></div>
+ <div style="padding:0 14px 10px"><div class="seg">${REFTABS.map(([k,l])=>`<button class="${t===k?'on':''}" data-act="refTab" data-v="${k}">${l}</button>`).join('')}</div></div>`;
+ if(t==='notes')return head+refNotes()+'</aside>';
+ if(t==='find')return head+refFind()+'</aside>';
+ return head+`<div style="padding:0 14px 10px"><div class="search">${ic('search',15)}<input class="in" id="refQ" placeholder="ค้นหา…" value="${esc(S.refQ)}" aria-label="ค้นหาข้อมูลอ้างอิง"></div></div><div class="ref-items" id="refItems">${refItemsHtml()}</div></aside>`;
+}
+function refItemsHtml(){
+ const n=N(),t=S.refTab,q=S.refQ.trim().toLowerCase();
+ const items=n[t].filter(x=>!q||JSON.stringify(x).toLowerCase().includes(q));
+ const det=x=>{if(t==='characters')return [['บทบาท',x.role],['อายุ',x.age],['นิสัย',x.personality],['รูปลักษณ์',x.appearance],['ต้องการ',x.want],['กลัว',x.fear],['ประวัติ',x.backstory]];
+  if(t==='locations')return [['ประเภท',x.type],['ที่ตั้ง',x.region],['บรรยากาศ',x.atmosphere],['รายละเอียด',x.description]];return [['ประเภท',(GKIND[x.kind]||{}).n],...(x.fields||[]).map(f=>[f.label,f.text])]};
+ return items.map(x=>`<div class="ref-it" data-act="refOpen"><div style="display:flex;align-items:center;gap:8px">${t==='characters'?avatar(x,30):''}<div style="flex:1;min-width:0"><div class="li-name" style="font-weight:600">${esc(x.name)}</div><div class="li-sub muted" style="font-size:12px">${esc(t==='characters'?x.role:t==='locations'?x.type:(GKIND[x.kind]||{}).n)}</div></div>
+ <button class="btn sm" data-act="insName" data-v="${esc(x.name)}" title="แทรกชื่อลงในเนื้อหา">แทรก</button></div>
+ <div class="ref-d">${det(x).filter(([,v])=>v).map(([k,v])=>`<div><b>${esc(k)}:</b> ${esc(v)}</div>`).join('')||'ยังไม่มีรายละเอียด'}</div></div>`).join('')||'<div class="empty">ไม่พบข้อมูล</div>'}
+function refNotes(){
+ const n=N(),c=curChapter();
+ const chip=(kind,x)=>{const on=(c[kind]||[]).includes(x.id);return `<button class="chip ${on?'on':''}" data-act="chTag" data-k="${kind}" data-id="${x.id}" aria-pressed="${on}">${esc(x.name)}</button>`};
+ const th=n.threads.filter(t=>t.planted===c.id||t.resolved===c.id);
+ return `<div class="ref-body">
+ <div class="field"><label for="chSum">สรุปเหตุการณ์ในบท</label><textarea id="chSum" class="in auto" rows="3" data-coll="chapters" data-id="${c.id}" data-f="summary" placeholder="บทนี้เกิดอะไรขึ้นบ้าง…" style="min-height:70px">${esc(c.summary)}</textarea></div>
+ <div class="field"><label for="chPov">มุมมองการเล่า (POV)</label><select id="chPov" class="in" data-coll="chapters" data-id="${c.id}" data-f="pov"><option value="">— ไม่ระบุ —</option>${n.characters.map(x=>`<option value="${x.id}" ${c.pov===x.id?'selected':''}>${esc(x.name)}</option>`).join('')}</select></div>
+ <div class="field"><div style="display:flex;align-items:center"><span class="lbl" style="flex:1">ตัวละครและสถานที่ในบทนี้</span><button class="btn sm" data-act="detectCh" title="ตรวจหาชื่อที่ปรากฏในเนื้อหาของบทนี้">${ic('search',13)} ตรวจจากเนื้อหา</button></div>
+ <div class="tagpick">${n.characters.map(x=>chip('chars',x)).join('')||'<span class="muted" style="font-size:13px">ยังไม่มีตัวละคร</span>'}</div>
+ <div class="tagpick" style="margin-top:4px">${n.locations.map(x=>chip('locs',x)).join('')}</div></div>
+ ${th.length?`<div class="field"><label>ปมเรื่องในบทนี้</label>${th.map(t=>`<div style="font-size:13.5px;display:flex;gap:6px;align-items:center">${ic('link',13)} ${esc(t.title||'(ปมไม่มีชื่อ)')} <span class="chip ${t.planted===c.id?'warm':'accent'}">${t.planted===c.id?'ผูกปม':'เฉลย'}</span></div>`).join('')}</div>`:''}
+ <div class="field"><label for="chNote">โน้ตสำหรับบทนี้</label><textarea id="chNote" class="in auto" rows="3" data-coll="chapters" data-id="${c.id}" data-f="notes" placeholder="สิ่งที่ต้องแก้ ไอเดียเพิ่มเติม…" style="min-height:70px">${esc(c.notes)}</textarea></div>
+ <button class="btn sm" data-act="history" style="align-self:flex-start">${ic('history',14)} ประวัติเวอร์ชัน (${(c.snaps||[]).length})</button></div>`;
+}
+function refFind(){const f=S.find;
+ return `<div class="ref-body"><div class="field"><label for="findQ">ค้นหา</label><input id="findQ" class="in" value="${esc(f.q)}" placeholder="คำที่ต้องการค้นหา"></div>
+ <div class="field"><label for="findR">แทนที่ด้วย</label><input id="findR" class="in" value="${esc(f.r)}" placeholder="(เว้นว่างเพื่อลบคำ)"></div>
+ <div class="field"><label for="findScope">ขอบเขต</label><select id="findScope" class="in"><option value="all" ${f.scope==='all'?'selected':''}>ทุกบท</option><option value="cur" ${f.scope==='cur'?'selected':''}>เฉพาะบทนี้</option></select></div>
+ <label class="check" style="padding:8px 12px"><input type="checkbox" id="findData" ${f.data?'checked':''}><span style="font-size:13.5px">รวมข้อมูลตัวละคร สถานที่ คำศัพท์ โครงเรื่อง และกระดานด้วย<small>เหมาะเวลาเปลี่ยนชื่อตัวละครทั้งเรื่อง</small></span></label>
+ <label class="check" style="padding:8px 12px"><input type="checkbox" id="findCase" ${f.case?'checked':''}><span style="font-size:13.5px">ตัวพิมพ์เล็ก/ใหญ่ต้องตรงกัน <small>(สำหรับภาษาอังกฤษ)</small></span></label>
+ <button class="btn primary" data-act="replaceAll" style="justify-content:center">${ic('refresh',15)} แทนที่ทั้งหมด</button>
+ <div id="findRes">${findResultsHtml()}</div></div>`}
+
+/* ---------- editor ---------- */
+let edT,savedRange=null;
+function mountEditor(){
+ const ed=$('#editor');if(!ed)return;const c=curChapter();ed.innerHTML=cleanHtml(c.html);updateWC();
+ ed.addEventListener('input',()=>{clearTimeout(edT);setSaved(true);edT=setTimeout(()=>commitEditor(),350);if(AC.skip){AC.skip=false;hideAC()}else acCheck()});
+ ed.addEventListener('keydown',acKey);
+ ed.addEventListener('blur',()=>{setTimeout(hideAC,150)});
+ ed.addEventListener('paste',e=>{e.preventDefault();const t=(e.clipboardData||window.clipboardData).getData('text/plain');document.execCommand('insertText',false,t)});
+ ed.addEventListener('drop',e=>{if(e.dataTransfer&&[...e.dataTransfer.types].includes('Files'))e.preventDefault()});
+ ed.addEventListener('keyup',e=>{if(/^Arrow|Home|End/.test(e.key)&&!AC.items.length)hideAC()});
+ ed.addEventListener('mouseup',saveRange);ed.addEventListener('keyup',saveRange);
+ const ri=$('#refQ');if(ri)ri.addEventListener('input',()=>{S.refQ=ri.value;$('#refItems').innerHTML=refItemsHtml();labelButtons($('#refItems'))});
+ mountFind();
+ if(S.jump){const j=S.jump;S.jump=null;setTimeout(()=>doJump(j),0)}
+ else if(!S.focus&&!('ontouchstart' in window)&&!S.keepFocus)setTimeout(()=>{ed.focus();placeEnd(ed)},0);
+ S.keepFocus=false;
+}
+function placeEnd(el){const r=document.createRange();r.selectNodeContents(el);r.collapse(false);const s=getSelection();s.removeAllRanges();s.addRange(r);saveRange()}
+function saveRange(){const s=getSelection();if(s.rangeCount&&$('#editor')&&$('#editor').contains(s.anchorNode))savedRange=s.getRangeAt(0).cloneRange()}
+function addSnap(c,label){if(!c.html&&!label)return;c.snaps=c.snaps||[];c.snaps.push({t:Date.now(),html:c.html,words:c.words||0,label:label||''});if(c.snaps.length>SNAP_MAX){const auto=c.snaps.findIndex(s=>!s.label);c.snaps.splice(auto>=0?auto:0,1)}}
+function commitEditor(){
+ clearTimeout(edT);
+ const ed=$('#editor');if(!ed)return;const n=N(),c=curChapter();if(!c)return;
+ const html=ed.innerHTML;if(html===c.html){setSaved(false);return}
+ const last=(c.snaps||[]).filter(s=>!s.label).pop();
+ if(c.html&&(!last||dkey(new Date(last.t))!==today()))addSnap(c,'');
+ c.html=html;updateChapterWords(n,c,countWords(htmlToText(c.html)));touch(n);save();updateWC();
+ const li=$(`[data-li="${c.id}"] .li-w`);if(li)li.textContent=num(c.words)+' คำ';
+}
+function updateWC(){const c=curChapter();if(!c)return;const ed=$('#editor');const txt=ed?htmlToText(ed.innerHTML):'';
+ $('#wc').textContent=num(countWords(txt))+' คำ';$('#cc').textContent=num(txt.replace(/\s/g,'').length)+' ตัวอักษร'}
+
+/* ---------- autocomplete ---------- */
+const AC={items:[],i:0,skip:false};
+function acNames(){const n=N(),out=[];const add=(name,kind)=>{if(name&&name.trim().length>=2)out.push({text:name.trim(),kind})};
+ n.characters.forEach(c=>{add(c.name,'ตัวละคร');const p=(c.name||'').trim().split(/\s+/);if(p.length>1)add(p[0],'ตัวละคร')});
+ n.locations.forEach(l=>add(l.name,'สถานที่'));n.glossary.filter(g=>g.ac!==false).forEach(g=>add(g.name,'คำศัพท์'));
+ const seen=new Set();return out.filter(x=>!seen.has(x.text)&&seen.add(x.text))}
+function acCheck(){
+ const s=getSelection();if(!s.rangeCount)return hideAC();const r=s.getRangeAt(0);if(!r.collapsed||r.startContainer.nodeType!==3)return hideAC();
+ const before=r.startContainer.textContent.slice(0,r.startOffset);const lower=before.toLowerCase();const c=[];
+ for(const nm of acNames()){const t=nm.text,tl=t.toLowerCase();for(let k=Math.min(t.length-1,before.length);k>=2;k--){if(lower.endsWith(tl.slice(0,k))){const prev=before[before.length-k-1];if(/[a-z0-9]/i.test(t[0])&&prev&&/[a-z0-9]/i.test(prev))break;c.push({...nm,k});break}}}
+ if(!c.length)return hideAC();
+ c.sort((a,b)=>b.k-a.k||a.text.length-b.text.length);AC.items=c.slice(0,6);AC.i=0;
+ const rect=r.getBoundingClientRect();const box=$('#ac');drawAC();box.classList.remove('hidden');
+ const x=Math.min(rect.left,innerWidth-330),y=rect.bottom+6;box.style.left=x+'px';box.style.top=(y+box.offsetHeight>innerHeight?rect.top-box.offsetHeight-6:y)+'px';
+}
+function drawAC(){$('#ac').innerHTML=`<div class="ac-h">เติมชื่ออัตโนมัติ · <kbd>Tab</kbd> เลือก · <kbd>↑↓</kbd> เปลี่ยน · <kbd>Esc</kbd> ปิด</div>`+AC.items.map((x,i)=>`<div class="ac-i ${i===AC.i?'on':''}" data-aci="${i}" role="option" aria-selected="${i===AC.i}"><span><b>${esc(x.text.slice(0,x.k))}</b>${esc(x.text.slice(x.k))}</span><small>${x.kind}</small></div>`).join('')}
+function hideAC(){AC.items=[];const b=$('#ac');if(b)b.classList.add('hidden')}
+function acPick(i){const x=AC.items[i];if(!x)return;hideAC();AC.skip=true;document.execCommand('insertText',false,x.text.slice(x.k))}
+function acKey(e){
+ if(AC.items.length){
+  if(e.key==='ArrowDown'){e.preventDefault();AC.i=(AC.i+1)%AC.items.length;drawAC();return}
+  if(e.key==='ArrowUp'){e.preventDefault();AC.i=(AC.i-1+AC.items.length)%AC.items.length;drawAC();return}
+  if(e.key==='Tab'){e.preventDefault();acPick(AC.i);return}
+  if(e.key==='Escape'){e.preventDefault();e.stopPropagation();hideAC();return}
+  if(e.key==='Enter')hideAC();
+ }
+ if(e.key==='Tab'){e.preventDefault();document.execCommand('insertText',false,'    ')}
+}
+$('#ac').addEventListener('mousedown',e=>{const it=e.target.closest('[data-aci]');if(it){e.preventDefault();acPick(+it.dataset.aci)}});
+
+/* ---------- find & replace ---------- */
+function findRe(){const f=S.find;if(!f.q)return null;return new RegExp(escRe(f.q),f.case?'g':'gi')}
+function matchesIn(root,re){const out=[];for(const t of textNodes(root)){const s=t.textContent;re.lastIndex=0;let m;while((m=re.exec(s))){out.push({node:t,i:m.index,len:m[0].length,ctx:s.slice(Math.max(0,m.index-26),m.index),hit:m[0],after:s.slice(m.index+m[0].length,m.index+m[0].length+26)});if(!m[0].length)re.lastIndex++}}return out}
+const DATA_SKIP=new Set(['id','ref','from','to','a','b','folder','planted','resolved','chapterId','pov','kind','type','status','style','color','img','x','y','ac','done','mutual','html']);
+function dataTargets(n){const out=[];const add=(o,label)=>{for(const k of Object.keys(o))if(!DATA_SKIP.has(k)&&typeof o[k]==='string'&&o[k])out.push([o,k,label])};
+ n.characters.forEach(x=>add(x,'ตัวละคร'));n.locations.forEach(x=>add(x,'สถานที่'));
+ n.glossary.forEach(g=>{add(g,'คำศัพท์');g.fields.forEach(f=>add(f,'คำศัพท์'))});
+ add(n.outline,'โครงเรื่อง');n.boards.forEach(b=>b.cards.forEach(c=>add(c,'กระดาน')));
+ n.timeline.forEach(e=>add(e,'เส้นเวลา'));n.threads.forEach(t=>add(t,'ปมเรื่อง'));n.ideas.forEach(i=>add(i,'ไอเดีย'));
+ n.relations.forEach(r=>add(r,'ความสัมพันธ์'));
+ n.chapters.forEach(c=>['title','summary','notes'].forEach(k=>{if(c[k])out.push([c,k,'ข้อมูลบท'])}));
+ return out}
+function findResultsHtml(){
+ const re=findRe();if(!re)return '<div class="muted" style="font-size:13px">พิมพ์คำที่ต้องการค้นหา</div>';
+ const n=N();let html='',total=0;
+ n.chapters.forEach((c,ci)=>{if(S.find.scope==='cur'&&c.id!==S.sel.chapters)return;const d=document.createElement('div');d.innerHTML=c.html||'';
+  matchesIn(d,re).forEach((m,k)=>{total++;if(total<=200)html+=`<div class="fr" data-act="jump" data-cid="${c.id}" data-k="${k}" tabindex="0" role="button"><small>บทที่ ${ci+1} · ${esc(c.title)}</small>…${esc(m.ctx)}<mark>${esc(m.hit)}</mark>${esc(m.after)}…</div>`})});
+ let dataN=0;if(S.find.data)for(const [o,k] of dataTargets(n)){const m=o[k].match(re);if(m)dataN+=m.length}
+ return `<div class="lbl" style="margin:4px 0 6px">พบในเนื้อหา ${num(total)} จุด${S.find.data?` · ในข้อมูลอื่น ${num(dataN)} จุด`:''}${total>200?' (แสดง 200 รายการแรก)':''}</div><div class="fres">${html}</div>`;
+}
+let findT;
+function mountFind(){
+ const q=$('#findQ');if(!q)return;const upd=()=>{clearTimeout(findT);findT=setTimeout(()=>{const r=$('#findRes');if(r)r.innerHTML=findResultsHtml()},150)};
+ q.addEventListener('input',()=>{S.find.q=q.value;upd()});$('#findR').addEventListener('input',e=>S.find.r=e.target.value);
+ $('#findScope').addEventListener('change',e=>{S.find.scope=e.target.value;upd()});$('#findData').addEventListener('change',e=>{S.find.data=e.target.checked;upd()});$('#findCase').addEventListener('change',e=>{S.find.case=e.target.checked;upd()});
+ if(S.focusFind){S.focusFind=false;setTimeout(()=>{q.focus();q.select()},0)}
+}
+function doJump({k}){const ed=$('#editor');const re=findRe();if(!ed||!re)return;const m=matchesIn(ed,re)[k];if(!m)return;
+ ed.focus();const r=document.createRange();r.setStart(m.node,m.i);r.setEnd(m.node,m.i+m.len);const s=getSelection();s.removeAllRanges();s.addRange(r);saveRange();
+ const el=m.node.parentElement;if(el&&el.scrollIntoView)el.scrollIntoView({block:'center',behavior:'smooth'})}
+function jumpTo(cid,k){commitEditor();S.sec='chapters';S.sel.chapters=cid;S.refOpen=true;S.refTab='find';S.jump={cid,k};rerenderMain()}
+function replaceAll(){
+ const re=findRe(),f=S.find;if(!re)return toast('พิมพ์คำที่ต้องการค้นหาก่อน');commitEditor();const n=N();
+ const targets=n.chapters.filter(c=>f.scope==='all'||c.id===S.sel.chapters);
+ let cnt=0;targets.forEach(c=>{const d=document.createElement('div');d.innerHTML=c.html||'';cnt+=matchesIn(d,re).length});
+ let dcnt=0;if(f.data)for(const [o,k] of dataTargets(n)){const m=o[k].match(re);if(m)dcnt+=m.length}
+ if(!cnt&&!dcnt)return toast('ไม่พบคำนี้');
+ if(!confirm(`แทนที่ “${f.q}” ด้วย “${f.r}” ทั้งหมด ${num(cnt+dcnt)} จุด?\n\nบทที่ถูกแก้จะถูกเก็บเวอร์ชันเดิมไว้ในประวัติเวอร์ชัน`))return;
+ targets.forEach(c=>{const d=document.createElement('div');d.innerHTML=c.html||'';let ch=false;
+  for(const t of textNodes(d)){const s=t.textContent;re.lastIndex=0;const ns=s.replace(re,()=>f.r);if(ns!==s){t.textContent=ns;ch=true}}
+  if(ch){addSnap(c,`ก่อนแทนที่ “${f.q}”`);c.html=d.innerHTML;c.words=countWords(htmlToText(c.html))}});
+ if(f.data)for(const [o,k] of dataTargets(n)){o[k]=o[k].replace(re,()=>f.r)}
+ touch(n);save();S.keepFocus=true;rerenderMain();toast(`แทนที่แล้ว ${num(cnt+dcnt)} จุด`);
+}
+
+/* ---------- entities (characters / locations / glossary) ---------- */
+const tagsOf=x=>String(x.tags||'').split(/[,،、]/).map(s=>s.trim()).filter(Boolean);
+const ENT={
+ characters:{t:'ตัวละคร',newName:'ตัวละครใหม่',sub:x=>x.role||'ยังไม่ระบุบทบาท',mk:()=>({role:'สมทบ',age:'',tags:'',personality:'',appearance:'',want:'',fear:'',backstory:'',notes:'',img:'',color:COLORS[Math.floor(Math.random()*COLORS.length)]}),
+  fields:[['role','บทบาทในเรื่อง','text','เช่น ตัวเอก ตัวร้าย',1,'roles'],['age','อายุ / เผ่าพันธุ์','text','เช่น 24 ปี, เอลฟ์โบราณ',1],['want','ความต้องการ','area','สิ่งที่ตัวละครอยากได้มากที่สุด',1],['fear','ความกลัว','area','สิ่งที่ตัวละครกลัวหรือหลีกเลี่ยง',1],['tags','แท็ก','text','คั่นด้วยจุลภาค เช่น กล้าหาญ, ใจเย็น',1],['personality','นิสัยและบุคลิก','area','นิสัย จุดแข็ง จุดอ่อน แรงจูงใจ…'],['appearance','รูปลักษณ์','area','รูปร่าง การแต่งกาย ลักษณะเด่น…'],['backstory','ประวัติและภูมิหลัง','area','เหตุการณ์ก่อนเริ่มเรื่อง ครอบครัว ความสัมพันธ์…'],['notes','โน้ตเพิ่มเติม','area','']]},
+ locations:{t:'ฉากและสถานที่',newName:'สถานที่ใหม่',sub:x=>x.type||'สถานที่',mk:()=>({type:'',region:'',tags:'',atmosphere:'',description:'',notes:''}),
+  fields:[['type','ประเภท','text','เช่น เมือง ดันเจี้ยน ปราสาท ป่า',1],['region','ที่ตั้ง / ภูมิภาค','text','เช่น ทางเหนือของอาณาจักร',1],['tags','แท็ก','text','คั่นด้วยจุลภาค',1],['atmosphere','บรรยากาศ','area','แสง เสียง กลิ่น อารมณ์ของสถานที่…'],['description','รายละเอียด','area','ผังเมือง ประวัติ ผู้คน จุดสำคัญ…'],['notes','โน้ตเพิ่มเติม','area','']]},
+ glossary:{t:'คำศัพท์และเกร็ดโลก',newName:'คำศัพท์ใหม่',sub:x=>((x.fields||[]).find(f=>f.text)||{}).text||'(ยังไม่มีรายละเอียด)',mk:()=>({kind:'term',ac:true,tags:'',fields:GKIND.term.fields.map(l=>({label:l,text:''}))})},
+};
+function curEnt(sec){const n=N(),list=filteredEnt(sec);let x=n[sec].find(e=>e.id===S.sel[sec]);if(!x){x=list[0]||n[sec][0];S.sel[sec]=x&&x.id}return x}
+function filteredEnt(sec){const n=N(),f=S.folder[sec]||'all',tg=S.tag[sec]||'',q=(S.q[sec]||'').trim().toLowerCase();
+ return n[sec].filter(x=>(f==='all'||(f==='none'?!x.folder:x.folder===f))&&(!tg||tagsOf(x).includes(tg))&&(!q||JSON.stringify(x).toLowerCase().includes(q)))}
+function entListItems(sec){const n=N(),cfg=ENT[sec],cur=S.sel[sec];
+ return filteredEnt(sec).map(x=>{const fo=n.folders[sec].find(f=>f.id===x.folder);const tg=tagsOf(x).slice(0,3);
+  const k=sec==='glossary'?`<span class="chip accent" style="font-size:11px">${esc((GKIND[x.kind]||GKIND.term).n)}</span>`:'';
+  return `<div class="li ${x.id===cur?'on':''}" data-act="selEnt" data-id="${x.id}" data-li="${x.id}" tabindex="0" role="button">${k||fo?`<div class="li-k" style="margin-bottom:3px">${k}${fo?`<span>${ic('folder',12)} ${esc(fo.name)}</span>`:''}</div>`:''}
+  <div style="display:flex;align-items:center;gap:10px">${sec==='characters'?avatar(x,32):''}<div style="min-width:0;flex:1"><div class="li-name">${esc(x.name)||'(ไม่มีชื่อ)'}</div><div class="li-sub">${esc(cfg.sub(x))}</div>${tg.length?`<div class="li-tags">${tg.map(t=>`<span class="chip">#${esc(t)}</span>`).join('')}</div>`:''}</div></div></div>`}).join('')||`<div class="empty">ไม่พบ${cfg.t}</div>`}
+function appearanceHtml(sec,x){
+ const n=N();let names=[(x.name||'').trim()];if(sec==='characters'){const p=names[0].split(/\s+/);if(p.length>1)names.push(p[0])}
+ names=names.filter(s=>s.length>=2).sort((a,b)=>a.length-b.length);if(!names.length||!n.chapters.length)return '';
+ const key=names[0],lk=key.toLowerCase();let total=0;const hits=[];
+ n.chapters.forEach((c,i)=>{const t=htmlToText(c.html).toLowerCase();let k=0,p=t.indexOf(lk);while(p>=0){k++;p=t.indexOf(lk,p+lk.length)}if(k){total+=k;hits.push([c,i,k])}});
+ return `<div class="field"><label>ปรากฏในเนื้อเรื่อง</label>${hits.length?`<div class="muted" style="font-size:13.5px">พบ “${esc(key)}” ${num(total)} ครั้ง ใน ${hits.length} บท · ปรากฏครั้งแรกในบทที่ ${hits[0][1]+1}</div>
+ <div class="appear">${hits.map(([c,i,k])=>`<button class="chip" data-act="findName" data-v="${esc(key)}" data-cid="${c.id}" title="${esc(c.title)}">บทที่ ${i+1} · ${k} ครั้ง</button>`).join('')}</div>`:`<div class="muted" style="font-size:13.5px">ยังไม่พบ “${esc(key)}” ในเนื้อหาบทใดเลย</div>`}</div>`}
+function secEntities(sec){
+ const n=N(),cfg=ENT[sec],x=curEnt(sec),f=S.folder[sec]||'all',tgSel=S.tag[sec]||'';
+ const allTags=[...new Set(n[sec].flatMap(tagsOf))].sort();
+ const list=`<aside class="list"><div class="list-head"><span class="t">${cfg.t}</span><button class="btn sm" data-act="addFolder" title="สร้างโฟลเดอร์">${ic('folder',14)}+</button><button class="btn primary sm" data-act="addEnt">${ic('plus',14)} เพิ่ม</button></div>
+ <div class="list-tools"><div class="folders"><button class="chip ${f==='all'?'on':''}" data-act="folder" data-v="all">ทั้งหมด</button><button class="chip ${f==='none'?'on':''}" data-act="folder" data-v="none">ทั่วไป</button>
+ ${n.folders[sec].map(fo=>`<button class="chip ${f===fo.id?'on':''}" data-act="folder" data-v="${fo.id}" title="ดับเบิลคลิกเพื่อแก้ชื่อหรือลบโฟลเดอร์">${ic('folder',12)} ${esc(fo.name)}</button>`).join('')}</div>
+ ${allTags.length?`<div class="folders"><span class="tl-lbl">แท็ก:</span>${allTags.map(t=>`<button class="chip ${tgSel===t?'on':''}" data-act="tagF" data-v="${esc(t)}">#${esc(t)}</button>`).join('')}</div>`:''}
+ <div class="search">${ic('search',15)}<input class="in" id="entQ" placeholder="ค้นหา…" value="${esc(S.q[sec]||'')}" aria-label="ค้นหา${cfg.t}"></div></div>
+ <div class="list-items" id="entItems">${entListItems(sec)}</div></aside>`;
+ if(!x)return `<div class="split">${list}<div class="pane"><div class="empty" style="margin-top:12vh">${ART.book}<div class="big">ยังไม่มี${cfg.t}</div>เริ่มเพิ่มรายการแรกเพื่อเก็บข้อมูลไว้เปิดดูขณะเขียน<br><br><button class="btn primary" data-act="addEnt">${ic('plus',16)} เพิ่ม${cfg.t}</button></div></div></div>`;
+ const folderSel=`<div class="field"><label for="entFolder">โฟลเดอร์ที่จัดเก็บ</label><select id="entFolder" class="in" data-coll="${sec}" data-id="${x.id}" data-f="folder" data-rr="list"><option value="">ทั่วไป (ไม่มีโฟลเดอร์)</option>${n.folders[sec].map(fo=>`<option value="${fo.id}" ${x.folder===fo.id?'selected':''}>${esc(fo.name)}</option>`).join('')}</select></div>`;
+ const fl=([k,l,t,ph,half,dl])=>{const v=esc(x[k]),id=`f_${k}`;return `<div class="field"><label for="${id}">${l}</label>${t==='area'?`<textarea id="${id}" class="in auto" data-coll="${sec}" data-id="${x.id}" data-f="${k}" placeholder="${ph}" rows="3" ${half?'style="min-height:70px"':''}>${v}</textarea>`:`<input id="${id}" class="in" data-coll="${sec}" data-id="${x.id}" data-f="${k}" placeholder="${ph}" value="${v}" ${dl?`list="${dl}"`:''} ${k==='tags'?'data-rr="list"':''}>`}</div>`};
+ let form='';
+ if(sec==='glossary'){
+  form=`<div class="field"><label>ประเภท</label><div class="seg">${Object.entries(GKIND).map(([k,g])=>`<button class="${x.kind===k?'on':''}" data-act="gKind" data-v="${k}">${g.n}</button>`).join('')}</div></div>
+  <div class="grid2">${folderSel}${fl(['tags','แท็ก','text','คั่นด้วยจุลภาค',1])}</div>
+  <label class="check"><input type="checkbox" data-coll="glossary" data-id="${x.id}" data-f="ac" ${x.ac!==false?'checked':''}><span>เปิดระบบช่วยพิมพ์ (Autocomplete)<small>หากปิดไว้ คำนี้จะไม่ขึ้นแนะนำขณะเขียนนิยาย — เหมาะกับข้อมูลเบื้องหลังที่ไม่ได้ใช้เป็นชื่อเรียก</small></span></label>
+  <div style="display:flex;align-items:center"><span class="lbl" style="flex:1">หัวข้อคำอธิบายและรายละเอียด</span><button class="btn sm" data-act="addGField">${ic('plus',14)} เพิ่มหัวข้อ</button></div>
+  ${(x.fields||[]).map((fd,i)=>`<div class="fblock"><div class="fb-h"><input data-coll="gfield" data-id="${x.id}" data-i="${i}" data-f="label" value="${esc(fd.label)}" placeholder="ชื่อหัวข้อ" aria-label="ชื่อหัวข้อ"><button class="icon-btn" data-act="delGField" data-i="${i}" title="ลบหัวข้อนี้">${ic('trash',15)}</button></div>
+  <textarea class="in auto" data-coll="gfield" data-id="${x.id}" data-i="${i}" data-f="text" placeholder="บันทึกรายละเอียดของ ${esc(fd.label)}…" aria-label="${esc(fd.label)}">${esc(fd.text)}</textarea></div>`).join('')}`;
+ }else{
+  form=`<div class="grid2">${cfg.fields.filter(f=>f[4]).map(fl).join('')}${folderSel}</div>${cfg.fields.filter(f=>!f[4]).map(fl).join('')}`;
+ }
+ const head=sec==='characters'?`<button data-act="charLook" title="เปลี่ยนรูปหรือสีของตัวละคร" style="border-radius:50%">${avatar(x,54)}</button>`:`<span class="avatar" style="background:var(--accent-soft);color:var(--accent-2)">${ic(sec==='locations'?'pin':'mark',24)}</span>`;
+ return `<div class="split">${list}<div class="pane"><div class="pane-in"><div class="ent-head">${head}<input class="ent-name" data-coll="${sec}" data-id="${x.id}" data-f="name" value="${esc(x.name)}" placeholder="ชื่อ" aria-label="ชื่อ">
+ <button class="btn sm" data-act="findName" data-v="${esc(x.name)}" title="ค้นหาหรือเปลี่ยนชื่อนี้ในเนื้อเรื่อง">${ic('search',14)} <span class="hide-sm">ค้นในเนื้อเรื่อง</span></button><button class="btn danger sm" data-act="delEnt">${ic('trash',15)} ลบ</button></div>
+ <div class="ent-form">${form}${appearanceHtml(sec,x)}</div></div></div></div><datalist id="roles">${ROLES.map(r=>`<option value="${r}">`).join('')}</datalist>`;
+}
+
+/* ---------- ideas & threads ---------- */
+function secIdeas(){const n=N();const chOpt=v=>`<option value="">— ยังไม่ระบุ —</option>`+n.chapters.map((c,i)=>`<option value="${c.id}" ${v===c.id?'selected':''}>บทที่ ${i+1}: ${esc(c.title)}</option>`).join('');
+ return `<div class="page"><div class="page-h"><div><h2>ไอเดียและปมเรื่อง</h2><p>จดไอเดียไว้ก่อนลืม ติ๊กเมื่อใช้แล้ว และตามปมตั้งแต่ผูกจนคลี่คลาย</p></div></div>
+ <div class="cols2"><div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:center"><h3 style="flex:1;font-size:18px">ไอเดีย</h3><span class="muted" style="font-size:13px">${n.ideas.filter(i=>i.done).length}/${n.ideas.length} ใช้แล้ว</span></div>
+ <div style="display:flex;gap:8px"><input class="in" id="ideaIn" placeholder="พิมพ์ไอเดียแล้วกด Enter…" aria-label="ไอเดียใหม่"><button class="btn primary" data-act="addIdea" title="เพิ่มไอเดีย">${ic('plus',16)}</button></div>
+ ${n.ideas.map(i=>`<div class="idea ${i.done?'done':''}"><input type="checkbox" data-coll="ideas" data-id="${i.id}" data-f="done" data-rr="main" ${i.done?'checked':''} aria-label="ใช้ไอเดียนี้แล้ว"><textarea class="auto" rows="1" data-coll="ideas" data-id="${i.id}" data-f="text" aria-label="ไอเดีย">${esc(i.text)}</textarea><button class="icon-btn" data-act="delItem" data-coll="ideas" data-id="${i.id}" style="width:28px;height:28px" title="ลบไอเดีย">${ic('x',15)}</button></div>`).join('')||'<div class="empty">ยังไม่มีไอเดีย</div>'}</div>
+ <div style="display:flex;flex-direction:column;gap:10px"><div style="display:flex;align-items:center"><h3 style="flex:1;font-size:18px">ปมเรื่อง</h3><button class="btn sm" data-act="addThread">${ic('plus',14)} เพิ่มปม</button></div>
+ ${n.threads.map(t=>`<div class="card thread"><div class="th-h"><span class="st-dot" style="background:${t.status==='resolved'?'#7F9C8C':t.status==='progress'?'#8A9BB8':'#C9A863'}"></span><input data-coll="threads" data-id="${t.id}" data-f="title" value="${esc(t.title)}" placeholder="ชื่อปม เช่น ใครคือคนร้าย" aria-label="ชื่อปม"><button class="icon-btn" data-act="delItem" data-coll="threads" data-id="${t.id}" title="ลบปมนี้">${ic('trash',15)}</button></div>
+ <div class="grid2" style="gap:8px"><div class="field"><label>ผูกปมใน</label><select class="in" data-coll="threads" data-id="${t.id}" data-f="planted">${chOpt(t.planted)}</select></div><div class="field"><label>เฉลยใน</label><select class="in" data-coll="threads" data-id="${t.id}" data-f="resolved">${chOpt(t.resolved)}</select></div></div>
+ <select class="in" data-coll="threads" data-id="${t.id}" data-f="status" data-rr="main" aria-label="สถานะปม"><option value="open" ${t.status==='open'?'selected':''}>เปิดปมแล้ว</option><option value="progress" ${t.status==='progress'?'selected':''}>กำลังดำเนินเรื่อง</option><option value="resolved" ${t.status==='resolved'?'selected':''}>คลี่คลายแล้ว</option></select>
+ <textarea class="in auto" rows="2" style="min-height:50px" data-coll="threads" data-id="${t.id}" data-f="notes" placeholder="โน้ต / เบาะแสที่วางไว้" aria-label="โน้ตปม">${esc(t.notes)}</textarea></div>`).join('')||'<div class="empty">ยังไม่มีปมเรื่อง</div>'}</div></div></div>`}
+
+/* ---------- board ---------- */
+function board(){const n=N();let b=n.boards.find(x=>x.id===S.bid);if(!b){b=n.boards[0];S.bid=b.id}return b}
+const HIST={};
+function hkey(){return S.bmode==='free'?'b:'+board().id:'r:'+S.nid}
+function pushHist(){const n=N(),k=hkey();const snap=S.bmode==='free'?JSON.stringify({cards:board().cards,links:board().links}):JSON.stringify({relations:n.relations,relPos:n.relPos});(HIST[k]=HIST[k]||[]).push(snap);if(HIST[k].length>60)HIST[k].shift()}
+function undoBoard(){const k=hkey(),h=HIST[k];if(!h||!h.length)return toast('ไม่มีอะไรให้ย้อนกลับแล้ว');const s=JSON.parse(h.pop()),n=N();
+ if(S.bmode==='free'){const b=board();b.cards=s.cards;b.links=s.links}else{n.relations=s.relations;n.relPos=s.relPos}touch();save();rerenderMain()}
+function secBoard(){
+ const n=N(),b=board(),m=S.bmode;
+ const tabs=`<div class="seg" style="flex:none">${[['free','กระดานอิสระ','grid'],['timeline','เส้นเวลา','clock'],['rel','ผังความสัมพันธ์','heart']].map(([k,l,i])=>`<button class="${m===k?'on':''}" data-act="bmode" data-v="${k}" style="display:flex;gap:6px;align-items:center">${ic(i,15)} ${l}</button>`).join('')}</div>`;
+ let tools='';
+ if(m==='free')tools=`<div class="vsep"></div><select class="in" id="boardSel" style="width:auto;max-width:200px;padding:6px 10px" aria-label="เลือกกระดาน">${n.boards.map(x=>`<option value="${x.id}" ${x.id===b.id?'selected':''}>${esc(x.name)}</option>`).join('')}</select>
+  <button class="icon-btn" data-act="addBoard" title="สร้างกระดานใหม่">${ic('plus',17)}</button><button class="icon-btn" data-act="renameBoard" title="เปลี่ยนชื่อหรือลบกระดาน">${ic('edit',16)}</button><div class="vsep"></div>
+  <button class="btn primary sm" data-act="addCard" data-v="note">${ic('note',14)} โน้ต</button><button class="btn sm" data-act="addCard" data-v="scene">${ic('film',14)} ฉาก</button>
+  <button class="btn sm" data-act="addRefCard" data-v="characters">${ic('users',14)} ตัวละคร</button><button class="btn sm" data-act="addRefCard" data-v="locations">${ic('pin',14)} สถานที่</button><button class="btn sm" data-act="addRefCard" data-v="chapters">${ic('file',14)} บท</button>`;
+ if(m==='rel')tools=`<div class="vsep"></div><span class="muted" style="font-size:13px">ชี้ที่ตัวละครแล้วกด ${ic('link',13)} เพื่อโยงความสัมพันธ์</span><span style="flex:1"></span><button class="btn sm" data-act="relCircle">${ic('refresh',14)} จัดวงกลมใหม่</button>`;
+ if(m==='timeline')tools=`<div class="vsep"></div><span class="muted" style="font-size:13px">เรียงเหตุการณ์ตามลำดับเวลาในโลกของเรื่อง</span><span style="flex:1"></span><button class="btn primary sm" data-act="addEvent">${ic('plus',14)} เหตุการณ์</button>`;
+ const body=m==='timeline'?renderTimeline():`<div class="bd-canvas" id="bdCanvas">${S.linkFrom||S.relFrom?`<div class="bd-hint">คลิก${m==='rel'?'ตัวละคร':'การ์ด'}ปลายทางเพื่อเชื่อมเส้น · Esc ยกเลิก</div>`:''}
+  <div class="bd-world" id="bdWorld"><svg class="bd-svg" id="bdSvg"></svg><div id="bdLabels"></div>${m==='free'?b.cards.map(renderCard).join(''):renderNodes()}</div>
+  <div class="bd-zoom"><button class="icon-btn" data-act="bundo" title="ย้อนกลับ (Ctrl+Z)">${ic('undo',15)}</button><button class="icon-btn" data-act="bzoom" data-v="-1" title="ซูมออก">${ic('minus',15)}</button><button class="icon-btn" data-act="bzoom" data-v="0" style="width:auto;padding:0 8px;font-size:12px" id="zl" title="รีเซ็ตมุมมอง">${Math.round(S.z*100)}%</button><button class="icon-btn" data-act="bzoom" data-v="1" title="ซูมเข้า">${ic('plus',15)}</button></div>
+  ${m==='free'&&!b.cards.length?`<div class="empty" style="position:absolute;inset:0;display:grid;place-items:center;pointer-events:none"><div><div class="big">กระดานว่างเปล่า</div>เพิ่มโน้ตหรือการ์ดฉากเพื่อเริ่มวางพล็อต</div></div>`:''}
+  ${m==='rel'&&!n.characters.length?`<div class="empty" style="position:absolute;inset:0;display:grid;place-items:center"><div><div class="big">ยังไม่มีตัวละคร</div>เพิ่มตัวละครก่อน แล้วกลับมาโยงความสัมพันธ์</div></div>`:''}</div>`;
+ return `<div class="bd"><div class="bd-bar">${tabs}${tools}</div>${body}</div>`;
+}
+function renderCard(c){
+ const n=N();let tag,band='',body='';
+ if(c.type==='scene'){tag=`<span class="chip accent">${ic('film',12)} ฉาก</span>`;
+  body=`<input class="ct" data-coll="card" data-id="${c.id}" data-f="title" value="${esc(c.title)}" placeholder="ชื่อฉาก" aria-label="ชื่อฉาก">
+  <div class="sf"><span>เป้าหมาย</span><textarea data-coll="card" data-id="${c.id}" data-f="goal" rows="1" aria-label="เป้าหมาย">${esc(c.goal)}</textarea><span>อุปสรรค</span><textarea data-coll="card" data-id="${c.id}" data-f="conflict" rows="1" aria-label="อุปสรรค">${esc(c.conflict)}</textarea><span>ผลลัพธ์</span><textarea data-coll="card" data-id="${c.id}" data-f="outcome" rows="1" aria-label="ผลลัพธ์">${esc(c.outcome)}</textarea></div>
+  <button class="btn sm" data-act="nextScene" data-id="${c.id}" style="align-self:flex-start">${ic('arrowR',14)} สร้างฉากถัดไป</button>`}
+ else if(c.type==='note'){tag=`<span class="chip warm">${ic('note',12)} โน้ต</span>`;body=`<input class="ct" data-coll="card" data-id="${c.id}" data-f="title" value="${esc(c.title)}" placeholder="หัวข้อ" aria-label="หัวข้อโน้ต"><textarea data-coll="card" data-id="${c.id}" data-f="text" placeholder="เขียนโน้ต หรือเบาะแสสำคัญ…" aria-label="โน้ต">${esc(c.text)}</textarea>`}
+ else{const e=n[c.type].find(x=>x.id===c.ref);const lab={characters:['ตัวละคร','users'],locations:['สถานที่','pin'],chapters:['บท','file']}[c.type];
+  tag=`<span class="chip">${ic(lab[1],12)} ${lab[0]}</span>`;if(c.type==='characters'&&e)band=`<div class="band" style="background:${e.color}"></div>`;
+  const sub=!e?'(ถูกลบไปแล้ว)':c.type==='characters'?e.role:c.type==='locations'?e.type:`${num(e.words)} คำ · ${(STATUS[e.status]||STATUS.draft).n}`;
+  body=`<div class="ct" style="font-family:var(--serif);font-weight:600">${esc(e?(e.name||e.title):'—')}</div><div class="muted" style="font-size:12.5px;margin-top:-4px">${esc(sub)}</div><textarea data-coll="card" data-id="${c.id}" data-f="text" placeholder="โน้ตสำหรับการ์ดนี้…" aria-label="โน้ตการ์ด">${esc(c.text)}</textarea>`}
+ return `<div class="bd-card ${S.linkFrom===c.id?'linking':''}" data-drag="card" data-id="${c.id}" style="left:${+c.x||0}px;top:${+c.y||0}px">${band}<div class="ch">${tag}<span class="grow"></span><button class="icon-btn" data-act="linkStart" data-id="${c.id}" title="ลากเส้นเชื่อมไปการ์ดอื่น">${ic('link')}</button><button class="icon-btn" data-act="delCard" data-id="${c.id}" title="ลบการ์ด">${ic('trash')}</button></div><div class="cb">${body}</div></div>`;
+}
+function relLayout(force){const n=N(),cs=n.characters,R=Math.max(200,cs.length*38),cx=R+120,cy=R+60;
+ cs.forEach((c,i)=>{if(force||!n.relPos[c.id]){const a=-Math.PI/2+i*2*Math.PI/cs.length;n.relPos[c.id]={x:Math.round(cx+R*Math.cos(a)-60),y:Math.round(cy+R*Math.sin(a)-32)}}})}
+function renderNodes(){const n=N();relLayout(false);
+ return n.characters.map(c=>{const p=n.relPos[c.id];return `<div class="bd-node ${S.relFrom===c.id?'linking':''}" data-drag="node" data-id="${c.id}" style="left:${+p.x||0}px;top:${+p.y||0}px">${avatar(c,64)}<button class="icon-btn lk" data-act="relStart" data-id="${c.id}" title="โยงความสัมพันธ์จาก ${esc(c.name)}">${ic('link',14)}</button><div class="nm">${esc(c.name)}</div><div class="rl">${esc(c.role)}</div></div>`}).join('')}
+function renderTimeline(){const n=N();
+ return `<div class="tl"><div class="tl-track">${n.timeline.map((e,i)=>{const ch=n.chapters.find(c=>c.id===e.chapterId);return `<div class="card tl-ev"><input class="when" data-coll="timeline" data-id="${e.id}" data-f="when" value="${esc(e.when)}" placeholder="ช่วงเวลา เช่น ปีที่ 3" aria-label="ช่วงเวลา"><input class="ti" data-coll="timeline" data-id="${e.id}" data-f="title" value="${esc(e.title)}" placeholder="เหตุการณ์" aria-label="เหตุการณ์"><textarea class="in" data-coll="timeline" data-id="${e.id}" data-f="text" placeholder="รายละเอียด…" aria-label="รายละเอียด">${esc(e.text)}</textarea>
+ <select class="in" data-coll="timeline" data-id="${e.id}" data-f="chapterId" data-rr="main" aria-label="บทที่เกี่ยวข้อง"><option value="">— ไม่ผูกกับบท —</option>${n.chapters.map((c,j)=>`<option value="${c.id}" ${e.chapterId===c.id?'selected':''}>บทที่ ${j+1}: ${esc(c.title)}</option>`).join('')}</select>
+ <div class="acts">${ch?`<button class="btn sm" data-act="goChapter" data-id="${ch.id}" style="margin-right:auto">${ic('file',13)} ไปที่บท</button>`:''}<button class="icon-btn" data-act="moveEv" data-id="${e.id}" data-v="-1" ${i===0?'disabled':''} title="เลื่อนไปก่อนหน้า">${ic('left',16)}</button><button class="icon-btn" data-act="moveEv" data-id="${e.id}" data-v="1" ${i===n.timeline.length-1?'disabled':''} title="เลื่อนไปถัดไป">${ic('right',16)}</button><button class="icon-btn" data-act="delItem" data-coll="timeline" data-id="${e.id}" title="ลบเหตุการณ์">${ic('trash',16)}</button></div></div>`}).join('')}
+ <div class="tl-add" data-act="addEvent" tabindex="0" role="button"><div style="text-align:center">${ic('plus',24)}<div>เพิ่มเหตุการณ์</div></div></div></div></div>`}
+
+function applyView(){const w=$('#bdWorld');if(w)w.style.transform=`translate(${S.pan.x}px,${S.pan.y}px) scale(${S.z})`;const zl=$('#zl');if(zl)zl.textContent=Math.round(S.z*100)+'%'}
+function clipBox(c,o,hw,hh){const dx=o.x-c.x,dy=o.y-c.y;if(!dx&&!dy)return c;const t=Math.min(dx?hw/Math.abs(dx):Infinity,dy?hh/Math.abs(dy):Infinity);return {x:c.x+dx*Math.min(1,t),y:c.y+dy*Math.min(1,t)}}
+function clipCircle(c,o,r){const dx=o.x-c.x,dy=o.y-c.y,d=Math.hypot(dx,dy)||1;return {x:c.x+dx/d*Math.min(r,d),y:c.y+dy/d*Math.min(r,d)}}
+function drawLinks(){
+ const svg=$('#bdSvg'),lab=$('#bdLabels');if(!svg)return;const n=N();let lines='',labels='';const colors=new Set();
+ const box=(sel,id)=>{const el=$(`[data-drag="${sel}"][data-id="${id}"]`);if(!el)return null;return sel==='node'?{x:el.offsetLeft+60,y:el.offsetTop+32,r:56}:{x:el.offsetLeft+el.offsetWidth/2,y:el.offsetTop+el.offsetHeight/2,hw:el.offsetWidth/2+6,hh:el.offsetHeight/2+6}};
+ const list=S.bmode==='free'?board().links.map(l=>({id:l.id,a:box('card',l.from),b:box('card',l.to),st:FLOW[l.style]||FLOW.cause,label:l.label,start:false})):n.relations.map(r=>({id:r.id,a:box('node',r.a),b:box('node',r.b),st:REL[r.type]||REL.other,label:r.label,start:r.mutual}));
+ for(const l of list){if(!l.a||!l.b)continue;
+  const p1=l.a.r?clipCircle(l.a,l.b,l.a.r):clipBox(l.a,l.b,l.a.hw,l.a.hh),p2=l.b.r?clipCircle(l.b,l.a,l.b.r):clipBox(l.b,l.a,l.b.hw,l.b.hh);
+  const mk='m'+l.st.c.slice(1);colors.add(l.st.c);
+  lines+=`<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${l.st.c}" stroke-width="2.4" stroke-linecap="round" ${l.st.d?`stroke-dasharray="${l.st.d}"`:''} marker-end="url(#${mk})" ${l.start?`marker-start="url(#${mk})"`:''}/>`;
+  const mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2;
+  labels+=`<div class="bd-label" data-act="editLink" data-id="${l.id}" style="left:${mx}px;top:${my}px;border-color:${l.st.c}55" tabindex="0" role="button"><span class="st-dot" style="background:${l.st.c};width:7px;height:7px;margin-right:5px"></span>${esc(l.label||l.st.n)}</div>`}
+ svg.innerHTML=`<defs>${[...colors].map(c=>`<marker id="m${c.slice(1)}" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="${c}"/></marker>`).join('')}</defs>`+lines;lab.innerHTML=labels;
+}
+function mountBoard(){
+ if(S.bmode==='timeline'){$$('.tl textarea').forEach(autoGrow);return}
+ const cv=$('#bdCanvas');if(!cv)return;applyView();drawLinks();
+ const bs=$('#boardSel');if(bs)bs.addEventListener('change',()=>{S.bid=bs.value;S.linkFrom=null;rerenderMain()});
+ let drag=null;
+ cv.addEventListener('pointerdown',e=>{
+  if(e.button!==0)return;
+  const it=e.target.closest('[data-drag]');
+  if(it&&!e.target.closest('button,input,textarea,select')){
+   const n=N(),id=it.dataset.id,obj=it.dataset.drag==='card'?board().cards.find(c=>c.id===id):n.relPos[id];
+   drag={type:'item',el:it,obj,sx:e.clientX,sy:e.clientY,ox:obj.x,oy:obj.y,moved:false};
+  }else if(!it&&!e.target.closest('.bd-label,.bd-zoom')){drag={type:'pan',sx:e.clientX,sy:e.clientY,ox:S.pan.x,oy:S.pan.y,moved:false};cv.classList.add('panning')}
+  else return;
+  cv.setPointerCapture(e.pointerId);
+ });
+ cv.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.sx,dy=e.clientY-drag.sy;if(!drag.moved&&Math.abs(dx)+Math.abs(dy)>3){drag.moved=true;if(drag.type==='item')pushHist()}if(!drag.moved)return;
+  if(drag.type==='pan'){S.pan.x=drag.ox+dx;S.pan.y=drag.oy+dy;applyView()}
+  else{drag.obj.x=Math.round(drag.ox+dx/S.z);drag.obj.y=Math.round(drag.oy+dy/S.z);drag.el.style.left=drag.obj.x+'px';drag.el.style.top=drag.obj.y+'px';drawLinks()}});
+ const end=()=>{if(!drag)return;cv.classList.remove('panning');if(drag.moved){S.justDragged=true;setTimeout(()=>S.justDragged=false,50);if(drag.type==='item'){touch();saveSoon()}}drag=null};
+ cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
+ cv.addEventListener('wheel',e=>{if(e.target.closest('textarea'))return;e.preventDefault();const r=cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;zoomAt(S.z*(e.deltaY<0?1.1:1/1.1),mx,my)},{passive:false});
+ $$('.bd-card textarea').forEach(t=>t.addEventListener('mouseup',drawLinks));
+}
+function zoomAt(z,mx,my){z=Math.min(2,Math.max(.35,z));const wx=(mx-S.pan.x)/S.z,wy=(my-S.pan.y)/S.z;S.z=z;S.pan.x=mx-wx*z;S.pan.y=my-wy*z;applyView()}
+function canvasCenter(){const cv=$('#bdCanvas');const r=cv?cv.getBoundingClientRect():{width:800,height:500};return {x:Math.round((r.width/2-S.pan.x)/S.z-125+(Math.random()*60-30)),y:Math.round((r.height/2-S.pan.y)/S.z-90+(Math.random()*60-30))}}
+
+/* ---------- export ---------- */
+function secExport(){const n=N();
+ const ex=[['docx','Word (.docx)','ต้นฉบับจัดหน้า A4 ฟอนต์ TH Sarabun New แยกบทขึ้นหน้าใหม่ เหมาะส่งบรรณาธิการ','#6E8CB0','file'],
+ ['pdf','PDF / พิมพ์ต้นฉบับ','เปิดหน้าตัวอย่างพร้อมพิมพ์ เลือก “บันทึกเป็น PDF” ได้จากหน้าต่างพิมพ์','#B8837A','book'],
+ ['epub','E-Book (.epub)','อีบุ๊กมาตรฐาน EPUB 3 พร้อมสารบัญและรูปปก เปิดในแอปอ่านอีบุ๊กได้ สระไทยไม่เพี้ยน','#9A86B6','mark'],
+ ['md','Markdown (.md)','คงตัวหนา ตัวเอียง และหัวข้อบท สำหรับลงแพลตฟอร์มนิยายออนไลน์','#6FA58C','note'],
+ ['txt','ข้อความล้วน (.txt)','ข้อความเรียงต่อกันพร้อมตัวคั่นบท เปิดได้ทุกโปรแกรม','#C49A6A','file'],
+ ['bible','เอกสารข้อมูลเรื่อง','รวมโครงเรื่อง ตัวละคร สถานที่ คำศัพท์ และสรุปแต่ละบท เป็นเอกสารสำหรับอ่านหรือพิมพ์','#7F9C8C','users'],
+ ['json','สำรองข้อมูล (.json)','ไฟล์สำรองทั้งเรื่อง ใช้ย้ายเครื่องหรือกู้คืนผ่านปุ่ม “นำเข้า” ในหน้าคลังนิยาย','#9A958C','down']];
+ return `<div class="page"><div class="page-h"><div><h2>รวบรวมและส่งออก</h2><p>${n.chapters.length} บท · ${num(totalWords(n))} คำ — ไฟล์ถูกสร้างในเครื่องของคุณ ไม่มีการอัปโหลดไปที่ใด</p></div></div>
+ <div class="ex-grid">${ex.map(([k,t,d,c,i])=>`<div class="card ex"><div class="ico" style="background:${c}22;color:${c}">${ic(i,22)}</div><h3>${t}</h3><p>${d}</p><button class="btn" data-act="export" data-v="${k}" style="background:${c};border-color:${c};color:#fff;justify-content:center">${ic('down',16)} ส่งออก</button></div>`).join('')}</div></div>`}
+const xesc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'');
+const fname=n=>(n.title||'novel').replace(/[\\/:*?"<>|]+/g,'_').slice(0,60);
+function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
+const chTitle=(c,i)=>`บทที่ ${i+1}${c.title?' '+c.title:''}`;
+function runsHtml(p){return p.runs.map(r=>{let t=xesc(r.t);if(r.b)t=`<b>${t}</b>`;if(r.i)t=`<i>${t}</i>`;if(r.u)t=`<u>${t}</u>`;return t}).join('')}
+function parasHtml(html){return htmlToParas(html).map(p=>{const t=runsHtml(p);return t.trim()?`<p${p.align&&/^(center|right|justify)$/.test(p.align)?` style="text-align:${p.align}"`:''}>${t}</p>`:'<p class="blank">&#160;</p>'}).join('\n')}
+const crcT=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function crc32(b){let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=crcT[(c^b[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0}
+function makeZip(files,type){const enc=new TextEncoder(),parts=[],cen=[];let off=0,cs=0;
+ for(const f of files){const nm=enc.encode(f.name),d=typeof f.data==='string'?enc.encode(f.data):f.data,crc=crc32(d);
+  const h=new DataView(new ArrayBuffer(30));h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint16(8,0,true);h.setUint16(10,0,true);h.setUint16(12,0x21,true);h.setUint32(14,crc,true);h.setUint32(18,d.length,true);h.setUint32(22,d.length,true);h.setUint16(26,nm.length,true);h.setUint16(28,0,true);
+  parts.push(h.buffer,nm,d);
+  const c=new DataView(new ArrayBuffer(46));c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0x0800,true);c.setUint16(10,0,true);c.setUint16(12,0,true);c.setUint16(14,0x21,true);c.setUint32(16,crc,true);c.setUint32(20,d.length,true);c.setUint32(24,d.length,true);c.setUint16(28,nm.length,true);c.setUint32(42,off,true);
+  cen.push(c.buffer,nm);cs+=46+nm.length;off+=30+nm.length+d.length}
+ const e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cs,true);e.setUint32(16,off,true);
+ return new Blob([...parts,...cen,e.buffer],{type})}
+const dataUrlBytes=u=>{const b=atob(u.split(',')[1]);const a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a};
+function exportDocx(n){
+ const F='TH Sarabun New';const rp=(r,sz)=>`<w:rPr><w:rFonts w:ascii="${F}" w:hAnsi="${F}" w:cs="${F}" w:eastAsia="${F}"/>${r.b?'<w:b/><w:bCs/>':''}${r.i?'<w:i/><w:iCs/>':''}${r.u?'<w:u w:val="single"/>':''}<w:sz w:val="${sz}"/><w:szCs w:val="${sz}"/></w:rPr>`;
+ const run=(r,sz)=>`<w:r>${rp(r,sz)}<w:t xml:space="preserve">${xesc(r.t)}</w:t></w:r>`;
+ const jc={center:'center',right:'right',justify:'both'};
+ let body=`<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="2400" w:after="400"/></w:pPr>${run({t:n.title,b:1},56)}</w:p>`;
+ if(n.synopsis)body+=`<w:p><w:pPr><w:jc w:val="center"/></w:pPr>${run({t:n.synopsis,i:1},32)}</w:p>`;
+ n.chapters.forEach((c,i)=>{body+=`<w:p><w:pPr><w:pageBreakBefore/><w:jc w:val="center"/><w:spacing w:after="360"/></w:pPr>${run({t:chTitle(c,i),b:1},40)}</w:p>`;
+  htmlToParas(c.html).forEach(p=>{body+=`<w:p><w:pPr>${jc[p.align]?`<w:jc w:val="${jc[p.align]}"/>`:''}<w:spacing w:after="0" w:line="360" w:lineRule="auto"/><w:ind w:firstLine="720"/></w:pPr>${p.runs.map(r=>run(r,32)).join('')}</w:p>`})});
+ const doc=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${body}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr></w:body></w:document>`;
+ download(makeZip([{name:'[Content_Types].xml',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>'},
+  {name:'_rels/.rels',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>'},
+  {name:'word/document.xml',data:doc}],'application/vnd.openxmlformats-officedocument.wordprocessingml.document'),fname(n)+'.docx');
+}
+function exportEpub(n){
+ const id='urn:uuid:'+n.id,mod=new Date().toISOString().replace(/\.\d+Z$/,'Z');
+ const css='body{font-family:serif;line-height:1.8;margin:0 4%}h1{text-align:center;margin:2em 0 1.2em;font-size:1.5em}p{margin:0;text-indent:2em}p.blank{text-indent:0}.title{text-align:center;margin-top:30%}.cover{text-align:center;margin:0}.cover img{max-width:100%;max-height:100vh}';
+ const xh=(t,b)=>`<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE html>\n<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="th" lang="th"><head><meta charset="UTF-8"/><title>${xesc(t)}</title><link rel="stylesheet" type="text/css" href="style.css"/></head><body>${b}</body></html>`;
+ const hasCover=okImg(n.cover);const cext=hasCover&&/^data:image\/png/.test(n.cover)?'png':'jpg';
+ const files=[{name:'mimetype',data:'application/epub+zip'},{name:'META-INF/container.xml',data:'<?xml version="1.0" encoding="UTF-8"?><container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/></rootfiles></container>'},{name:'OEBPS/style.css',data:css}];
+ if(hasCover){files.push({name:`OEBPS/cover.${cext}`,data:dataUrlBytes(n.cover)});files.push({name:'OEBPS/cover.xhtml',data:xh(n.title,`<div class="cover"><img src="cover.${cext}" alt="${xesc(n.title)}"/></div>`)})}
+ files.push({name:'OEBPS/title.xhtml',data:xh(n.title,`<div class="title"><h1>${xesc(n.title)}</h1>${n.synopsis?`<p style="text-indent:0;text-align:center"><i>${xesc(n.synopsis)}</i></p>`:''}</div>`)});
+ n.chapters.forEach((c,i)=>files.push({name:`OEBPS/ch${i+1}.xhtml`,data:xh(chTitle(c,i),`<h1>${xesc(chTitle(c,i))}</h1>\n${parasHtml(c.html)}`)}));
+ const navli=n.chapters.map((c,i)=>`<li><a href="ch${i+1}.xhtml">${xesc(chTitle(c,i))}</a></li>`).join('');
+ files.push({name:'OEBPS/nav.xhtml',data:xh('สารบัญ',`<nav epub:type="toc" id="toc"><h1>สารบัญ</h1><ol><li><a href="title.xhtml">${xesc(n.title)}</a></li>${navli}</ol></nav>`)});
+ files.push({name:'OEBPS/toc.ncx',data:`<?xml version="1.0" encoding="UTF-8"?><ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1"><head><meta name="dtb:uid" content="${id}"/></head><docTitle><text>${xesc(n.title)}</text></docTitle><navMap>${n.chapters.map((c,i)=>`<navPoint id="np${i+1}" playOrder="${i+1}"><navLabel><text>${xesc(chTitle(c,i))}</text></navLabel><content src="ch${i+1}.xhtml"/></navPoint>`).join('')}</navMap></ncx>`});
+ files.push({name:'OEBPS/content.opf',data:`<?xml version="1.0" encoding="UTF-8"?><package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="bookid" xml:lang="th"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:identifier id="bookid">${id}</dc:identifier><dc:title>${xesc(n.title)}</dc:title><dc:language>th</dc:language>${n.synopsis?`<dc:description>${xesc(n.synopsis)}</dc:description>`:''}<meta property="dcterms:modified">${mod}</meta>${hasCover?'<meta name="cover" content="cover-img"/>':''}</metadata>
+<manifest><item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/><item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/><item id="css" href="style.css" media-type="text/css"/>${hasCover?`<item id="cover-img" href="cover.${cext}" media-type="image/${cext==='png'?'png':'jpeg'}" properties="cover-image"/><item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"/>`:''}<item id="title" href="title.xhtml" media-type="application/xhtml+xml"/>${n.chapters.map((c,i)=>`<item id="ch${i+1}" href="ch${i+1}.xhtml" media-type="application/xhtml+xml"/>`).join('')}</manifest>
+<spine toc="ncx">${hasCover?'<itemref idref="cover"/>':''}<itemref idref="title"/><itemref idref="nav"/>${n.chapters.map((c,i)=>`<itemref idref="ch${i+1}"/>`).join('')}</spine></package>`});
+ download(makeZip(files,'application/epub+zip'),fname(n)+'.epub');
+}
+function printHtml(title,body){
+ const fr=document.createElement('iframe');fr.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';document.body.appendChild(fr);
+ const d=fr.contentDocument;d.open();d.write(`<!doctype html><html lang="th"><head><meta charset="utf-8"><title>${esc(title)}</title><link href="https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"><style>@page{size:A4;margin:2.2cm 2.2cm 2.4cm}body{font-family:Sarabun,'TH Sarabun New','Leelawadee UI',serif;font-size:15pt;line-height:1.75;color:#222}h1{text-align:center;font-size:22pt;margin:0 0 1em}h2{font-size:17pt;margin:1.4em 0 .5em;border-bottom:1px solid #ccc;padding-bottom:4px}h3{font-size:15pt;margin:1em 0 .2em}.ch{page-break-before:always}p{margin:0;text-indent:2.5em}p.blank{text-indent:0}.cover{text-align:center;padding-top:22vh}.cover img{max-width:60%;max-height:50vh;margin-bottom:1em}.kv{margin:.15em 0}.kv b{display:inline-block;min-width:7em}.sec{page-break-inside:avoid;margin-bottom:.8em}</style></head><body>${body}</body></html>`);d.close();
+ const go=()=>{try{fr.contentWindow.focus();fr.contentWindow.print()}catch(e){}setTimeout(()=>fr.remove(),2000)};
+ const ready=d.fonts&&d.fonts.ready?Promise.race([d.fonts.ready,new Promise(r=>setTimeout(r,2500))]):Promise.resolve();ready.then(()=>setTimeout(go,300));
+}
+function exportPdf(n){printHtml(n.title,`<div class="cover">${okImg(n.cover)?`<img src="${n.cover}" alt="">`:''}<h1 style="font-size:30pt">${esc(n.title)}</h1>${n.synopsis?`<p style="text-indent:0"><i>${esc(n.synopsis)}</i></p>`:''}</div>`+n.chapters.map((c,i)=>`<div class="ch"><h1>${esc(chTitle(c,i))}</h1>${parasHtml(c.html)}</div>`).join(''))}
+function exportBible(n){const kv=(k,v)=>v?`<div class="kv"><b>${esc(k)}</b> ${esc(v)}</div>`:'';const o=n.outline;const nm=id=>(n.characters.find(c=>c.id===id)||{}).name||'';
+ let h=`<h1>${esc(n.title)} — ข้อมูลเรื่อง</h1>`;
+ h+=`<h2>โครงเรื่อง</h2>`+OUT.map(([k,l])=>o[k]?`<div class="sec"><h3>${l}</h3><div style="white-space:pre-wrap">${esc(o[k])}</div></div>`:'').join('');
+ h+=`<h2>สรุปรายบท</h2>`+n.chapters.map((c,i)=>`<div class="sec"><h3>${esc(chTitle(c,i))}</h3>${kv('สถานะ',(STATUS[c.status]||STATUS.draft).n+' · '+num(c.words)+' คำ')}${kv('มุมมอง',nm(c.pov))}${kv('ตัวละคร',(c.chars||[]).map(nm).filter(Boolean).join(', '))}${kv('สรุป',c.summary)}</div>`).join('');
+ h+=`<h2>ตัวละคร (${n.characters.length})</h2>`+n.characters.map(c=>`<div class="sec"><h3>${esc(c.name)}</h3>${ENT.characters.fields.map(([k,l])=>kv(l,c[k])).join('')}</div>`).join('');
+ h+=`<h2>ฉากและสถานที่ (${n.locations.length})</h2>`+n.locations.map(c=>`<div class="sec"><h3>${esc(c.name)}</h3>${ENT.locations.fields.map(([k,l])=>kv(l,c[k])).join('')}</div>`).join('');
+ h+=`<h2>คำศัพท์และเกร็ดโลก (${n.glossary.length})</h2>`+n.glossary.map(g=>`<div class="sec"><h3>${esc(g.name)} <small style="font-weight:400;color:#777">· ${esc((GKIND[g.kind]||GKIND.term).n)}</small></h3>${(g.fields||[]).map(f=>kv(f.label,f.text)).join('')}</div>`).join('');
+ if(n.relations.length)h+=`<h2>ความสัมพันธ์</h2>`+n.relations.map(r=>`<div class="kv">${esc(nm(r.a)||'?')} ${r.mutual?'↔':'→'} ${esc(nm(r.b)||'?')}: ${esc((REL[r.type]||REL.other).n)}${r.label?' ('+esc(r.label)+')':''}</div>`).join('');
+ if(n.timeline.length)h+=`<h2>เส้นเวลา</h2>`+n.timeline.map(e=>kv(e.when||'—',e.title+(e.text?' — '+e.text:''))).join('');
+ printHtml(n.title+' — ข้อมูลเรื่อง',h)}
+function mdRuns(p){return p.runs.map(r=>{let t=r.t;if(!t.trim())return t;const lead=t.match(/^\s*/)[0],trail=t.match(/\s*$/)[0];t=t.trim();if(r.b&&r.i)t=`***${t}***`;else if(r.b)t=`**${t}**`;else if(r.i)t=`*${t}*`;return lead+t+trail}).join('')}
+function doExport(k){commitEditor();const n=N();
+ if(k==='txt'){const t=n.title+'\n\n'+n.chapters.map((c,i)=>`==== ${chTitle(c,i)} ====\n\n`+htmlToText(c.html)).join('\n\n\n');download(new Blob([t],{type:'text/plain;charset=utf-8'}),fname(n)+'.txt')}
+ else if(k==='md'){const t=`# ${n.title}\n\n`+(n.synopsis?`> ${n.synopsis}\n\n`:'')+n.chapters.map((c,i)=>`## ${chTitle(c,i)}\n\n`+htmlToParas(c.html).map(mdRuns).filter(x=>x.trim()).join('\n\n')).join('\n\n---\n\n');download(new Blob([t],{type:'text/markdown;charset=utf-8'}),fname(n)+'.md')}
+ else if(k==='docx')exportDocx(n);else if(k==='epub')exportEpub(n);else if(k==='pdf')exportPdf(n);else if(k==='bible')exportBible(n);
+ else if(k==='json')download(new Blob([JSON.stringify({app:'inkfold',type:'novel',version:APP_VERSION,novel:n},null,1)],{type:'application/json'}),fname(n)+'.json');
+ if(k!=='pdf'&&k!=='bible')toast('สร้างไฟล์เรียบร้อย')}
+
+/* ---------- images ---------- */
+function readImage(file,max){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const s=Math.min(1,max/Math.max(im.width,im.height));const cv=document.createElement('canvas');cv.width=Math.max(1,Math.round(im.width*s));cv.height=Math.max(1,Math.round(im.height*s));const g=cv.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,cv.width,cv.height);g.drawImage(im,0,0,cv.width,cv.height);res(cv.toDataURL('image/jpeg',.85))};im.onerror=rej;im.src=fr.result};fr.onerror=rej;fr.readAsDataURL(file)})}
+function pickImage(max){return new Promise(res=>{const i=$('#imgIn');i.value='';i.onchange=async()=>{const f=i.files[0];if(!f)return res(null);if(!/^image\//.test(f.type)){toast('กรุณาเลือกไฟล์รูปภาพ');return res(null)}try{res(await readImage(f,max))}catch(e){toast('เปิดรูปนี้ไม่ได้');res(null)}};i.click()})}
+
+/* ---------- modals ---------- */
+let modalOnClose=null;
+function modal(html,onSave,mount,opts={}){const root=$('#modalRoot');const prevFocus=document.activeElement;
+ root.innerHTML=`<div class="modal-bg"><div class="card modal ${opts.wide?'wide':''}" role="dialog" aria-modal="true">${html}</div></div>`;
+ modalOnClose=()=>{if(opts.onClose)opts.onClose();if(prevFocus&&prevFocus.focus&&document.contains(prevFocus))prevFocus.focus()};
+ const bg=root.firstChild;bg.addEventListener('mousedown',e=>{if(e.target===bg)closeModal()});
+ bg.addEventListener('click',e=>{const a=e.target.closest('[data-m]');if(!a)return;if(a.dataset.m==='close')closeModal();if(a.dataset.m==='save'){if(onSave&&onSave(bg)!==false)closeModal()}});
+ bg.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.tagName==='INPUT'&&e.target.type!=='checkbox'&&onSave){e.preventDefault();if(onSave(bg)!==false)closeModal()}});
+ if(mount)mount(bg);labelButtons(bg);const f=$('input:not([type=checkbox]),textarea,button',bg);if(f)setTimeout(()=>f.focus(),30)}
+function closeModal(){const r=$('#modalRoot');if(!r.innerHTML)return;r.innerHTML='';const f=modalOnClose;modalOnClose=null;if(f)f()}
+const mHead=t=>`<div class="modal-h"><h3>${t}</h3><button class="icon-btn" data-m="close" title="ปิด">${ic('x',18)}</button></div>`;
+function askChoice(title,msg,btns){return new Promise(res=>{let done=false;const fin=v=>{if(!done){done=true;res(v)}};
+ modal(`${mHead(title)}<p style="margin:0">${msg}</p><div class="modal-f"><span class="grow"></span>${btns.map((b,i)=>`<button class="btn ${b.primary?'primary':''}" data-choice="${i}">${b.label}</button>`).join('')}</div>`,null,
+ bg=>bg.addEventListener('click',e=>{const b=e.target.closest('[data-choice]');if(b){fin(btns[+b.dataset.choice].v);closeModal()}}),{onClose:()=>fin(btns[btns.length-1].v)})})}
+function novelModal(n){const isNew=!n;n=n||{title:'',genre:'',synopsis:'',color:COLORS[Math.floor(Math.random()*COLORS.length)],goal:1000,cover:'',target:{words:0,date:''}};let col=n.color,cover=n.cover||'';
+ const prev=()=>cover?`<img src="${cover}" alt="">`:ic('image',22);
+ modal(`${mHead(isNew?'นิยายเรื่องใหม่':'ตั้งค่านิยาย')}
+ <div class="field"><label for="mT">ชื่อเรื่อง</label><input class="in" id="mT" value="${esc(n.title)}" placeholder="ชื่อนิยายของคุณ"></div>
+ <div class="grid2"><div class="field"><label for="mG">แนวเรื่อง</label><input class="in" id="mG" value="${esc(n.genre)}" placeholder="แฟนตาซี โรแมนซ์ สืบสวน…" list="genres"></div><div class="field"><label for="mGoal">เป้าหมายคำต่อวัน</label><input class="in" id="mGoal" type="number" min="0" step="100" value="${n.goal||0}"></div></div>
+ <div class="grid2"><div class="field"><label for="mTW">เป้าหมายคำทั้งเรื่อง</label><input class="in" id="mTW" type="number" min="0" step="1000" value="${n.target.words||''}" placeholder="เช่น 80000"></div><div class="field"><label for="mTD">กำหนดเสร็จ</label><input class="in" id="mTD" type="date" value="${esc(n.target.date)}"></div></div>
+ <datalist id="genres">${['แฟนตาซี','โรแมนซ์','สืบสวน','ไซไฟ','สยองขวัญ','ดราม่า','กำลังภายใน','ชีวิตประจำวัน','วาย'].map(g=>`<option value="${g}">`).join('')}</datalist>
+ <div class="field"><label for="mS">เรื่องย่อสั้น ๆ</label><textarea class="in" id="mS" placeholder="เรื่องราวเกี่ยวกับอะไร…">${esc(n.synopsis)}</textarea></div>
+ <div class="field"><label>รูปปก</label><div class="imgpick"><div class="prev" id="mCov">${prev()}</div><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start"><button class="btn sm" id="mCovUp">${ic('image',14)} เลือกรูปปก</button><button class="btn sm danger ${cover?'':'hidden'}" id="mCovX">ลบรูปปก</button><span class="muted" style="font-size:12px">แนะนำแนวตั้ง 2:3 · ใช้ในคลังนิยายและไฟล์ EPUB</span></div></div></div>
+ <div class="field"><label>สีประจำเรื่อง</label><div class="colors" id="mC">${COLORS.map(c=>`<button style="background:${c}" data-c="${c}" class="${c===col?'on':''}" title="เลือกสีนี้"></button>`).join('')}</div></div>
+ <div class="modal-f">${isNew?'':`<button class="btn danger" id="mDel">${ic('trash',15)} ย้ายไปถังขยะ</button>`}<span class="grow"></span><button class="btn" data-m="close">ยกเลิก</button><button class="btn primary" data-m="save">${isNew?'สร้างนิยาย':'บันทึก'}</button></div>`,
+ bg=>{const t=$('#mT',bg).value.trim();if(!t){$('#mT',bg).focus();return false}
+  const o={title:t,genre:$('#mG',bg).value.trim(),synopsis:$('#mS',bg).value.trim(),color:col,cover,goal:+$('#mGoal',bg).value||0,target:{words:+$('#mTW',bg).value||0,date:$('#mTD',bg).value||''}};
+  if(isNew){const nn=blankNovel(o);db.novels.push(nn);save();S.nid=nn.id;S.sec='overview';render()}else{Object.assign(n,o);touch(n);save();render()}},
+ bg=>{$('#mC',bg).addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(!b)return;col=b.dataset.c;$$('#mC button',bg).forEach(x=>x.classList.toggle('on',x===b))});
+  $('#mCovUp',bg).addEventListener('click',async()=>{const u=await pickImage(900);if(u){cover=u;$('#mCov',bg).innerHTML=prev();$('#mCovX',bg).classList.remove('hidden')}});
+  $('#mCovX',bg).addEventListener('click',()=>{cover='';$('#mCov',bg).innerHTML=prev();$('#mCovX',bg).classList.add('hidden')});
+  const d=$('#mDel',bg);if(d)d.addEventListener('click',()=>{closeModal();delNovel(n.id)})})}
+function delNovel(id){const i=db.novels.findIndex(x=>x.id===id);if(i<0)return;const [n]=db.novels.splice(i,1);if(S.nid===id)S.nid=null;softDelete('novel',n,{});render()}
+function promptModal(title,label,val,onOk,extra){modal(`${mHead(title)}<div class="field"><label for="pV">${label}</label><input class="in" id="pV" value="${esc(val||'')}"></div><div class="modal-f">${extra?`<button class="btn danger" id="pX">${ic('trash',15)} ${extra.label}</button>`:''}<span class="grow"></span><button class="btn" data-m="close">ยกเลิก</button><button class="btn primary" data-m="save">ตกลง</button></div>`,
+ bg=>{const v=$('#pV',bg).value.trim();if(!v)return false;onOk(v)},bg=>{const x=$('#pX',bg);if(x)x.addEventListener('click',()=>{closeModal();extra.fn()})})}
+function linkModal(kind,obj,onDelete,isNew){const opts=kind==='flow'?FLOW:REL;let st=kind==='flow'?obj.style:obj.type;const n=N();
+ const nm=id=>esc((n.characters.find(c=>c.id===id)||{}).name||'?');
+ const dirHtml=()=>`<b>${nm(obj.a)}</b> <span id="lArr">${obj.mutual?'↔':'→'}</span> <b>${nm(obj.b)}</b>`;
+ modal(`${mHead(kind==='flow'?'ตั้งค่าเส้นเชื่อมโยง':'ความสัมพันธ์ระหว่างตัวละคร')}
+ ${kind==='rel'?`<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><div id="lDir" style="flex:1">${dirHtml()}</div><button class="btn sm" id="lSwap">${ic('swap',14)} สลับทิศ</button></div>
+ <label class="check" style="padding:8px 12px"><input type="checkbox" id="lMut" ${obj.mutual?'checked':''}><span style="font-size:13.5px">ความสัมพันธ์สองทาง<small>ทั้งสองฝ่ายรู้สึกแบบเดียวกัน (หัวลูกศรทั้งสองข้าง)</small></span></label>`:''}
+ <div class="field"><label for="lL">ข้อความกำกับบนเส้น</label><input class="in" id="lL" value="${esc(obj.label)}" placeholder="เว้นว่างเพื่อใช้ชื่อรูปแบบ"></div>
+ <div class="field"><label>รูปแบบ</label><div style="display:flex;flex-direction:column;gap:6px" id="lO">${Object.entries(opts).map(([k,o])=>`<div class="opt ${k===st?'on':''}" data-k="${k}" tabindex="0" role="radio" aria-checked="${k===st}"><svg width="34" height="6" aria-hidden="true"><line x1="2" y1="3" x2="32" y2="3" stroke="${o.c}" stroke-width="3" stroke-linecap="round" ${o.d?`stroke-dasharray="${o.d.split(' ').map(x=>x/1.6).join(' ')}"`:''}/></svg>${o.n}<small>${o.d?'เส้นประ':'เส้นทึบ'}</small></div>`).join('')}</div></div>
+ <div class="modal-f"><button class="btn danger" id="lD">ลบเส้นนี้</button><span class="grow"></span><button class="btn" data-m="close">ยกเลิก</button><button class="btn primary" data-m="save">บันทึก</button></div>`,
+ bg=>{if(!isNew)pushHist();obj.label=$('#lL',bg).value.trim();if(kind==='flow')obj.style=st;else{obj.type=st;obj.mutual=$('#lMut',bg).checked}touch();save();drawLinks()},
+ bg=>{const pick=o=>{st=o.dataset.k;$$('#lO .opt',bg).forEach(x=>{x.classList.toggle('on',x===o);x.setAttribute('aria-checked',x===o)})};
+  $('#lO',bg).addEventListener('click',e=>{const o=e.target.closest('[data-k]');if(o)pick(o)});$('#lO',bg).addEventListener('keydown',e=>{const o=e.target.closest('[data-k]');if(o&&(e.key===' '||e.key==='Enter')){e.preventDefault();e.stopPropagation();pick(o)}});
+  $('#lD',bg).addEventListener('click',()=>{pushHist();onDelete();closeModal();touch();save();drawLinks()});
+  const sw=$('#lSwap',bg);if(sw){sw.addEventListener('click',()=>{if(!isNew)pushHist();[obj.a,obj.b]=[obj.b,obj.a];$('#lDir',bg).innerHTML=dirHtml();touch();save();drawLinks()});$('#lMut',bg).addEventListener('change',e=>$('#lArr',bg).textContent=e.target.checked?'↔':'→')}})}
+function pickModal(sec){const n=N(),list=n[sec],lab={characters:'ตัวละคร',locations:'สถานที่',chapters:'บท'}[sec];
+ if(!list.length){toast(`ยังไม่มี${lab}ในเรื่องนี้`);return}
+ modal(`${mHead('เพิ่มการ์ด'+lab)}<div class="pick">${list.map((x,i)=>`<div class="li" data-pick="${x.id}" tabindex="0" role="button"><div class="li-name">${sec==='chapters'?`บทที่ ${i+1}: `:''}${esc(x.name||x.title)}</div><div class="li-sub">${esc(x.role||x.type||'')}</div></div>`).join('')}</div>`,null,
+ bg=>$('.pick',bg).addEventListener('click',e=>{const p=e.target.closest('[data-pick]');if(!p)return;pushHist();const pos=canvasCenter();board().cards.push({id:uid(),type:sec,ref:p.dataset.pick,text:'',...pos});touch();save();closeModal();rerenderMain()}))}
+function charLookModal(){const x=curEnt('characters');
+ modal(`${mHead('รูปและสีของตัวละคร')}<div style="display:flex;align-items:center;gap:16px"><div id="clPrev">${avatar(x,84)}</div><div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start"><button class="btn sm" id="clUp">${ic('image',14)} เลือกรูปตัวละคร</button><button class="btn sm danger ${x.img?'':'hidden'}" id="clX">ลบรูป</button></div></div>
+ <div class="field"><label>สีประจำตัว (ใช้เมื่อไม่มีรูป และใช้ในผังความสัมพันธ์)</label><div class="colors" id="clC">${COLORS.map(c=>`<button style="background:${c}" data-c="${c}" class="${c===x.color?'on':''}" title="เลือกสีนี้"></button>`).join('')}</div></div>
+ <div class="modal-f"><span class="grow"></span><button class="btn primary" data-m="close">เสร็จ</button></div>`,null,
+ bg=>{const upd=()=>{$('#clPrev',bg).innerHTML=avatar(x,84);$('#clX',bg).classList.toggle('hidden',!x.img);touch();save()};
+  $('#clC',bg).addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(!b)return;x.color=b.dataset.c;$$('#clC button',bg).forEach(z=>z.classList.toggle('on',z===b));upd()});
+  $('#clUp',bg).addEventListener('click',async()=>{const u=await pickImage(320);if(u){x.img=u;upd()}});$('#clX',bg).addEventListener('click',()=>{x.img='';upd()})},{onClose:()=>rerenderMain()})}
+function historyModal(){commitEditor();const n=N(),c=curChapter();let sel=-1;
+ const snaps=()=>[...(c.snaps||[])].map((s,i)=>({...s,i})).reverse();
+ const listHtml=()=>`<div class="li ${sel===-1?'on':''}" data-h="-1" tabindex="0" role="button"><div class="li-name">ฉบับปัจจุบัน</div><div class="li-sub">${num(c.words)} คำ</div></div>`+snaps().map(s=>`<div class="li ${sel===s.i?'on':''}" data-h="${s.i}" tabindex="0" role="button"><div class="li-name">${fmtDT(s.t)}</div><div class="li-sub">${num(s.words)} คำ${s.label?' · '+esc(s.label):' · บันทึกอัตโนมัติ'}</div></div>`).join('');
+ const prevText=()=>{const h=sel===-1?c.html:c.snaps[sel].html;return esc(htmlToText(h).slice(0,6000))||'<span class="muted">(ว่าง)</span>'};
+ modal(`${mHead('ประวัติเวอร์ชัน — '+esc(c.title||'บทนี้'))}<p class="muted" style="margin:0;font-size:13.5px">ระบบเก็บเวอร์ชันให้อัตโนมัติวันละครั้ง และทุกครั้งก่อนแทนที่คำ (สูงสุด ${SNAP_MAX} เวอร์ชัน)</p>
+ <div class="hist"><div class="hl" id="hL">${listHtml()}</div><div class="hp" id="hP">${prevText()}</div></div>
+ <div class="modal-f"><button class="btn" id="hSave">${ic('save',14)} บันทึกเวอร์ชันนี้ไว้</button><span class="grow"></span><button class="btn" data-m="close">ปิด</button><button class="btn primary" id="hRestore" disabled>กู้คืนเวอร์ชันที่เลือก</button></div>`,null,
+ bg=>{const refresh=()=>{$('#hL',bg).innerHTML=listHtml();$('#hP',bg).innerHTML=prevText();$('#hRestore',bg).disabled=sel===-1};
+  $('#hL',bg).addEventListener('click',e=>{const it=e.target.closest('[data-h]');if(!it)return;sel=+it.dataset.h;refresh()});
+  $('#hSave',bg).addEventListener('click',()=>{const l=prompt('ตั้งชื่อเวอร์ชันนี้ (เช่น ร่างแรก, ก่อนส่ง บก.)','ร่างที่บันทึกไว้');if(l===null)return;addSnap(c,l.trim()||'บันทึกเอง');touch(n);save();refresh();toast('บันทึกเวอร์ชันแล้ว')});
+  $('#hRestore',bg).addEventListener('click',()=>{if(sel<0)return;const s=c.snaps[sel];addSnap(c,'ก่อนกู้คืนเวอร์ชันเก่า');c.html=s.html;c.words=countWords(htmlToText(c.html));touch(n);save();closeModal();S.keepFocus=true;rerenderMain();toast('กู้คืนเวอร์ชันแล้ว — ฉบับก่อนหน้าถูกเก็บไว้ในประวัติ')})},{wide:true})}
+function trashModal(nid){
+ const items=()=>db.trash.filter(t=>!nid||t.nid===nid).sort((a,b)=>b.at-a.at);
+ const nameOf=t=>t.item.title||t.item.name||t.item.text||'(ไม่มีชื่อ)';
+ const novelOf=t=>t.kind==='novel'?'':((db.novels.find(n=>n.id===t.nid)||{}).title||'(นิยายถูกลบ)');
+ const rows=()=>items().map(t=>`<div class="trow"><span class="chip">${TRASH_KIND[t.kind]}</span><div class="grow"><div style="font-weight:600">${esc(String(nameOf(t)).slice(0,80))}</div><div class="muted" style="font-size:12px">${nid||t.kind==='novel'?'':esc(novelOf(t))+' · '}ลบเมื่อ ${fmtDT(t.at)} · จะหายไปถาวรใน ${Math.max(0,TRASH_DAYS-Math.floor((Date.now()-t.at)/864e5))} วัน</div></div><button class="btn sm" data-tr="${t.id}">กู้คืน</button><button class="icon-btn" data-tx="${t.id}" title="ลบถาวร">${ic('x',15)}</button></div>`).join('')||'<div class="empty">ถังขยะว่างเปล่า</div>';
+ modal(`${mHead('ถังขยะ')}<p class="muted" style="margin:0;font-size:13.5px">สิ่งที่ลบจะอยู่ที่นี่ ${TRASH_DAYS} วันก่อนหายไปถาวร</p><div id="trL" style="display:flex;flex-direction:column;gap:6px;max-height:55vh;overflow:auto">${rows()}</div>
+ <div class="modal-f"><button class="btn danger" id="trEmpty">ล้างถังขยะ</button><span class="grow"></span><button class="btn primary" data-m="close">ปิด</button></div>`,null,
+ bg=>{const ref=()=>{$('#trL',bg).innerHTML=rows();labelButtons(bg)};
+  $('#trL',bg).addEventListener('click',e=>{const r=e.target.closest('[data-tr]'),x=e.target.closest('[data-tx]');
+   if(r){if(trashRestore(r.dataset.tr)){save();toast('กู้คืนแล้ว');ref()}}
+   if(x){if(!confirm('ลบรายการนี้ถาวร? กู้คืนไม่ได้อีก'))return;db.trash=db.trash.filter(t=>t.id!==x.dataset.tx);save();ref()}});
+  $('#trEmpty',bg).addEventListener('click',()=>{const ids=new Set(items().map(t=>t.id));if(!ids.size)return;if(!confirm(`ลบ ${ids.size} รายการในถังขยะถาวร? กู้คืนไม่ได้อีก`))return;db.trash=db.trash.filter(t=>!ids.has(t.id));save();ref()})},
+ {onClose:()=>render()})}
+async function settingsModal(){
+ let est='';try{if(navigator.storage&&navigator.storage.estimate){const e=await navigator.storage.estimate();est=`${(e.usage/1048576).toFixed(1)} MB จากที่ใช้ได้ประมาณ ${(e.quota/1073741824).toFixed(1)} GB`}}catch(e){}
+ const fsRow=!window.showSaveFilePicker?`<div class="muted" style="font-size:13.5px">เบราว์เซอร์นี้ยังไม่รองรับการบันทึกลงไฟล์อัตโนมัติ (ใช้ได้ใน Chrome และ Edge บนคอมพิวเตอร์) — ใช้ปุ่ม “สำรองทั้งคลัง” แทน</div>`
+  :FS.handle?`<div class="kv"><span>ไฟล์ที่เชื่อมไว้</span><b>${esc(FS.name||'ไฟล์สำรอง')}</b></div><div class="kv"><span>สถานะ</span><b style="color:${FS.ok?'var(--accent-2)':'var(--warm-ink)'}">${FS.ok?'กำลังบันทึกอัตโนมัติ':'หยุดชั่วคราว — ต้องยืนยันสิทธิ์'}</b></div>
+   <div style="display:flex;gap:8px;flex-wrap:wrap">${FS.ok?'':`<button class="btn primary sm" data-s="regrant">เปิดอีกครั้ง</button>`}<button class="btn sm" data-s="link">เปลี่ยนไฟล์</button><button class="btn sm danger" data-s="unlink">ยกเลิกการเชื่อม</button></div>`
+  :`<div class="muted" style="font-size:13.5px">เลือกไฟล์หนึ่งไฟล์ (เช่นในโฟลเดอร์ OneDrive / Google Drive) แล้วระบบจะบันทึกงานทั้งหมดลงไฟล์นั้นให้อัตโนมัติทุกครั้งที่แก้ไข</div><button class="btn primary sm" data-s="link" style="align-self:flex-start">${ic('save',14)} เลือกไฟล์สำหรับบันทึกอัตโนมัติ</button>`;
+ modal(`${mHead('ตั้งค่าและการบันทึกข้อมูล')}
+ <div class="field"><label>ที่เก็บข้อมูลในเบราว์เซอร์</label><div class="kv"><span>ระบบจัดเก็บ</span><b>${ST.mode==='idb'?'IndexedDB (จุได้มาก)':'localStorage (จำกัด ~5 MB)'}</b></div>
+ <div class="kv"><span>ป้องกันเบราว์เซอร์ลบข้อมูลเอง</span><b>${ST.persisted?'เปิดแล้ว':'ยังไม่ได้รับอนุญาต'}</b></div>${est?`<div class="kv"><span>พื้นที่ที่ใช้</span><b>${est}</b></div>`:''}
+ <div class="kv"><span>สำรองล่าสุด</span><b>${db.settings.lastBackup?fmtDT(db.settings.lastBackup):'ยังไม่เคย'}</b></div></div>
+ <div class="field"><label>อนิเมชัน</label><label class="check"><input type="checkbox" id="setIntro" ${introOn()?'checked':''}><span>อนิเมชันและเอฟเฟกต์<small>หนังสือปกแข็งค่อย ๆ เปิดออกตอนเปิดโปรแกรมและตอนเปิดนิยาย รวมถึงการเปลี่ยนหน้าแบบนุ่มนวล — ปิดได้ถ้าต้องการให้เปิดเร็วขึ้น</small></span></label><button class="btn sm" data-s="replay" style="align-self:flex-start">ดูอนิเมชันอีกครั้ง</button></div>
+ <div class="field"><label>บันทึกลงไฟล์อัตโนมัติ</label>${fsRow}</div>
+ <div class="modal-f"><button class="btn sm" data-s="backup">${ic('down',14)} สำรองทั้งคลัง</button><button class="btn sm" data-s="import">${ic('up',14)} นำเข้า</button><span class="grow"></span><span class="muted" style="font-size:12px">เวอร์ชัน ${APP_VERSION}</span><button class="btn primary" data-m="close">ปิด</button></div>`,null,
+ bg=>{const si=$('#setIntro',bg);if(si)si.addEventListener('change',()=>setIntro(si.checked));bg.addEventListener('click',e=>{const b=e.target.closest('[data-s]');if(!b)return;const a=b.dataset.s;
+  if(a==='replay'){closeModal();if(!introOn())setIntro(true);playLaunch();return}if(a==='link')linkBackupFile();if(a==='regrant')regrantBackup();if(a==='unlink')unlinkBackup();if(a==='backup'){A.backupAll();closeModal()}if(a==='import'){closeModal();A.importJson()}})})}
+function reopenSettings(){const h=$('#modalRoot .modal-h h3');const wasOpen=h&&h.textContent.startsWith('ตั้งค่าและ');if(wasOpen)closeModal();
+ if(S.nid&&N()){refreshBanner();const si=$('#savedInd');if(si)setSaved(false)}else render();if(wasOpen)settingsModal()}
+
+/* ---------- import ---------- */
+async function importFile(f){
+ let d;try{d=JSON.parse(await f.text())}catch(e){return toast('ไฟล์ไม่ถูกต้อง — ต้องเป็นไฟล์ JSON ที่ส่งออกจาก Inkfold หรือโต๊ะนักเขียน')}
+ const list=d&&(d.novels||(d.novel?[d.novel]:d.chapters?[d]:null));if(!Array.isArray(list))return toast('ไฟล์นี้ไม่ใช่ไฟล์สำรองของ Inkfold หรือโต๊ะนักเขียน');
+ let c=0,bad=0;
+ for(const nv of list){if(!nv||typeof nv!=='object'||!Array.isArray(nv.chapters)){bad++;continue}
+  try{checkIds(nv)}catch(e){bad++;continue}normalize(nv);
+  if(db.novels.some(x=>x.id===nv.id)){const v=await askChoice('มีนิยายเรื่องนี้อยู่แล้ว',`“<b>${esc(nv.title)}</b>” มีอยู่ในคลังแล้ว จะทำอย่างไรกับไฟล์ที่นำเข้า?`,[{label:'เขียนทับของเดิม',v:'over'},{label:'เพิ่มเป็นสำเนา',v:'copy',primary:true},{label:'ข้าม',v:'skip'}]);
+   if(v==='skip')continue;if(v==='copy'){nv.id=uid();nv.title+=' (สำเนา)'}else{const old=db.novels.find(x=>x.id===nv.id);trashPut('novel',old,{});db.novels=db.novels.filter(x=>x!==old)}}
+  db.novels.push(nv);c++}
+ save();render();toast(`นำเข้า ${c} เรื่องเรียบร้อย${bad?` · ข้าม ${bad} รายการที่ไฟล์ไม่ถูกต้อง`:''}`);
+}
+
+/* ---------- actions ---------- */
+let installEvt=null;
+const A={
+ theme:el=>{db.settings.theme=el.dataset.v;document.documentElement.dataset.theme=el.dataset.v;save();$$('.themes button').forEach(b=>b.classList.toggle('on',b.dataset.v===el.dataset.v))},
+ newNovel:()=>novelModal(),editNovel:el=>novelModal(db.novels.find(x=>x.id===el.dataset.id)),delNovel:el=>delNovel(el.dataset.id),
+ open:el=>{const n=db.novels.find(x=>x.id===el.dataset.id);const go=()=>{S.nid=el.dataset.id;S.sec='overview';S.sel={};S.bid=null;S.pan={x:40,y:20};S.z=1;render()};if(n&&introOn())playBook({title:n.title,sub:n.genre,color:n.color,cover:n.cover,left:n.title,leftSub:(n.synopsis||'').slice(0,90),right:`${n.chapters.length} บท · ${num(totalWords(n))} คำ`,fast:true,onMid:go});else go()},
+ home:()=>{commitEditor();S.nid=null;S.focus=false;render()},
+ sec:el=>{commitEditor();S.sec=el.dataset.v;S.linkFrom=S.relFrom=null;S.animate=true;rerenderMain()},
+ collapse:()=>{commitEditor();S.collapsed=!S.collapsed;S.keepFocus=true;render()},
+ writeNow:()=>{const n=N();if(!n.chapters.length)return A.addChapter();S.sec='chapters';rerenderMain()},
+ goChapter:el=>{S.sec='chapters';S.sel.chapters=el.dataset.id;rerenderMain()},
+ mood:el=>{const n=N(),d=today();n.journal[d]=n.journal[d]||{};n.journal[d].mood=n.journal[d].mood===el.dataset.v?'':el.dataset.v;save();$$('.moods button').forEach(b=>{b.classList.toggle('on',b.dataset.v===n.journal[d].mood);b.setAttribute('aria-pressed',b.dataset.v===n.journal[d].mood)})},
+ addChapter:()=>{commitEditor();const n=N(),c={id:uid(),title:`บทที่ ${n.chapters.length+1}`,html:'',status:'draft',words:0,summary:'',pov:'',chars:[],locs:[],notes:'',snaps:[]};n.chapters.push(c);S.sel.chapters=c.id;S.sec='chapters';touch(n);save();rerenderMain();setTimeout(()=>{const t=$('.ed-title');if(t){t.focus();t.select()}},30)},
+ selChapter:el=>{commitEditor();S.sel.chapters=el.dataset.id;rerenderMain()},
+ delChapter:()=>{commitEditor();const n=N(),c=curChapter();if(!c)return;const i=n.chapters.indexOf(c);n.chapters.splice(i,1);S.sel.chapters=null;touch(n);softDelete('chapters',c,{nid:n.id,index:i});rerenderMain()},
+ moveCh:el=>{commitEditor();const n=N(),c=curChapter(),i=n.chapters.indexOf(c),j=i+ +el.dataset.v;if(j<0||j>=n.chapters.length)return;n.chapters.splice(i,1);n.chapters.splice(j,0,c);touch(n);save();S.keepFocus=true;rerenderMain()},
+ history:()=>historyModal(),
+ toggleRef:()=>{commitEditor();S.refOpen=!S.refOpen;S.keepFocus=true;rerenderMain()},
+ openFind:()=>{commitEditor();const s=getSelection();if(s&&!s.isCollapsed&&$('#editor')&&$('#editor').contains(s.anchorNode)){const t=s.toString().trim();if(t&&t.length<60)S.find.q=t}S.refOpen=true;S.refTab='find';S.focusFind=true;S.keepFocus=true;S.sec='chapters';rerenderMain()},
+ refTab:el=>{commitEditor();S.refTab=el.dataset.v;S.keepFocus=true;if(el.dataset.v==='find')S.focusFind=true;rerenderMain()},
+ refOpen:(el,e)=>{if(e.target.closest('[data-act="insName"]'))return;el.classList.toggle('open')},
+ insName:el=>{const ed=$('#editor');if(!ed)return;ed.focus();const s=getSelection();s.removeAllRanges();if(savedRange&&ed.contains(savedRange.startContainer))s.addRange(savedRange);else placeEnd(ed);document.execCommand('insertText',false,el.dataset.v);saveRange()},
+ chTag:el=>{const c=curChapter(),k=el.dataset.k,id=el.dataset.id;c[k]=c[k]||[];const i=c[k].indexOf(id);if(i>=0)c[k].splice(i,1);else c[k].push(id);touch();save();el.classList.toggle('on',i<0);el.setAttribute('aria-pressed',i<0)},
+ detectCh:()=>{commitEditor();const n=N(),c=curChapter(),t=htmlToText(c.html).toLowerCase();const has=x=>{const nm=(x.name||'').trim();if(nm.length<2)return false;const p=nm.split(/\s+/);return t.includes(nm.toLowerCase())||(p.length>1&&p[0].length>=2&&t.includes(p[0].toLowerCase()))};
+  const ch=n.characters.filter(has).map(x=>x.id),lo=n.locations.filter(has).map(x=>x.id);const add=ch.filter(i=>!c.chars.includes(i)).length+lo.filter(i=>!c.locs.includes(i)).length;
+  c.chars=[...new Set([...c.chars,...ch])];c.locs=[...new Set([...c.locs,...lo])];touch(n);save();S.keepFocus=true;rerenderMain();toast(add?`พบและเพิ่ม ${add} รายการ`:'ไม่พบชื่อใหม่ในเนื้อหา')},
+ replaceAll:()=>replaceAll(),
+ jump:el=>jumpTo(el.dataset.cid,+el.dataset.k),
+ findName:el=>{S.find.q=el.dataset.v;S.find.r=el.dataset.v;S.find.scope='all';S.find.data=false;if(el.dataset.cid)jumpTo(el.dataset.cid,0);else{const n=N();S.sec='chapters';S.refOpen=true;S.refTab='find';S.focusFind=true;S.keepFocus=true;if(!S.sel.chapters&&n.chapters[0])S.sel.chapters=n.chapters[0].id;rerenderMain()}},
+ focus:()=>{commitEditor();S.focus=!S.focus;render();if(S.focus)toast('โหมดโฟกัส — กด Esc เพื่อออก')},
+ edSize:el=>{db.settings.edSize=Math.min(30,Math.max(13,(db.settings.edSize||18)+ +el.dataset.v));save();$('#editor').style.fontSize=db.settings.edSize+'px';$('#fsz').textContent=db.settings.edSize+'px'},
+ insSep:()=>{const ed=$('#editor');ed.focus();document.execCommand('insertHTML',false,'<div style="text-align:center">✻ ✻ ✻</div><div><br></div>')},
+ addEnt:()=>{const sec=S.sec,n=N(),f=S.folder[sec];const x={id:uid(),name:ENT[sec].newName,folder:f&&f!=='all'&&f!=='none'?f:'',...ENT[sec].mk()};n[sec].unshift(x);S.sel[sec]=x.id;S.tag[sec]='';touch(n);save();rerenderMain();setTimeout(()=>{const t=$('.ent-name');t.focus();t.select()},30)},
+ selEnt:el=>{S.sel[S.sec]=el.dataset.id;rerenderMain()},
+ delEnt:()=>{const sec=S.sec,n=N(),x=curEnt(sec);if(!x)return;const i=n[sec].indexOf(x);n[sec].splice(i,1);let extra=null;
+  if(sec==='characters'){extra={relations:n.relations.filter(r=>r.a===x.id||r.b===x.id),pos:n.relPos[x.id]};n.relations=n.relations.filter(r=>r.a!==x.id&&r.b!==x.id);delete n.relPos[x.id]}
+  S.sel[sec]=null;touch(n);softDelete(sec,x,{nid:n.id,index:i,extra});rerenderMain()},
+ folder:el=>{S.folder[S.sec]=el.dataset.v;rerenderMain()},
+ tagF:el=>{S.tag[S.sec]=S.tag[S.sec]===el.dataset.v?'':el.dataset.v;rerenderMain()},
+ addFolder:()=>promptModal('สร้างโฟลเดอร์','ชื่อโฟลเดอร์','',v=>{const f={id:uid(),name:v};N().folders[S.sec].push(f);S.folder[S.sec]=f.id;save();rerenderMain()}),
+ charLook:()=>charLookModal(),
+ gKind:el=>{const x=curEnt('glossary'),k=el.dataset.v;if(x.kind===k)return;const empty=(x.fields||[]).every(f=>!f.text);x.kind=k;if(empty)x.fields=GKIND[k].fields.map(l=>({label:l,text:''}));touch();save();rerenderMain()},
+ addGField:()=>{const x=curEnt('glossary');x.fields.push({label:'หัวข้อใหม่',text:''});save();rerenderMain();const ins=$$('.fb-h input');const l=ins[ins.length-1];if(l){l.focus();l.select()}},
+ delGField:el=>{const x=curEnt('glossary'),i=+el.dataset.i,f=x.fields[i];x.fields.splice(i,1);save();rerenderMain();if(f&&f.text)toast('ลบหัวข้อแล้ว',{label:'เลิกทำ',fn:()=>{x.fields.splice(i,0,f);save();rerenderMain()}})},
+ addIdea:()=>{const i=$('#ideaIn');if(!i.value.trim())return i.focus();N().ideas.unshift({id:uid(),text:i.value.trim(),done:false});touch();save();rerenderMain();$('#ideaIn').focus()},
+ addThread:()=>{N().threads.unshift({id:uid(),title:'',status:'open',planted:'',resolved:'',notes:''});save();rerenderMain();$('.thread input').focus()},
+ delItem:el=>{const n=N(),c=el.dataset.coll,i=n[c].findIndex(x=>x.id===el.dataset.id);if(i<0)return;const [x]=n[c].splice(i,1);touch(n);softDelete(c,x,{nid:n.id,index:i});rerenderMain()},
+ bmode:el=>{S.bmode=el.dataset.v;S.linkFrom=S.relFrom=null;rerenderMain()},
+ addBoard:()=>promptModal('สร้างกระดานใหม่','ชื่อกระดาน (เช่น องก์ 1, ผังตระกูลตัวร้าย)','',v=>{const b={id:uid(),name:v,cards:[],links:[]};N().boards.push(b);S.bid=b.id;save();rerenderMain()}),
+ renameBoard:()=>{const b=board(),n=N();promptModal('เปลี่ยนชื่อกระดาน','ชื่อกระดาน',b.name,v=>{b.name=v;save();rerenderMain()},n.boards.length>1?{label:'ลบกระดาน',fn:()=>{n.boards=n.boards.filter(x=>x!==b);S.bid=null;softDelete('board',b,{nid:n.id});rerenderMain()}}:null)},
+ addCard:el=>{pushHist();const t=el.dataset.v,pos=canvasCenter();const c=t==='scene'?{id:uid(),type:'scene',title:'ฉากใหม่',goal:'',conflict:'',outcome:'',...pos}:{id:uid(),type:'note',title:'',text:'',...pos};board().cards.push(c);touch();save();rerenderMain();const i=$(`[data-id="${c.id}"] input.ct`);if(i){i.focus();i.select()}},
+ addRefCard:el=>pickModal(el.dataset.v),
+ delCard:el=>{pushHist();const b=board(),id=el.dataset.id;b.cards=b.cards.filter(c=>c.id!==id);b.links=b.links.filter(l=>l.from!==id&&l.to!==id);touch();save();rerenderMain();toast('ลบการ์ดแล้ว',{label:'เลิกทำ',fn:undoBoard})},
+ nextScene:el=>{pushHist();const b=board(),src=b.cards.find(c=>c.id===el.dataset.id);const c={id:uid(),type:'scene',title:'ฉากถัดไป',goal:src.outcome||'',conflict:'',outcome:'',x:src.x+320,y:(src.y+(Math.random()*40-20))|0};b.cards.push(c);b.links.push({id:uid(),from:src.id,to:c.id,style:'cause',label:''});touch();save();rerenderMain();const i=$(`[data-id="${c.id}"] input.ct`);if(i){i.focus();i.select()}},
+ linkStart:el=>{S.linkFrom=S.linkFrom===el.dataset.id?null:el.dataset.id;rerenderMain()},
+ relStart:el=>{S.relFrom=S.relFrom===el.dataset.id?null:el.dataset.id;rerenderMain()},
+ editLink:el=>{const n=N(),id=el.dataset.id;if(S.bmode==='free'){const b=board(),l=b.links.find(x=>x.id===id);linkModal('flow',l,()=>b.links=b.links.filter(x=>x!==l))}else{const r=n.relations.find(x=>x.id===id);linkModal('rel',r,()=>n.relations=n.relations.filter(x=>x!==r))}},
+ relCircle:()=>{pushHist();relLayout(true);touch();save();rerenderMain()},
+ bundo:()=>undoBoard(),
+ bzoom:el=>{const v=+el.dataset.v,cv=$('#bdCanvas').getBoundingClientRect();if(v===0){S.z=1;S.pan={x:40,y:20};applyView()}else zoomAt(S.z*(v>0?1.15:1/1.15),cv.width/2,cv.height/2)},
+ addEvent:()=>{N().timeline.push({id:uid(),when:'',title:'',text:'',chapterId:''});touch();save();rerenderMain();const t=$$('.tl-ev .when');t[t.length-1].focus()},
+ moveEv:el=>{const n=N(),i=n.timeline.findIndex(e=>e.id===el.dataset.id),j=i+ +el.dataset.v;if(j<0||j>=n.timeline.length)return;const [e]=n.timeline.splice(i,1);n.timeline.splice(j,0,e);save();rerenderMain()},
+ export:el=>doExport(el.dataset.v),
+ backupAll:()=>{download(new Blob([backupJson()],{type:'application/json'}),`Inkfold-backup-${today()}.json`);db.settings.lastBackup=Date.now();save();refreshBanner();toast('ดาวน์โหลดไฟล์สำรองแล้ว — เก็บไว้ในที่ปลอดภัย เช่น Google Drive')},
+ importJson:()=>$('#fileIn').click(),
+ trash:el=>{commitEditor();trashModal(el.dataset.v||'')},
+ settings:()=>settingsModal(),
+ linkFile:()=>linkBackupFile(),regrant:()=>regrantBackup(),
+ install:async()=>{if(!installEvt)return;installEvt.prompt();try{await installEvt.userChoice}catch(e){}installEvt=null;$$('.install-btn').forEach(b=>b.classList.add('hidden'))},
+};
+document.addEventListener('click',e=>{
+ if(S.justDragged)return;
+ const node=e.target.closest('[data-drag]');
+ if(node&&!e.target.closest('button,input,textarea,select')){
+  if(S.linkFrom&&node.dataset.drag==='card'&&node.dataset.id!==S.linkFrom){pushHist();const b=board();const l={id:uid(),from:S.linkFrom,to:node.dataset.id,style:'cause',label:''};b.links.push(l);S.linkFrom=null;touch();save();rerenderMain();linkModal('flow',l,()=>b.links=b.links.filter(x=>x!==l),true);return}
+  if(S.relFrom&&node.dataset.drag==='node'&&node.dataset.id!==S.relFrom){pushHist();const n=N();const r={id:uid(),a:S.relFrom,b:node.dataset.id,type:'ally',label:'',mutual:false};n.relations.push(r);S.relFrom=null;touch();save();rerenderMain();linkModal('rel',r,()=>n.relations=n.relations.filter(x=>x!==r),true);return}
+ }
+ const cmd=e.target.closest('[data-cmd]');if(cmd){const ed=$('#editor');ed&&ed.focus();document.execCommand(cmd.dataset.cmd,false,null);commitEditor();return}
+ const el=e.target.closest('[data-act]');if(!el)return;
+ const f=A[el.dataset.act];if(f){e.stopPropagation();f(el,e)}
+});
+document.addEventListener('mousedown',e=>{if(e.target.closest('[data-cmd],.tb'))e.preventDefault()});
+document.addEventListener('input',e=>{
+ const el=e.target;
+ if(el.id==='entQ'){S.q[S.sec]=el.value;$('#entItems').innerHTML=entListItems(S.sec);labelButtons($('#entItems'));return}
+ const c=el.dataset.coll;if(!c||!S.nid)return;const n=N();let obj;
+ if(c==='outline')obj=n.outline;else if(c==='journal'){const d=today();obj=n.journal[d]=n.journal[d]||{}}
+ else if(c==='card')obj=board().cards.find(x=>x.id===el.dataset.id);
+ else if(c==='gfield')obj=(n.glossary.find(x=>x.id===el.dataset.id)||{fields:[]}).fields[+el.dataset.i];
+ else obj=(n[c]||[]).find(x=>x.id===el.dataset.id);
+ if(!obj)return;obj[el.dataset.f]=el.type==='checkbox'?el.checked:el.value;
+ if(el.tagName==='TEXTAREA'&&(el.classList.contains('auto')||el.closest('.idea')))autoGrow(el);
+ if(c==='card'&&el.tagName==='TEXTAREA')drawLinks();
+ const f=el.dataset.f;
+ if(f==='name'||f==='title'){$$(`[data-li="${el.dataset.id}"] .li-name`).forEach(x=>x.textContent=el.value||'(ไม่มีชื่อ)')}
+ if(c==='chapters'&&f==='summary'){const li=$(`[data-li="${el.dataset.id}"]`);if(li){let s=$('.li-sub',li);if(!s&&el.value){li.insertAdjacentHTML('beforeend','<div class="li-sub"></div>');s=$('.li-sub',li)}if(s)s.textContent=el.value}}
+ touch(n);saveSoon();
+ if(el.dataset.rr==='main'){save();rerenderMain()}
+ else if(el.dataset.rr==='list'){if(S.sec==='chapters'){$('#chList').innerHTML=chapterListHtml()}else if(f==='tags'){clearTimeout(window._tagT);window._tagT=setTimeout(()=>{const t=$('#f_tags'),st=t&&t.selectionStart,had=document.activeElement===t;rerenderMain();const t2=$('#f_tags');if(t2&&had){t2.focus();t2.setSelectionRange(st,st)}},800)}else{$('#entItems').innerHTML=entListItems(S.sec)}}
+});
+document.addEventListener('change',e=>{const el=e.target;
+ if(el.dataset.actChange==='edFont'){db.settings.edFont=el.value;save();$('#editor').classList.toggle('sans',el.value==='sans')}
+});
+document.addEventListener('dblclick',e=>{const ch=e.target.closest('.folders [data-act="folder"]');if(!ch||['all','none'].includes(ch.dataset.v))return;const n=N(),sec=S.sec,fo=n.folders[sec].find(f=>f.id===ch.dataset.v);
+ promptModal('แก้ไขโฟลเดอร์','ชื่อโฟลเดอร์',fo.name,v=>{fo.name=v;save();rerenderMain()},{label:'ลบโฟลเดอร์',fn:()=>{n.folders[sec]=n.folders[sec].filter(f=>f!==fo);n[sec].forEach(x=>{if(x.folder===fo.id)x.folder=''});S.folder[sec]='all';save();rerenderMain();toast('ลบโฟลเดอร์แล้ว (รายการข้างในย้ายไป “ทั่วไป”)')}})});
+/* drag to reorder chapters */
+let dragCh=null;
+document.addEventListener('dragstart',e=>{const li=e.target.closest&&e.target.closest('[data-chdrag]');if(!li)return;commitEditor();dragCh=li.dataset.chdrag;li.classList.add('dragging');e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/x-chapter',dragCh)});
+document.addEventListener('dragover',e=>{if(!dragCh)return;const li=e.target.closest&&e.target.closest('[data-chdrag]');$$('.drop-before,.drop-after').forEach(x=>x.classList.remove('drop-before','drop-after'));if(!li||li.dataset.chdrag===dragCh)return;e.preventDefault();const r=li.getBoundingClientRect();li.classList.add(e.clientY<r.top+r.height/2?'drop-before':'drop-after')});
+document.addEventListener('drop',e=>{if(!dragCh)return;const li=e.target.closest&&e.target.closest('[data-chdrag]');if(!li||li.dataset.chdrag===dragCh)return;e.preventDefault();const n=N(),after=li.classList.contains('drop-after');const from=n.chapters.findIndex(c=>c.id===dragCh);const [c]=n.chapters.splice(from,1);let to=n.chapters.findIndex(x=>x.id===li.dataset.chdrag);if(after)to++;n.chapters.splice(to,0,c);dragCh=null;touch(n);save();S.keepFocus=true;rerenderMain()});
+document.addEventListener('dragend',()=>{dragCh=null;$$('.dragging,.drop-before,.drop-after').forEach(x=>x.classList.remove('dragging','drop-before','drop-after'))});
+document.addEventListener('keydown',e=>{
+ const k=(e.key||'').toLowerCase(),mod=e.ctrlKey||e.metaKey,inField=/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)||e.target.isContentEditable;
+ if(e.key==='Enter'&&e.target.id==='ideaIn'){e.preventDefault();A.addIdea();return}
+ if((e.key==='Enter'||e.key===' ')&&!inField&&e.target.matches&&e.target.matches('[role=button]:not(button),[data-tr],[data-h]')){e.preventDefault();e.target.click();return}
+ if(mod&&k==='s'){e.preventDefault();commitEditor();save();toast('บันทึกแล้ว')}
+ if(mod&&(k==='f'||k==='h')&&S.nid&&!$('#modalRoot').innerHTML){e.preventDefault();A.openFind()}
+ if(mod&&k==='z'&&!e.shiftKey&&S.sec==='board'&&S.bmode!=='timeline'&&!inField&&!$('#modalRoot').innerHTML){e.preventDefault();undoBoard()}
+ if(e.key==='Escape'){if($('#modalRoot').innerHTML){closeModal();return}if(S.linkFrom||S.relFrom){S.linkFrom=S.relFrom=null;rerenderMain();return}if(S.focus){A.focus()}}
+});
+$('#fileIn').addEventListener('change',e=>{const f=e.target.files[0];e.target.value='';if(f)importFile(f)});
+window.addEventListener('beforeunload',()=>{if(db)commitEditor()});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&db){commitEditor();clearTimeout(saveT);save();if(FS.ok){clearTimeout(FS.t);FS.t=null;writeBackupFile()}}});
+window.addEventListener('resize',()=>{if(S.sec==='board')drawLinks()});
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;$$('.install-btn').forEach(b=>b.classList.remove('hidden'))});
+window.addEventListener('appinstalled',()=>{installEvt=null;toast('ติดตั้ง Inkfold เป็นแอปแล้ว')});
+
+/* ---------- Inkfold: illustrations + opening book animation ---------- */
+const ART={
+ book:'<svg class="art" viewBox="0 0 120 80" width="120" height="80" aria-hidden="true"><path d="M60 18c-12-8-30-10-46-6v52c16-4 34-2 46 6 12-8 30-10 46-6V12c-16-4-34-2-46 6z" fill="var(--paper)" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/><path d="M60 18v52" stroke="var(--accent)" stroke-width="2"/><path d="M24 27c10-2 20-1 28 3M24 37c10-2 20-1 28 3M24 47c10-2 20-1 28 3M68 30c8-4 18-5 28-3M68 40c8-4 18-5 28-3" stroke="var(--line)" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M84 10v18l5-4 5 4V9" fill="var(--warm)" opacity=".85"/></svg>',
+ quill:'<svg class="art" viewBox="0 0 120 90" width="120" height="90" aria-hidden="true"><rect x="22" y="58" width="40" height="22" rx="6" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/><rect x="32" y="50" width="20" height="10" rx="3" fill="var(--paper)" stroke="var(--accent)" stroke-width="2"/><path d="M44 54C60 30 82 14 104 8c-4 20-20 40-46 52" fill="var(--paper)" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/><path d="M44 54c18-16 34-28 50-38M62 44l8-2M74 34l9-2M86 24l8-2" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>',
+};
+const QUILL='<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true"><path d="M10 40C18 26 28 14 42 6c-2 12-10 24-26 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M10 40l6-4M18 30c6-6 12-12 20-18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+const introOn=()=>{try{return localStorage.getItem('inkfold.intro')!=='off'}catch(e){return true}};
+document.documentElement.classList.toggle('no-anim',!introOn());
+function setIntro(on){try{localStorage.setItem('inkfold.intro',on?'on':'off')}catch(e){}document.documentElement.classList.toggle('no-anim',!on);toast(on?'เปิดอนิเมชันแล้ว':'ปิดอนิเมชันแล้ว')}
+function playLaunch(){playBook({title:'Inkfold',sub:'โต๊ะเขียนนิยายของคุณ',left:'Inkfold',leftSub:'ทุกเรื่องราวเริ่มจากหน้ากระดาษหนึ่งหน้า',right:'เปิดโต๊ะเขียน…',color:'#5E7A6C'})}
+function playBook(o){
+ const prev=$('#intro');if(prev)prev.remove();
+ const fast=!!o.fast,t=fast?.55:1,n=fast?4:7,s=x=>(x*t).toFixed(3)+'s';
+ const leafEnd=1.25+(n-1)*.16+.9,textAt=leafEnd-.3,zoomAt=leafEnd+(fast?.2:.6);
+ const el=document.createElement('div');el.id='intro';el.setAttribute('role','presentation');
+ el.style.cssText=`--cover:${okColor(o.color)?o.color:'#5E7A6C'};--a-d:${s(.8)};--c-s:${s(.75)};--c-d:${s(1.25)};--tx-s:${s(textAt)};--z-d:${s(.95)}`;
+ const front=o.cover&&okImg(o.cover)?`<img src="${o.cover}" alt="">`:`<div class="cf-frame"><div class="cf-em">${QUILL}</div><div class="cf-title">${esc(o.title)}</div>${o.sub?`<div class="cf-sub">${esc(o.sub)}</div>`:''}</div>`;
+ el.innerHTML=`<div class="i-zoom"><div class="i-pos"><div class="book">
+  <div class="b-half b-back"></div>
+  <div class="b-half b-block"><div class="sp sp-r"><div class="sp-orn">❦</div><div>${esc(o.right||'')}</div></div></div>
+  ${Array.from({length:n},(_,i)=>`<div class="b-half b-leaf${i===n-1?' last':''}" style="--l-s:${s(1.25+i*.16)};--l-d:${s(.9)};--end:${(-179.4+i*.12).toFixed(2)}deg"><div class="lf"></div><div class="lb">${i===n-1?`<div class="sp sp-l"><div class="sp-t">${esc(o.left||o.title)}</div>${o.leftSub?`<div class="sp-s">${esc(o.leftSub)}</div>`:''}</div>`:''}</div></div>`).join('')}
+  <div class="b-half b-cover"><div class="cf">${front}</div><div class="cb"></div></div>
+ </div></div></div><button type="button" class="intro-skip">ข้าม ›</button>`;
+ document.body.appendChild(el);
+ let mid=false,done=false;const timers=[];
+ const runMid=()=>{if(!mid){mid=true;try{if(o.onMid)o.onMid()}catch(e){console.error(e)}}};
+ const onKey=e=>{if(['Escape','Enter',' '].includes(e.key)){e.preventDefault();e.stopPropagation();finish(true)}};
+ function finish(quick){if(done)return;done=true;timers.forEach(clearTimeout);runMid();el.classList.add('out');if(quick)el.classList.add('quick');document.removeEventListener('keydown',onKey,true);setTimeout(()=>el.remove(),quick?350:750)}
+ el.addEventListener('click',()=>finish(true));document.addEventListener('keydown',onKey,true);
+ timers.push(setTimeout(()=>{el.classList.add('zoom');runMid()},zoomAt*t*1000));
+ timers.push(setTimeout(()=>finish(false),(zoomAt+.35)*t*1000));
+}
+
+/* ---------- start ---------- */
+(async()=>{
+ if(introOn())playLaunch();
+ db=await loadDb();
+ document.documentElement.dataset.theme=db.settings.theme||'paper';
+ await initFileBackup();
+ try{if(navigator.storage&&navigator.storage.persist){ST.persisted=await navigator.storage.persisted()||await navigator.storage.persist()}}catch(e){}
+ save();render();
+ if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
+})();
+</script>
+</body>
+</html>
