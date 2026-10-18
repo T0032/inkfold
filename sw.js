@@ -1,6 +1,6 @@
 // Inkfold — service worker: makes the app work offline after the first visit.
 // When you publish a new version, change VERSION so browsers pick up the update.
-const VERSION = 'inkfold-v1.1.0';
+const VERSION = 'inkfold-v1.2.0';
 const FONTS = 'inkfold-fonts';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png'];
 
