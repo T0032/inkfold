@@ -450,6 +450,74 @@ body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 .shell.navtop .nav a.on::before{left:12px;right:12px;top:auto;bottom:-6px;width:auto;height:3px;border-radius:3px 3px 0 0}
 .shell.navtop .main{flex:1;min-height:0}
 
+/* ---------- 1.3: scenes, corkboard, review, web copy, maps, gallery ---------- */
+.sc-tg{margin-left:6px;font-size:10.5px;padding:0 7px;border-radius:999px;background:var(--surface2);color:var(--muted);letter-spacing:0;line-height:1.7}
+.sc-tg:hover{background:var(--accent-soft);color:var(--accent-2)}
+.sc-list{margin:-2px 0 4px 18px;border-left:2px solid var(--line2);padding-left:6px;display:flex;flex-direction:column;gap:1px}
+.sc-it{display:flex;align-items:center;gap:7px;padding:5px 8px;border-radius:8px;font-size:13px;cursor:pointer;color:var(--muted)}
+.sc-it:hover{background:var(--surface2);color:var(--text)}
+.sc-n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sc-note{display:flex;gap:6px;align-items:center}
+.sc-note .in{padding:5px 9px;font-size:13px}
+.ed-body hr[data-sid]{height:2.2em}
+.ed-body hr[data-sid]::after{content:'✻   ฉากใหม่   ✻';font-size:.78em;letter-spacing:.08em;color:var(--accent-2);opacity:.75}
+.ed-scroll.tw .ed-paper{margin-bottom:48vh}
+.ed-bar .tb.on{background:var(--accent-soft);color:var(--accent-2)}
+.cork{flex:1;overflow:auto;padding:24px;background-color:#C9A57A;background-image:radial-gradient(rgba(90,60,30,.25) 1px,transparent 1.5px),radial-gradient(rgba(255,240,210,.2) 1px,transparent 1.5px);background-size:7px 7px,11px 11px;background-position:0 0,3px 5px}
+[data-theme=dusk] .cork{background-color:#6B5440}
+.cork-track{display:flex;gap:16px;align-items:flex-start;min-width:max-content}
+.cork-col{width:260px;flex:none;background:rgba(255,250,240,.6);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:10px;box-shadow:0 2px 8px rgba(60,40,20,.18)}
+[data-theme=dusk] .cork-col{background:rgba(40,36,34,.6)}
+.cork-h{display:flex;gap:6px;align-items:center;font-size:13.5px;padding:2px 4px;min-width:0}
+.cork-ct{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.cork-list{display:flex;flex-direction:column;gap:12px;min-height:46px;border-radius:10px;padding-top:6px}
+.cork-list.drop-in{outline:2px dashed var(--accent);outline-offset:3px}
+.cork-card{position:relative;background:var(--paper);border-radius:6px;padding:12px 10px 8px 14px;box-shadow:0 3px 8px rgba(60,40,20,.25);border-left:5px solid var(--sc);display:flex;flex-direction:column;gap:6px}
+.cork-card::before{content:'';position:absolute;top:-6px;left:50%;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#F2958A,#B4473A);box-shadow:0 2px 3px rgba(0,0,0,.3);transform:translateX(-50%)}
+.cork-card.dragging{opacity:.4}
+.cork-card.drop-before{box-shadow:0 -5px 0 var(--accent),0 3px 8px rgba(60,40,20,.25)}
+.cork-card.drop-after{box-shadow:0 5px 0 var(--accent),0 3px 8px rgba(60,40,20,.25)}
+.cc-h{display:flex;gap:4px;align-items:center}
+.cc-grip{cursor:grab;color:var(--faint);font-size:16px;padding:0 2px;user-select:none;line-height:1}
+.cc-t{flex:1;min-width:0;border:0;background:transparent;font-family:var(--serif);font-weight:600;font-size:14.5px;outline:none}
+.cc-st{border:0;background:var(--surface2);border-radius:6px;font-size:11.5px;padding:2px 4px;color:var(--text)}
+.cc-s{width:100%;border:1px solid transparent;background:var(--surface2);border-radius:6px;resize:none;font-size:12.5px;padding:5px 7px;min-height:38px;outline:none;line-height:1.5;overflow:hidden}
+.cc-s:focus{border-color:var(--accent)}
+.cc-snip{font-size:11.5px;color:var(--faint);line-height:1.5}
+.cc-f{display:flex;align-items:center;justify-content:space-between;gap:6px;font-size:11.5px;color:var(--faint)}
+.cork-add{border:2px dashed rgba(120,90,60,.45);border-radius:8px;padding:6px;color:var(--muted);font-size:13px;display:flex;gap:6px;justify-content:center;align-items:center;background:rgba(255,255,255,.25)}
+.cork-add:hover{border-color:var(--accent);color:var(--accent-2)}
+::highlight(inkrep){background-color:rgba(232,190,110,.5)}
+::highlight(inkrep-cur){background-color:rgba(214,120,90,.6)}
+.rep-list{display:flex;flex-direction:column;gap:4px}
+.rep-it{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:9px;text-align:left;font-size:14px}
+.rep-it:hover{background:var(--surface)}
+.rep-it small{margin-left:auto;color:var(--faint);font-size:11.5px}
+.wc-prev{background:var(--paper);border:1px solid var(--line2);border-radius:var(--r-sm);padding:16px 20px;max-height:40vh;overflow:auto;font-family:var(--serif);line-height:1.8;font-size:15px}
+.wc-prev p{margin:0}
+.map-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.map-bar .seg{margin:0!important}
+.pane-in.map-in{max-width:none}
+.map-tools{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.map-tools .zoom{display:flex;align-items:center;gap:4px;font-size:12.5px;color:var(--muted)}
+.map-wrap{overflow:auto;border-radius:14px;border:1px solid var(--line2);background:var(--bg2);max-height:calc(100vh - 240px)}
+.map-stage{position:relative;min-width:100%;user-select:none}
+.map-stage img{display:block;width:100%;height:auto;pointer-events:none}
+.map-stage.pinning,.map-stage.pinning img{cursor:crosshair}
+.map-pin{position:absolute;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;gap:3px;padding:0;cursor:grab;touch-action:none}
+.mp-dot{width:18px;height:18px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--danger);border:2px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,.35);margin-bottom:4px}
+.map-pin.on .mp-dot{background:var(--accent)}
+.mp-l{font-size:12px;font-weight:600;background:rgba(255,255,255,.93);color:#3B3732;padding:1px 8px;border-radius:999px;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.gal{display:flex;flex-wrap:wrap;gap:10px}
+.gal-it,.gal-add{width:110px;height:110px;border-radius:12px;overflow:hidden;border:1px solid var(--line2);background:var(--surface2);padding:0;position:relative}
+.gal-it img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+.gal-it:hover img{transform:scale(1.05)}
+.gal-it.main::after{content:'รูปหลัก';position:absolute;left:6px;bottom:6px;font-size:11px;background:var(--accent);color:var(--accent-ink);padding:1px 7px;border-radius:999px}
+.gal-add{border:2px dashed var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--muted);font-size:12.5px}
+.gal-add:hover{border-color:var(--accent);color:var(--accent-2)}
+.gal-big{display:grid;place-items:center;background:var(--bg2);border-radius:12px;padding:10px}
+.gal-big img{max-width:100%;max-height:62vh;border-radius:8px}
+
 /* ---------- 1.2: editor content + toolbar ---------- */
 .ed-body h1,.ed-body h2,.ed-body h3{font-family:inherit;line-height:1.4;margin:.6em 0 .3em;text-indent:0}
 .ed-body h1{font-size:1.6em}.ed-body h2{font-size:1.35em}.ed-body h3{font-size:1.15em}
@@ -504,7 +572,7 @@ body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 <input type="file" id="imgIn" accept="image/*" class="hidden">
 <script>
 'use strict';
-const APP_NAME='Inkfold';const APP_VERSION='1.2.0';
+const APP_NAME='Inkfold';const APP_VERSION='1.3.0';
 /* ---------- helpers ---------- */
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -555,6 +623,10 @@ const IC={
  ol:'<path d="M10 6h10M10 12h10M10 18h10M4 4.5h1.5V9M4 9h3M4 14h3l-3 4h3"/>',
  print:'<path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/>',
  sidebar:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/>',
+ map:'<path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/>',
+ copy:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+ tw:'<path d="M4 6h16M4 18h16M7 12h10"/><path d="M2 10l2 2-2 2M22 10l-2 2 2 2"/>',
+ check:'<path d="M4 12l5 5L20 6"/>',
  max:'<path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/>',history:'<path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/>',
  image:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>',
  save:'<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/>',
@@ -598,7 +670,7 @@ const CARD_TYPES=['note','scene','characters','locations','chapters'];
 const TRASH_KIND={novel:'นิยาย',chapters:'บท',characters:'ตัวละคร',locations:'สถานที่',glossary:'คำศัพท์',ideas:'ไอเดีย',threads:'ปมเรื่อง',timeline:'เหตุการณ์',board:'กระดาน'};
 const TRASH_DAYS=30, SNAP_MAX=30;
 const PREF_KEY='inkfold.prefs';
-const PREF_DEFAULT={anim:true,launch:true,novelAnim:true,speed:'normal',sound:true,pageSound:true,volume:60,iconStyle:'hand',libView:'shelf',edWidth:780,edLine:1.95,ac:true,remindDays:7,navPos:'side',navHidden:false,listHidden:false,indent:false,spell:false,toolbar:true};
+const PREF_DEFAULT={anim:true,launch:true,novelAnim:true,speed:'normal',sound:true,pageSound:true,volume:60,iconStyle:'hand',libView:'shelf',edWidth:780,edLine:1.95,ac:true,remindDays:7,navPos:'side',navHidden:false,listHidden:false,indent:false,spell:false,toolbar:true,typewriter:false,repWin:50,repMin:3,repIgnore:true};
 const P=Object.assign({},PREF_DEFAULT,(()=>{try{return JSON.parse(localStorage.getItem(PREF_KEY))||{}}catch(e){return {}}})());
 try{if(localStorage.getItem('inkfold.intro')==='off'){P.anim=false;localStorage.removeItem('inkfold.intro')}}catch(e){}
 function savePrefs(){try{localStorage.setItem(PREF_KEY,JSON.stringify(P))}catch(e){}}
@@ -618,7 +690,9 @@ function cleanHtml(html){
   if(!/^(B|STRONG|I|EM|U|S|STRIKE|DEL|BR|HR|DIV|P|SPAN|H1|H2|H3|BLOCKQUOTE|UL|OL|LI|FONT)$/.test(n.tagName)){n.replaceWith(...n.childNodes);continue}
   const st=n.style||{},al=st.textAlign,fw=st.fontWeight,fs=st.fontStyle,td=(st.textDecorationLine||st.textDecoration||'');let col=st.color,bg=st.backgroundColor;
   if(n.tagName==='FONT'){col=n.getAttribute('color')||col;const sp=document.createElement('span');sp.append(...n.childNodes);n.replaceWith(sp);n=sp}
+  const sid=n.tagName==='HR'?n.getAttribute('data-sid'):'';
   for(const a of [...n.attributes])n.removeAttribute(a.name);
+  if(sid&&ID_RE.test(sid))n.setAttribute('data-sid',sid);
   if(/^(left|right|center|justify)$/.test(al))n.style.textAlign=al;
   if(fw==='bold'||+fw>=600)n.style.fontWeight='bold';if(fs==='italic')n.style.fontStyle='italic';
   if(okCss(col))n.style.color=col;if(okCss(bg))n.style.backgroundColor=bg;
@@ -647,8 +721,10 @@ function normalize(n){
  n.folders=n.folders&&typeof n.folders==='object'?n.folders:{};for(const k of ['characters','locations','glossary'])n.folders[k]=Array.isArray(n.folders[k])?n.folders[k]:[];
  if(!okColor(n.color))n.color=COLORS[0];if(n.spine&&!okColor(n.spine))n.spine='';if(n.cover&&!okImg(n.cover))n.cover='';
  n.goal=+n.goal||0;const tg=n.target||{};n.target={words:+tg.words||0,date:/^\d{4}-\d\d-\d\d$/.test(tg.date||'')?tg.date:''};
- n.characters.forEach(c=>{if(!okColor(c.color))c.color=COLORS[0];if(c.img&&!okImg(c.img))c.img=''});
- n.chapters.forEach(c=>{c.html=cleanHtml(c.html);c.words=+c.words||0;c.chars=Array.isArray(c.chars)?c.chars:[];c.locs=Array.isArray(c.locs)?c.locs:[];
+ n.characters.forEach(c=>{if(!okColor(c.color))c.color=COLORS[0];if(c.img&&!okImg(c.img))c.img='';c.gallery=(Array.isArray(c.gallery)?c.gallery:[]).filter(okImg)});
+ n.locations.forEach(l=>{if(l.img&&!okImg(l.img))l.img='';l.gallery=(Array.isArray(l.gallery)?l.gallery:[]).filter(okImg)});
+ n.maps=(Array.isArray(n.maps)?n.maps:[]).filter(m=>m&&okImg(m.img)&&ID_RE.test(String(m.id))).map(m=>({id:m.id,name:String(m.name||'แผนที่'),img:m.img,pins:(Array.isArray(m.pins)?m.pins:[]).filter(q=>q&&ID_RE.test(String(q.id))&&ID_RE.test(String(q.loc))).map(q=>({id:q.id,loc:q.loc,x:Math.min(1,Math.max(0,+q.x||0)),y:Math.min(1,Math.max(0,+q.y||0))}))}));
+ n.chapters.forEach(c=>{c.html=cleanHtml(c.html);{const sm={};for(const k in (c.smeta||{})){if(!ID_RE.test(k))continue;const v=c.smeta[k]||{};sm[k]={title:String(v.title||''),summary:String(v.summary||''),status:STATUS[v.status]?v.status:'draft'}}c.smeta=sm;if(c.scene0&&!ID_RE.test(String(c.scene0)))c.scene0=''}c.words=+c.words||0;c.chars=Array.isArray(c.chars)?c.chars:[];c.locs=Array.isArray(c.locs)?c.locs:[];
   c.snaps=Array.isArray(c.snaps)?c.snaps.map(s=>({t:+s.t||0,html:cleanHtml(s.html),words:+s.words||0,label:String(s.label||'')})):[];if(!STATUS[c.status])c.status='draft'});
  if(!n.boards.length)n.boards=b.boards;
  n.boards.forEach(bd=>{bd.name=String(bd.name||'กระดาน');bd.cards=(Array.isArray(bd.cards)?bd.cards:[]).filter(c=>CARD_TYPES.includes(c.type));bd.cards.forEach(c=>{c.x=+c.x||0;c.y=+c.y||0});bd.links=(Array.isArray(bd.links)?bd.links:[]);bd.links.forEach(l=>{if(!FLOW[l.style])l.style='cause'})});
@@ -744,7 +820,7 @@ function htmlToParas(html){
    if(n.nodeType===3){if(n.textContent)cur.push({t:n.textContent.replace(/\n/g,' '),...fmt});continue}
    if(n.nodeType!==1)continue;const tag=n.tagName;
    if(tag==='BR'){if(!(n.nextSibling==null&&n.parentNode!==root))flush();continue}
-   if(tag==='HR'){if(cur.length)flush();const k0=kind;kind='hr';cur=[{t:'✻ ✻ ✻'}];al='center';flush();kind=k0;continue}
+   if(tag==='HR'){if(!paras.length&&!cur.some(r=>r.t.trim())){cur=[];continue}if(cur.length)flush();const k0=kind;kind='hr';cur=[{t:'✻ ✻ ✻'}];al='center';flush();kind=k0;continue}
    const f={...fmt};if(/^(B|STRONG)$/.test(tag))f.b=1;if(/^(I|EM)$/.test(tag))f.i=1;if(tag==='U')f.u=1;if(/^(S|STRIKE|DEL)$/.test(tag))f.s=1;
    if(n.style){if(n.style.fontWeight==='bold'||+n.style.fontWeight>=600)f.b=1;if(n.style.fontStyle==='italic')f.i=1;const td=n.style.textDecoration||'';if(/line-through/.test(td))f.s=1;if(/underline/.test(td))f.u=1;const c=toHex(n.style.color);if(c)f.c=c;const bg=toHex(n.style.backgroundColor);if(bg)f.bg=bg}
    if(/^(UL|OL)$/.test(tag)){if(cur.length)flush();let i=0;for(const li of n.children){if(li.tagName!=='LI')continue;i++;const k0=kind;kind=tag==='OL'?'ol':'ul';walk(li,f);cur.unshift({t:tag==='OL'?i+'. ':'• '});flush();kind=k0}continue}
@@ -860,7 +936,7 @@ function renderSection(){
 }
 function rerenderMain(){const m=$('#main');if(!m)return render();const st=m.scrollTop;hideAC();m.innerHTML=renderSection();if(S.animate){S.animate=false;const f=m.firstElementChild;if(f)f.classList.add('pg-in')}afterRender();m.scrollTop=st;
  $$('.nav a[data-act="sec"]').forEach(a=>a.classList.toggle('on',a.dataset.v===S.sec))}
-function afterRender(){if(S.sec==='chapters')mountEditor();if(S.sec==='board')mountBoard();$$('textarea.auto').forEach(autoGrow);labelButtons()}
+function afterRender(){if(S.sec==='chapters')mountEditor();if(S.sec==='locations'&&S.locView==='map')mountMap();if(S.sec==='board')mountBoard();$$('textarea.auto').forEach(autoGrow);labelButtons()}
 function autoGrow(t){t.style.height='auto';t.style.height=t.scrollHeight+'px'}
 function avatar(c,sz=54){const fs=Math.round(sz*.42);return c.img?`<img class="avatar" src="${c.img}" alt="" style="width:${sz}px;height:${sz}px">`:`<span class="avatar" style="width:${sz}px;height:${sz}px;font-size:${fs}px;background:${c.color||COLORS[0]}">${esc(initial(c.name))}</span>`}
 
@@ -905,9 +981,11 @@ function secOutline(){const o=N().outline;
 
 /* ---------- chapters ---------- */
 function curChapter(){const n=N();let c=n.chapters.find(x=>x.id===S.sel.chapters);if(!c&&n.chapters.length){c=n.chapters[0];S.sel.chapters=c.id}return c}
-function chapterListHtml(){const n=N(),c=curChapter();
- return n.chapters.map((x,i)=>`<div class="li ${c&&x.id===c.id?'on':''}" data-act="selChapter" data-id="${x.id}" data-li="${x.id}" draggable="true" data-chdrag="${x.id}" title="ลากเพื่อเรียงลำดับ" tabindex="0" role="button">
-  <div class="li-k"><span class="st-dot" style="background:${(STATUS[x.status]||STATUS.draft).c}"></span>บทที่ ${i+1}<span style="margin-left:auto" class="li-w">${num(x.words)} คำ</span></div><div class="li-name">${esc(x.title)||'(ไม่มีชื่อบท)'}</div>${x.summary?`<div class="li-sub">${esc(x.summary)}</div>`:''}</div>`).join('')||'<div class="empty">ยังไม่มีบท<br>กด “เพิ่มบท” เพื่อเริ่ม</div>'}
+function chapterListHtml(){const n=N(),c=curChapter();S.openCh=S.openCh||{};
+ return n.chapters.map((x,i)=>{const sc=scenesOf(x),open=x.id in S.openCh?S.openCh[x.id]:!!(c&&x.id===c.id);
+  return `<div class="li ${c&&x.id===c.id?'on':''}" data-act="selChapter" data-id="${x.id}" data-li="${x.id}" draggable="true" data-chdrag="${x.id}" title="ลากเพื่อเรียงลำดับ" tabindex="0" role="button">
+  <div class="li-k"><span class="st-dot" style="background:${(STATUS[x.status]||STATUS.draft).c}"></span>บทที่ ${i+1}${sc.length>1?`<button class="sc-tg" data-act="toggleScenes" data-id="${x.id}" title="${open?'ซ่อน':'แสดง'}รายการฉาก">${sc.length} ฉาก ${open?'▴':'▾'}</button>`:''}<span style="margin-left:auto" class="li-w">${num(x.words)} คำ</span></div><div class="li-name">${esc(x.title)||'(ไม่มีชื่อบท)'}</div>${x.summary?`<div class="li-sub">${esc(x.summary)}</div>`:''}</div>
+  ${open&&sc.length>1?`<div class="sc-list">${sc.map((q,j)=>`<div class="sc-it" data-act="goScene" data-cid="${x.id}" data-sid="${q.id}" tabindex="0" role="button" title="ไปที่ฉากนี้"><span class="st-dot" style="background:${(STATUS[q.meta.status]||STATUS.draft).c}"></span><span class="sc-n">${esc(sceneTitle(q,j))}</span><span class="li-w">${num(q.words)}</span></div>`).join('')}</div>`:''}`}).join('')||'<div class="empty">ยังไม่มีบท<br>กด “เพิ่มบท” เพื่อเริ่ม</div>'}
 function secChapters(){
  const n=N(),c=curChapter();
  const list=`<aside class="list"><div class="list-head"><button class="icon-btn" data-act="toggleList" title="ซ่อนรายการบท" style="width:28px;height:28px">${ic('left',15)}</button><span class="t">บททั้งหมด</span><button class="btn primary sm" data-act="addChapter">${ic('plus',14)} เพิ่มบท</button></div>
@@ -920,7 +998,7 @@ function secChapters(){
   <button class="icon-btn" data-act="moveCh" data-v="-1" title="เลื่อนบทขึ้น" ${idx===0?'disabled':''}>${ic('chevU',17)}</button><button class="icon-btn" data-act="moveCh" data-v="1" title="เลื่อนบทลง" ${idx===n.chapters.length-1?'disabled':''}>${ic('chevD',17)}</button>
   <button class="icon-btn" data-act="history" title="ประวัติเวอร์ชันของบทนี้">${ic('history',17)}</button>
   <button class="icon-btn" data-act="delChapter" title="ย้ายบทนี้ไปถังขยะ">${ic('trash',17)}</button>
-  <button class="icon-btn" data-act="openFind" title="ค้นหาและแทนที่ (Ctrl+F)">${ic('search',17)}</button>
+  <button class="icon-btn" data-act="openReview" title="ตรวจคำซ้ำ">${ic('check',17)}</button><button class="icon-btn" data-act="openFind" title="ค้นหาและแทนที่ (Ctrl+F)">${ic('search',17)}</button>
   <button class="icon-btn ${S.refOpen?'on':''}" data-act="toggleRef" title="โน้ตบทและข้อมูลอ้างอิง">${ic('side',17)}</button>
   <button class="icon-btn ${S.focus?'on':''}" data-act="focus" title="โหมดโฟกัส (Esc เพื่อออก)">${ic('expand',17)}</button></div>
  ${P.toolbar===false?'':`<div class="ed-bar" role="toolbar" aria-label="เครื่องมือจัดรูปแบบ">
@@ -935,18 +1013,19 @@ function secChapters(){
   <button class="tb" data-cmd="insertUnorderedList" title="รายการแบบจุด">${ic('ul',16)}</button><button class="tb" data-cmd="insertOrderedList" title="รายการแบบตัวเลข">${ic('ol',16)}</button><span class="sep"></span>
   <button class="tb tb-txt" data-act="insertMenu" title="แทรกตัวคั่นฉาก เส้นคั่น วันที่ หรืออักขระพิเศษ">${ic('plus',15)} แทรก</button>
   <button class="tb" data-act="importDoc" title="นำเข้าไฟล์ Word (.docx) / .txt / .md ลงในนิยาย">${ic('up',16)}</button>
-  <button class="tb" data-act="printChapter" title="พิมพ์บทนี้">${ic('print',16)}</button></div>`}
- <div class="ed-scroll"><div class="ed-paper" style="max-width:${P.edWidth}px"><div id="editor" class="ed-body ${font==='sans'?'sans':''} ${P.indent?'indent':''}" contenteditable="true" spellcheck="${P.spell?'true':'false'}" style="font-size:${fs}px;line-height:${P.edLine};${edFontCss(font)}" role="textbox" aria-multiline="true" aria-label="เนื้อหาบท"></div></div></div>
+  <button class="tb" data-act="printChapter" title="พิมพ์บทนี้">${ic('print',16)}</button><span class="sep"></span><button class="tb ${P.typewriter?'on':''}" data-act="toggleTW" title="Typewriter Scrolling — บรรทัดที่พิมพ์อยู่กลางจอเสมอ">${ic('tw',16)}</button><button class="tb tb-txt" data-act="webCopy" title="คัดลอกตอนนี้สำหรับวางลงเว็บนิยาย">${ic('copy',15)} เว็บนิยาย</button></div>`}
+ <div class="ed-scroll ${P.typewriter?'tw':''}"><div class="ed-paper" style="max-width:${P.edWidth}px"><div id="editor" class="ed-body ${font==='sans'?'sans':''} ${P.indent?'indent':''}" contenteditable="true" spellcheck="${P.spell?'true':'false'}" style="font-size:${fs}px;line-height:${P.edLine};${edFontCss(font)}" role="textbox" aria-multiline="true" aria-label="เนื้อหาบท"></div></div></div>
  <div class="ed-foot"><span id="wc">0 คำ</span><span id="cc">0 ตัวอักษร</span><span id="rt"></span><span class="sp"></span><span>พิมพ์ชื่อ 2 ตัวอักษรแรก แล้วกด <b>Tab</b> เพื่อเติมชื่อ</span></div></div>
  ${S.refOpen?renderRef():''}</div>`;
 }
-const REFTABS=[['notes','โน้ตบท'],['find','ค้นหา'],['characters','ตัวละคร'],['locations','สถานที่'],['glossary','คำศัพท์']];
+const REFTABS=[['notes','โน้ตบท'],['find','ค้นหา'],['review','คำซ้ำ'],['characters','ตัวละคร'],['locations','สถานที่'],['glossary','คำศัพท์']];
 function renderRef(){
  const t=S.refTab;
- const head=`<aside class="ref" aria-label="แผงข้อมูลอ้างอิง"><div class="ref-h"><h3>${t==='notes'?'โน้ตประจำบท':t==='find'?'ค้นหาและแทนที่':'ข้อมูลอ้างอิง'}</h3><button class="icon-btn" data-act="toggleRef" title="ปิดแผง">${ic('x',17)}</button></div>
+ const head=`<aside class="ref" aria-label="แผงข้อมูลอ้างอิง"><div class="ref-h"><h3>${t==='notes'?'โน้ตประจำบท':t==='find'?'ค้นหาและแทนที่':t==='review'?'ตรวจคำซ้ำ':'ข้อมูลอ้างอิง'}</h3><button class="icon-btn" data-act="toggleRef" title="ปิดแผง">${ic('x',17)}</button></div>
  <div style="padding:0 14px 10px"><div class="seg">${REFTABS.map(([k,l])=>`<button class="${t===k?'on':''}" data-act="refTab" data-v="${k}">${l}</button>`).join('')}</div></div>`;
  if(t==='notes')return head+refNotes()+'</aside>';
  if(t==='find')return head+refFind()+'</aside>';
+ if(t==='review')return head+refReview()+'</aside>';
  return head+`<div style="padding:0 14px 10px"><div class="search">${ic('search',15)}<input class="in" id="refQ" placeholder="ค้นหา…" value="${esc(S.refQ)}" aria-label="ค้นหาข้อมูลอ้างอิง"></div></div><div class="ref-items" id="refItems">${refItemsHtml()}</div></aside>`;
 }
 function refItemsHtml(){
@@ -968,6 +1047,7 @@ function refNotes(){
  <div class="tagpick">${n.characters.map(x=>chip('chars',x)).join('')||'<span class="muted" style="font-size:13px">ยังไม่มีตัวละคร</span>'}</div>
  <div class="tagpick" style="margin-top:4px">${n.locations.map(x=>chip('locs',x)).join('')}</div></div>
  ${th.length?`<div class="field"><label>ปมเรื่องในบทนี้</label>${th.map(t=>`<div style="font-size:13.5px;display:flex;gap:6px;align-items:center">${ic('link',13)} ${esc(t.title||'(ปมไม่มีชื่อ)')} <span class="chip ${t.planted===c.id?'warm':'accent'}">${t.planted===c.id?'ผูกปม':'เฉลย'}</span></div>`).join('')}</div>`:''}
+ ${scenesNoteHtml(c)}
  <div class="field"><label for="chNote">โน้ตสำหรับบทนี้</label><textarea id="chNote" class="in auto" rows="3" data-coll="chapters" data-id="${c.id}" data-f="notes" placeholder="สิ่งที่ต้องแก้ ไอเดียเพิ่มเติม…" style="min-height:70px">${esc(c.notes)}</textarea></div>
  <button class="btn sm" data-act="history" style="align-self:flex-start">${ic('history',14)} ประวัติเวอร์ชัน (${(c.snaps||[]).length})</button></div>`;
 }
@@ -984,16 +1064,17 @@ function refFind(){const f=S.find;
 let edT,savedRange=null;
 function mountEditor(){
  const ed=$('#editor');if(!ed)return;const c=curChapter();ed.innerHTML=cleanHtml(c.html);updateWC();
- ed.addEventListener('input',()=>{clearTimeout(edT);setSaved(true);edT=setTimeout(()=>commitEditor(),350);if(AC.skip){AC.skip=false;hideAC()}else acCheck()});
+ ed.addEventListener('input',()=>{clearTimeout(edT);setSaved(true);edT=setTimeout(()=>{commitEditor();if(S.refOpen&&S.refTab==='review'){const rr=$('#repRes');if(rr)rr.innerHTML=repResultsHtml()}},350);requestAnimationFrame(typewriter);if(AC.skip){AC.skip=false;hideAC()}else acCheck()});
  ed.addEventListener('keydown',acKey);
  ed.addEventListener('blur',()=>{setTimeout(hideAC,150)});
  ed.addEventListener('paste',e=>{e.preventDefault();const t=(e.clipboardData||window.clipboardData).getData('text/plain');document.execCommand('insertText',false,t)});
  ed.addEventListener('drop',e=>{if(e.dataTransfer&&[...e.dataTransfer.types].includes('Files'))e.preventDefault()});
  ed.addEventListener('keyup',e=>{if(/^Arrow|Home|End/.test(e.key)&&!AC.items.length)hideAC()});
- ed.addEventListener('mouseup',()=>{saveRange();tbState()});ed.addEventListener('keyup',()=>{saveRange();tbState()});
+ ed.addEventListener('mouseup',()=>{saveRange();tbState()});ed.addEventListener('keyup',e=>{saveRange();tbState();if(/^(Arrow|Page|Home|End|Enter|Backspace|Delete)/.test(e.key))typewriter()});
  const ri=$('#refQ');if(ri)ri.addEventListener('input',()=>{S.refQ=ri.value;$('#refItems').innerHTML=refItemsHtml();labelButtons($('#refItems'))});
- mountFind();
- if(S.jump){const j=S.jump;S.jump=null;setTimeout(()=>doJump(j),0)}
+ mountFind();mountReview();
+ if(S.jumpScene){const sid=S.jumpScene;S.jumpScene=null;setTimeout(()=>{const h=ed.querySelector(`hr[data-sid="${sid}"]`);if(h){h.scrollIntoView({block:'start',behavior:'smooth'});const r=document.createRange();r.setStartAfter(h);r.collapse(true);ed.focus();const g=getSelection();g.removeAllRanges();g.addRange(r);saveRange()}else{const sc=$('.ed-scroll');if(sc)sc.scrollTop=0;ed.focus()}},0)}
+ else if(S.jump){const j=S.jump;S.jump=null;setTimeout(()=>doJump(j),0)}
  else if(!S.focus&&!('ontouchstart' in window)&&!S.keepFocus)setTimeout(()=>{ed.focus();placeEnd(ed)},0);
  S.keepFocus=false;
 }
@@ -1103,7 +1184,7 @@ function entListItems(sec){const n=N(),cfg=ENT[sec],cur=S.sel[sec];
  return filteredEnt(sec).map(x=>{const fo=n.folders[sec].find(f=>f.id===x.folder);const tg=tagsOf(x).slice(0,3);
   const k=sec==='glossary'?`<span class="chip accent" style="font-size:11px">${esc((GKIND[x.kind]||GKIND.term).n)}</span>`:'';
   return `<div class="li ${x.id===cur?'on':''}" data-act="selEnt" data-id="${x.id}" data-li="${x.id}" tabindex="0" role="button">${k||fo?`<div class="li-k" style="margin-bottom:3px">${k}${fo?`<span>${ic('folder',12)} ${esc(fo.name)}</span>`:''}</div>`:''}
-  <div style="display:flex;align-items:center;gap:10px">${sec==='characters'?avatar(x,32):''}<div style="min-width:0;flex:1"><div class="li-name">${esc(x.name)||'(ไม่มีชื่อ)'}</div><div class="li-sub">${esc(cfg.sub(x))}</div>${tg.length?`<div class="li-tags">${tg.map(t=>`<span class="chip">#${esc(t)}</span>`).join('')}</div>`:''}</div></div></div>`}).join('')||`<div class="empty">ไม่พบ${cfg.t}</div>`}
+  <div style="display:flex;align-items:center;gap:10px">${sec==='characters'?avatar(x,32):sec==='locations'&&x.img?`<img class="avatar" src="${x.img}" alt="" style="width:32px;height:32px;border-radius:8px">`:''}<div style="min-width:0;flex:1"><div class="li-name">${esc(x.name)||'(ไม่มีชื่อ)'}</div><div class="li-sub">${esc(cfg.sub(x))}</div>${tg.length?`<div class="li-tags">${tg.map(t=>`<span class="chip">#${esc(t)}</span>`).join('')}</div>`:''}</div></div></div>`}).join('')||`<div class="empty">ไม่พบ${cfg.t}</div>`}
 function appearanceHtml(sec,x){
  const n=N();let names=[(x.name||'').trim()];if(sec==='characters'){const p=names[0].split(/\s+/);if(p.length>1)names.push(p[0])}
  names=names.filter(s=>s.length>=2).sort((a,b)=>a.length-b.length);if(!names.length||!n.chapters.length)return '';
@@ -1120,6 +1201,7 @@ function secEntities(sec){
  ${allTags.length?`<div class="folders"><span class="tl-lbl">แท็ก:</span>${allTags.map(t=>`<button class="chip ${tgSel===t?'on':''}" data-act="tagF" data-v="${esc(t)}">#${esc(t)}</button>`).join('')}</div>`:''}
  <div class="search">${ic('search',15)}<input class="in" id="entQ" placeholder="ค้นหา…" value="${esc(S.q[sec]||'')}" aria-label="ค้นหา${cfg.t}"></div></div>
  <div class="list-items" id="entItems">${entListItems(sec)}</div></aside>`;
+ if(sec==='locations'&&S.locView==='map')return `<div class="split">${list}<div class="pane">${renderMap()}</div></div>`;
  if(!x)return `<div class="split">${list}<div class="pane"><div class="empty" style="margin-top:12vh">${ART.book}<div class="big">ยังไม่มี${cfg.t}</div>เริ่มเพิ่มรายการแรกเพื่อเก็บข้อมูลไว้เปิดดูขณะเขียน<br><br><button class="btn primary" data-act="addEnt">${ic('plus',16)} เพิ่ม${cfg.t}</button></div></div></div>`;
  const folderSel=`<div class="field"><label for="entFolder">โฟลเดอร์ที่จัดเก็บ</label><select id="entFolder" class="in" data-coll="${sec}" data-id="${x.id}" data-f="folder" data-rr="list"><option value="">ทั่วไป (ไม่มีโฟลเดอร์)</option>${n.folders[sec].map(fo=>`<option value="${fo.id}" ${x.folder===fo.id?'selected':''}>${esc(fo.name)}</option>`).join('')}</select></div>`;
  const fl=([k,l,t,ph,half,dl])=>{const v=esc(x[k]),id=`f_${k}`;return `<div class="field"><label for="${id}">${l}</label>${t==='area'?`<textarea id="${id}" class="in auto" data-coll="${sec}" data-id="${x.id}" data-f="${k}" placeholder="${ph}" rows="3" ${half?'style="min-height:70px"':''}>${v}</textarea>`:`<input id="${id}" class="in" data-coll="${sec}" data-id="${x.id}" data-f="${k}" placeholder="${ph}" value="${v}" ${dl?`list="${dl}"`:''} ${k==='tags'?'data-rr="list"':''}>`}</div>`};
@@ -1134,10 +1216,10 @@ function secEntities(sec){
  }else{
   form=`<div class="grid2">${cfg.fields.filter(f=>f[4]).map(fl).join('')}${folderSel}</div>${cfg.fields.filter(f=>!f[4]).map(fl).join('')}`;
  }
- const head=sec==='characters'?`<button data-act="charLook" title="เปลี่ยนรูปหรือสีของตัวละคร" style="border-radius:50%">${avatar(x,54)}</button>`:`<span class="avatar" style="background:var(--accent-soft);color:var(--accent-2)">${ic(sec==='locations'?'pin':'mark',24)}</span>`;
- return `<div class="split">${list}<div class="pane"><div class="pane-in"><div class="ent-head">${head}<input class="ent-name" data-coll="${sec}" data-id="${x.id}" data-f="name" value="${esc(x.name)}" placeholder="ชื่อ" aria-label="ชื่อ">
+ const head=sec==='characters'?`<button data-act="charLook" title="เปลี่ยนรูปหรือสีของตัวละคร" style="border-radius:50%">${avatar(x,54)}</button>`:(sec==='locations'&&x.img?`<img class="avatar" src="${x.img}" alt="" style="border-radius:12px">`:`<span class="avatar" style="background:var(--accent-soft);color:var(--accent-2)">${ic(sec==='locations'?'pin':'mark',24)}</span>`);
+ return `<div class="split">${list}<div class="pane"><div class="pane-in">${sec==='locations'?locViewSeg():''}<div class="ent-head">${head}<input class="ent-name" data-coll="${sec}" data-id="${x.id}" data-f="name" value="${esc(x.name)}" placeholder="ชื่อ" aria-label="ชื่อ">
  <button class="btn sm" data-act="findName" data-v="${esc(x.name)}" title="ค้นหาหรือเปลี่ยนชื่อนี้ในเนื้อเรื่อง">${ic('search',14)} <span class="hide-sm">ค้นในเนื้อเรื่อง</span></button><button class="btn danger sm" data-act="delEnt">${ic('trash',15)} ลบ</button></div>
- <div class="ent-form">${form}${appearanceHtml(sec,x)}</div></div></div></div><datalist id="roles">${ROLES.map(r=>`<option value="${r}">`).join('')}</datalist>`;
+ <div class="ent-form">${form}${sec!=='glossary'?galleryHtml(sec,x):''}${appearanceHtml(sec,x)}</div></div></div></div><datalist id="roles">${ROLES.map(r=>`<option value="${r}">`).join('')}</datalist>`;
 }
 
 /* ---------- ideas & threads ---------- */
@@ -1161,15 +1243,16 @@ function undoBoard(){const k=hkey(),h=HIST[k];if(!h||!h.length)return toast('ไ
  if(S.bmode==='free'){const b=board();b.cards=s.cards;b.links=s.links}else{n.relations=s.relations;n.relPos=s.relPos}touch();save();rerenderMain()}
 function secBoard(){
  const n=N(),b=board(),m=S.bmode;
- const tabs=`<div class="seg" style="flex:none">${[['free','กระดานอิสระ','grid'],['timeline','เส้นเวลา','clock'],['rel','ผังความสัมพันธ์','heart']].map(([k,l,i])=>`<button class="${m===k?'on':''}" data-act="bmode" data-v="${k}" style="display:flex;gap:6px;align-items:center">${ic(i,15)} ${l}</button>`).join('')}</div>`;
+ const tabs=`<div class="seg" style="flex:none">${[['free','กระดานอิสระ','grid'],['cork','คอร์กบอร์ดฉาก','film'],['timeline','เส้นเวลา','clock'],['rel','ผังความสัมพันธ์','heart']].map(([k,l,i])=>`<button class="${m===k?'on':''}" data-act="bmode" data-v="${k}" style="display:flex;gap:6px;align-items:center">${ic(i,15)} ${l}</button>`).join('')}</div>`;
  let tools='';
  if(m==='free')tools=`<div class="vsep"></div><select class="in" id="boardSel" style="width:auto;max-width:200px;padding:6px 10px" aria-label="เลือกกระดาน">${n.boards.map(x=>`<option value="${x.id}" ${x.id===b.id?'selected':''}>${esc(x.name)}</option>`).join('')}</select>
   <button class="icon-btn" data-act="addBoard" title="สร้างกระดานใหม่">${ic('plus',17)}</button><button class="icon-btn" data-act="renameBoard" title="เปลี่ยนชื่อหรือลบกระดาน">${ic('edit',16)}</button><div class="vsep"></div>
   <button class="btn primary sm" data-act="addCard" data-v="note">${ic('note',14)} โน้ต</button><button class="btn sm" data-act="addCard" data-v="scene">${ic('film',14)} ฉาก</button>
   <button class="btn sm" data-act="addRefCard" data-v="characters">${ic('users',14)} ตัวละคร</button><button class="btn sm" data-act="addRefCard" data-v="locations">${ic('pin',14)} สถานที่</button><button class="btn sm" data-act="addRefCard" data-v="chapters">${ic('file',14)} บท</button>`;
  if(m==='rel')tools=`<div class="vsep"></div><span class="muted" style="font-size:13px">ชี้ที่ตัวละครแล้วกด ${ic('link',13)} เพื่อโยงความสัมพันธ์</span><span style="flex:1"></span><button class="btn sm" data-act="relCircle">${ic('refresh',14)} จัดวงกลมใหม่</button>`;
+ if(m==='cork')tools=`<div class="vsep"></div><span class="muted" style="font-size:13px">ลาก ⠿ เพื่อย้ายฉาก (ข้ามบทได้) · แบ่งฉากในหน้าเขียนด้วย แทรก → เริ่มฉากใหม่</span>`;
  if(m==='timeline')tools=`<div class="vsep"></div><span class="muted" style="font-size:13px">เรียงเหตุการณ์ตามลำดับเวลาในโลกของเรื่อง</span><span style="flex:1"></span><button class="btn primary sm" data-act="addEvent">${ic('plus',14)} เหตุการณ์</button>`;
- const body=m==='timeline'?renderTimeline():`<div class="bd-canvas" id="bdCanvas">${S.linkFrom||S.relFrom?`<div class="bd-hint">คลิก${m==='rel'?'ตัวละคร':'การ์ด'}ปลายทางเพื่อเชื่อมเส้น · Esc ยกเลิก</div>`:''}
+ const body=m==='cork'?renderCork():m==='timeline'?renderTimeline():`<div class="bd-canvas" id="bdCanvas">${S.linkFrom||S.relFrom?`<div class="bd-hint">คลิก${m==='rel'?'ตัวละคร':'การ์ด'}ปลายทางเพื่อเชื่อมเส้น · Esc ยกเลิก</div>`:''}
   <div class="bd-world" id="bdWorld"><svg class="bd-svg" id="bdSvg"></svg><div id="bdLabels"></div>${m==='free'?b.cards.map(renderCard).join(''):renderNodes()}</div>
   <div class="bd-zoom"><button class="icon-btn" data-act="bundo" title="ย้อนกลับ (Ctrl+Z)">${ic('undo',15)}</button><button class="icon-btn" data-act="bzoom" data-v="-1" title="ซูมออก">${ic('minus',15)}</button><button class="icon-btn" data-act="bzoom" data-v="0" style="width:auto;padding:0 8px;font-size:12px" id="zl" title="รีเซ็ตมุมมอง">${Math.round(S.z*100)}%</button><button class="icon-btn" data-act="bzoom" data-v="1" title="ซูมเข้า">${ic('plus',15)}</button></div>
   ${m==='free'&&!b.cards.length?`<div class="empty" style="position:absolute;inset:0;display:grid;place-items:center;pointer-events:none"><div><div class="big">กระดานว่างเปล่า</div>เพิ่มโน้ตหรือการ์ดฉากเพื่อเริ่มวางพล็อต</div></div>`:''}
@@ -1216,6 +1299,7 @@ function drawLinks(){
 }
 function mountBoard(){
  if(S.bmode==='timeline'){$$('.tl textarea').forEach(autoGrow);return}
+ if(S.bmode==='cork'){mountCork();return}
  const cv=$('#bdCanvas');if(!cv)return;applyView();drawLinks();
  const bs=$('#boardSel');if(bs)bs.addEventListener('change',()=>{S.bid=bs.value;S.linkFrom=null;rerenderMain()});
  let drag=null;
@@ -1437,6 +1521,7 @@ async function settingsModal(tab){
   ${ck('ac','ช่วยเติมชื่ออัตโนมัติ','พิมพ์ 2 ตัวอักษรแรกของชื่อตัวละคร สถานที่ หรือคำศัพท์ แล้วกด Tab')}
   ${ck('indent','ย่อหน้าบรรทัดแรกอัตโนมัติ','เว้นต้นย่อหน้าเหมือนหนังสือ (เฉพาะการแสดงผลในหน้าเขียน)')}
   ${ck('spell','ตรวจคำสะกด','ขีดเส้นใต้คำที่สะกดผิด (ใช้พจนานุกรมของเบราว์เซอร์)')}
+  ${ck('typewriter','Typewriter Scrolling','บรรทัดที่กำลังพิมพ์อยู่กลางจอเสมอ ตาไม่ต้องมองต่ำลงเรื่อย ๆ')}
   ${ck('toolbar','แสดงแถบเครื่องมือจัดรูปแบบ','')}
   ${ck('listHidden','ซ่อนรายการบทด้านซ้าย','')}
   <div class="muted" style="font-size:13px">นำเข้าไฟล์ Word (.docx), .txt หรือ .md ลงในนิยายได้จากปุ่ม ⤒ ในแถบเครื่องมือหน้าเขียน</div>
@@ -1487,7 +1572,7 @@ async function settingsModal(tab){
 }
 function applyPref(k){
  if(k==='anim')document.documentElement.classList.toggle('no-anim',!P.anim);
- if(['iconStyle','libView','navPos','navHidden','listHidden','toolbar','indent','spell'].includes(k)){commitEditor();S.keepFocus=true;render()}
+ if(['iconStyle','libView','navPos','navHidden','listHidden','toolbar','indent','spell','typewriter'].includes(k)){commitEditor();S.keepFocus=true;render()}
  const ed=$('#editor'),pp=$('.ed-paper');
  if(k==='edSize'&&ed){ed.style.fontSize=db.settings.edSize+'px';const f=$('#fsz');if(f)f.textContent=db.settings.edSize+'px'}
  if(k==='edLine'&&ed)ed.style.lineHeight=P.edLine;
@@ -1516,6 +1601,21 @@ let installEvt=null;
 const A={
  theme:el=>{db.settings.theme=el.dataset.v;document.documentElement.dataset.theme=el.dataset.v;save();$$('.themes button').forEach(b=>b.classList.toggle('on',b.dataset.v===el.dataset.v))},
  libView:el=>{P.libView=el.dataset.v;savePrefs();render()},
+ toggleTW:el=>{P.typewriter=!P.typewriter;savePrefs();const sc=$('.ed-scroll');if(sc)sc.classList.toggle('tw',P.typewriter);el.classList.toggle('on',P.typewriter);if(P.typewriter){edFocus();typewriter()}toast(P.typewriter?'เปิด Typewriter Scrolling — บรรทัดที่พิมพ์จะอยู่กลางจอ':'ปิด Typewriter Scrolling')},
+ webCopy:()=>webCopyModal(),
+ openReview:()=>{commitEditor();S.refOpen=true;S.refTab='review';S.keepFocus=true;rerenderMain()},
+ repWord:el=>repHighlight(el.dataset.v),
+ repClear:()=>{repClear();toast('ล้างไฮไลต์แล้ว')},
+ toggleScenes:el=>{const id=el.dataset.id,c=curChapter();S.openCh=S.openCh||{};const cur=id in S.openCh?S.openCh[id]:!!(c&&c.id===id);S.openCh[id]=!cur;$('#chList').innerHTML=chapterListHtml();labelButtons($('#chList'))},
+ goScene:el=>{commitEditor();const c=N().chapters.find(x=>x.id===el.dataset.cid);if(!c)return;S.sec='chapters';S.sel.chapters=c.id;S.openCh=S.openCh||{};S.openCh[c.id]=true;S.jumpScene=el.dataset.sid===c.scene0?'__top':el.dataset.sid;rerenderMain()},
+ addScene:el=>{const c=N().chapters.find(x=>x.id===el.dataset.cid);if(!c)return;const l=scenesOf(c).slice();l.push({id:uid(),html:'<div><br></div>',meta:{}});addSnap(c,'ก่อนเพิ่มฉาก');assembleScenes(c,l);touch();save();rerenderMain();toast('เพิ่มฉากท้ายบทแล้ว')},
+ locView:el=>{S.locView=el.dataset.v||(S.locView==='map'?'info':'map');S.pinMode=false;rerenderMain()},
+ mapAdd:async()=>{const u=await pickImage(2400);if(!u)return;promptModal('ตั้งชื่อแผนที่','ชื่อแผนที่ (เช่น แผนที่โลก, เมืองหลวง)','แผนที่โลก',v=>{const n=N();n.maps=n.maps||[];const m={id:uid(),name:v,img:u,pins:[]};n.maps.push(m);S.mapId=m.id;S.locView='map';touch();save();rerenderMain()})},
+ mapRename:()=>{const m=curMap(),n=N();if(!m)return;promptModal('เปลี่ยนชื่อแผนที่','ชื่อแผนที่',m.name,v=>{m.name=v;save();rerenderMain()},{label:'ลบแผนที่',fn:()=>{if(!confirm(`ลบแผนที่ “${m.name}” และหมุดทั้งหมด?`))return;n.maps=n.maps.filter(x=>x!==m);S.mapId=null;touch();save();rerenderMain()}})},
+ pinMode:()=>{S.pinMode=!S.pinMode;rerenderMain()},
+ mapZoom:el=>{S.mapZ=Math.min(3,Math.max(.5,(S.mapZ||1)*(+el.dataset.v>0?1.25:.8)));rerenderMain()},
+ galAdd:async()=>{const sec=S.sec,x=curEnt(sec);if(!x)return;const files=await pickFiles('image/*');if(!files.length)return;x.gallery=x.gallery||[];let k=0;for(const f of files){if(!/^image\//.test(f.type))continue;try{x.gallery.push(await readImage(f,1600));k++}catch(e){}}if(!x.img&&x.gallery[0])x.img=x.gallery[0];touch();save();rerenderMain();toast(`เพิ่มรูป ${k} รูปแล้ว`)},
+ galView:el=>galleryModal(+el.dataset.i),
  toggleNav:()=>{commitEditor();P.navHidden=!P.navHidden;savePrefs();S.keepFocus=true;render();toast(P.navHidden?'ซ่อนแถบเมนูแล้ว — กด Ctrl+\\ หรือปุ่ม ▯ เพื่อแสดงอีกครั้ง':'แสดงแถบเมนูแล้ว')},
  toggleList:()=>{commitEditor();P.listHidden=!P.listHidden;savePrefs();S.keepFocus=true;rerenderMain()},
  fullscreen:()=>{try{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen().catch(()=>toast('เบราว์เซอร์ไม่อนุญาตโหมดเต็มจอ'))}catch(e){toast('เบราว์เซอร์นี้ไม่รองรับโหมดเต็มจอ')}},
@@ -1538,7 +1638,7 @@ const A={
  history:()=>historyModal(),
  toggleRef:()=>{commitEditor();S.refOpen=!S.refOpen;S.keepFocus=true;rerenderMain()},
  openFind:()=>{commitEditor();const s=getSelection();if(s&&!s.isCollapsed&&$('#editor')&&$('#editor').contains(s.anchorNode)){const t=s.toString().trim();if(t&&t.length<60)S.find.q=t}S.refOpen=true;S.refTab='find';S.focusFind=true;S.keepFocus=true;S.sec='chapters';rerenderMain()},
- refTab:el=>{commitEditor();S.refTab=el.dataset.v;S.keepFocus=true;if(el.dataset.v==='find')S.focusFind=true;rerenderMain()},
+ refTab:el=>{commitEditor();repClear();S.refTab=el.dataset.v;S.keepFocus=true;if(el.dataset.v==='find')S.focusFind=true;rerenderMain()},
  refOpen:(el,e)=>{if(e.target.closest('[data-act="insName"]'))return;el.classList.toggle('open')},
  insName:el=>{const ed=$('#editor');if(!ed)return;ed.focus();const s=getSelection();s.removeAllRanges();if(savedRange&&ed.contains(savedRange.startContainer))s.addRange(savedRange);else placeEnd(ed);document.execCommand('insertText',false,el.dataset.v);saveRange()},
  chTag:el=>{const c=curChapter(),k=el.dataset.k,id=el.dataset.id;c[k]=c[k]||[];const i=c[k].indexOf(id);if(i>=0)c[k].splice(i,1);else c[k].push(id);touch();save();el.classList.toggle('on',i<0);el.setAttribute('aria-pressed',i<0)},
@@ -1603,6 +1703,7 @@ document.addEventListener('click',e=>{
 document.addEventListener('mousedown',e=>{if(e.target.closest('[data-cmd],.tb'))e.preventDefault()});
 document.addEventListener('input',e=>{
  const el=e.target;
+ if(el.dataset.smeta&&S.nid){const c=N().chapters.find(x=>x.id===el.dataset.cid);if(c){c.smeta=c.smeta||{};const m=c.smeta[el.dataset.sid]=c.smeta[el.dataset.sid]||{};m[el.dataset.smeta]=el.value;touch();saveSoon();if(el.dataset.smeta==='status'){const card=el.closest('.cork-card');if(card)card.style.setProperty('--sc',(STATUS[el.value]||STATUS.draft).c)}if(el.tagName==='TEXTAREA')autoGrow(el)}return}
  if(el.id==='entQ'){S.q[S.sec]=el.value;$('#entItems').innerHTML=entListItems(S.sec);labelButtons($('#entItems'));return}
  const c=el.dataset.coll;if(!c||!S.nid)return;const n=N();let obj;
  if(c==='outline')obj=n.outline;else if(c==='journal'){const d=today();obj=n.journal[d]=n.journal[d]||{}}
@@ -1639,8 +1740,8 @@ document.addEventListener('keydown',e=>{
  if(mod&&k==='s'){e.preventDefault();commitEditor();save();toast('บันทึกแล้ว')}
  if(mod&&e.key==='\\'&&S.nid){e.preventDefault();A.toggleNav();return}
  if(mod&&(k==='f'||k==='h')&&S.nid&&!$('#modalRoot').innerHTML){e.preventDefault();A.openFind()}
- if(mod&&k==='z'&&!e.shiftKey&&S.sec==='board'&&S.bmode!=='timeline'&&!inField&&!$('#modalRoot').innerHTML){e.preventDefault();undoBoard()}
- if(e.key==='Escape'){if($('.pop')){closePop();return}const cp=$('.cov-ov');if(cp){cp.remove();return}if($('#modalRoot').innerHTML){closeModal();return}if(S.linkFrom||S.relFrom){S.linkFrom=S.relFrom=null;rerenderMain();return}if(S.focus){A.focus()}}
+ if(mod&&k==='z'&&!e.shiftKey&&S.sec==='board'&&(S.bmode==='free'||S.bmode==='rel')&&!inField&&!$('#modalRoot').innerHTML){e.preventDefault();undoBoard()}
+ if(e.key==='Escape'){if($('.pop')){closePop();return}if(S.pinMode&&!$('#modalRoot').innerHTML){S.pinMode=false;rerenderMain();return}const cp=$('.cov-ov');if(cp){cp.remove();return}if($('#modalRoot').innerHTML){closeModal();return}if(S.linkFrom||S.relFrom){S.linkFrom=S.relFrom=null;rerenderMain();return}if(S.focus){A.focus()}}
 });
 $('#fileIn').addEventListener('change',e=>{const f=e.target.files[0];e.target.value='';if(f)importFile(f)});
 window.addEventListener('beforeunload',()=>{if(db)commitEditor()});
@@ -1648,6 +1749,130 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 window.addEventListener('resize',()=>{if(S.sec==='board')drawLinks()});
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;$$('.install-btn').forEach(b=>b.classList.remove('hidden'))});
 window.addEventListener('appinstalled',()=>{installEvt=null;toast('ติดตั้ง Inkfold เป็นแอปแล้ว')});
+
+/* ---------- 1.3: scenes (split by scene markers inside a chapter) ---------- */
+const SCN=new Map();
+function scenesOf(c){const html=c.html||'',m=SCN.get(c.id);if(m&&m.html===html)return m.list;
+ const d=document.createElement('div');d.innerHTML=html;const list=[];let cur={id:null,nodes:[]};
+ const push=()=>{const h=cur.nodes.map(n=>n.nodeType===1?n.outerHTML:n.nodeType===3?esc(n.textContent):'').join('');if(cur.id||htmlToText(h).trim()||!list.length)list.push({id:cur.id,html:h})};
+ for(const n of [...d.childNodes]){if(n.nodeType===1&&n.tagName==='HR'&&ID_RE.test(n.getAttribute('data-sid')||'')){if(cur.id||cur.nodes.length)push();cur={id:n.getAttribute('data-sid'),nodes:[]}}else cur.nodes.push(n)}
+ push();c.smeta=c.smeta||{};
+ list.forEach(q=>{if(!q.id)q.id=c.scene0||(c.scene0=uid());q.meta=c.smeta[q.id]||(c.smeta[q.id]={});const t=htmlToText(q.html);q.words=countWords(t);q.snip=t.replace(/\s+/g,' ').trim()});
+ SCN.set(c.id,{html,list});return list}
+function sceneTitle(q,j){return q.meta.title||(q.snip?q.snip.slice(0,28)+(q.snip.length>28?'…':''):`ฉากที่ ${j+1}`)}
+function assembleScenes(c,list){if(!list.length){c.html='';c.scene0=uid()}else{c.scene0=list[0].id;c.html=list.map((q,i)=>(i?`<hr data-sid="${q.id}">`:'')+q.html).join('')}c.words=countWords(htmlToText(c.html));SCN.delete(c.id)}
+function moveScene(fromCid,sid,toCid,idx){const n=N(),from=n.chapters.find(c=>c.id===fromCid),to=n.chapters.find(c=>c.id===toCid);if(!from||!to)return;
+ const fl=scenesOf(from).slice(),i=fl.findIndex(q=>q.id===sid);if(i<0)return;const [q]=fl.splice(i,1);
+ const tl=from===to?fl:scenesOf(to).slice();const at=Math.min(idx,tl.length);if(from===to&&at===i)return;tl.splice(at,0,q);
+ if(from!==to){to.smeta=to.smeta||{};to.smeta[q.id]=q.meta||{};delete from.smeta[q.id]}
+ addSnap(from,'ก่อนย้ายฉาก');if(from!==to)addSnap(to,'ก่อนย้ายฉาก');
+ assembleScenes(from,from===to?tl:fl);if(from!==to)assembleScenes(to,tl);touch(n);save();rerenderMain();toast('ย้ายฉากแล้ว — ย้อนกลับได้จากประวัติเวอร์ชันของบท')}
+function scenesNoteHtml(c){const sc=scenesOf(c);if(sc.length<2)return `<div class="field"><label>ฉากในบทนี้</label><div class="muted" style="font-size:13px">บทนี้ยังเป็นฉากเดียว — แบ่งฉากได้ที่ แทรก → เริ่มฉากใหม่</div></div>`;
+ return `<div class="field"><label>ฉากในบทนี้ (${sc.length})</label>${sc.map((q,j)=>`<div class="sc-note"><button class="icon-btn" data-act="goScene" data-cid="${c.id}" data-sid="${q.id}" title="ไปที่ฉากนี้" style="width:26px;height:26px">${ic('arrowR',13)}</button><input class="in" data-smeta="title" data-cid="${c.id}" data-sid="${q.id}" value="${esc(q.meta.title||'')}" placeholder="${esc(sceneTitle(q,j))}" aria-label="ชื่อฉาก"></div>`).join('')}</div>`}
+function renderCork(){const n=N();if(!n.chapters.length)return `<div class="empty" style="margin-top:10vh">${ART.book}<div class="big">ยังไม่มีบท</div>เพิ่มบทในเมนูเนื้อหาบทก่อน</div>`;
+ return `<div class="cork"><div class="cork-track">${n.chapters.map((c,ci)=>{const sc=scenesOf(c);return `<div class="cork-col"><div class="cork-h"><span class="st-dot" style="background:${(STATUS[c.status]||STATUS.draft).c}"></span><b>บทที่ ${ci+1}</b><span class="cork-ct">${esc(c.title)}</span><span class="muted" style="margin-left:auto;font-size:12px;white-space:nowrap">${sc.length} ฉาก</span></div>
+  <div class="cork-list" data-cork-drop="${c.id}">${sc.map((q,j)=>`<div class="cork-card" data-sid="${q.id}" data-cid="${c.id}" style="--sc:${(STATUS[q.meta.status]||STATUS.draft).c}">
+   <div class="cc-h"><span class="cc-grip" draggable="true" data-scdrag="${q.id}" title="ลากเพื่อย้ายฉาก">⠿</span><input class="cc-t" data-smeta="title" data-cid="${c.id}" data-sid="${q.id}" value="${esc(q.meta.title||'')}" placeholder="${esc(sceneTitle(q,j))}" aria-label="ชื่อฉาก"><select class="cc-st" data-smeta="status" data-cid="${c.id}" data-sid="${q.id}" aria-label="สถานะฉาก">${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${(q.meta.status||'draft')===k?'selected':''}>${v.n}</option>`).join('')}</select></div>
+   <textarea class="cc-s" data-smeta="summary" data-cid="${c.id}" data-sid="${q.id}" placeholder="สรุปฉากนี้…" rows="2" aria-label="สรุปฉาก">${esc(q.meta.summary||'')}</textarea>
+   <div class="cc-snip">${q.snip?esc(q.snip.slice(0,70))+(q.snip.length>70?'…':''):'<i>ฉากว่าง</i>'}</div>
+   <div class="cc-f"><span>${num(q.words)} คำ</span><button class="btn sm" data-act="goScene" data-cid="${c.id}" data-sid="${q.id}">${ic('edit',13)} เขียน</button></div></div>`).join('')}</div>
+  <button class="cork-add" data-act="addScene" data-cid="${c.id}">${ic('plus',14)} ฉากใหม่</button></div>`}).join('')}</div></div>`}
+function mountCork(){const root=$('.cork');if(!root)return;let drag=null;
+ const clear=()=>$$('.cork .drop-before,.cork .drop-after,.cork .drop-in').forEach(x=>x.classList.remove('drop-before','drop-after','drop-in'));
+ root.addEventListener('dragstart',e=>{const g=e.target.closest&&e.target.closest('[data-scdrag]');if(!g)return;const card=g.closest('.cork-card');drag={sid:card.dataset.sid,cid:card.dataset.cid};card.classList.add('dragging');e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/x-scene',drag.sid);try{e.dataTransfer.setDragImage(card,24,20)}catch(err){}});
+ root.addEventListener('dragover',e=>{if(!drag)return;const list=e.target.closest&&e.target.closest('[data-cork-drop]');if(!list)return;e.preventDefault();clear();const card=e.target.closest('.cork-card');if(card&&card.dataset.sid!==drag.sid){const r=card.getBoundingClientRect();card.classList.add(e.clientY<r.top+r.height/2?'drop-before':'drop-after')}else if(!card)list.classList.add('drop-in')});
+ root.addEventListener('drop',e=>{if(!drag)return;const list=e.target.closest&&e.target.closest('[data-cork-drop]');if(!list)return;e.preventDefault();const cards=[...list.querySelectorAll('.cork-card')].filter(x=>x.dataset.sid!==drag.sid);const card=e.target.closest('.cork-card');let idx=cards.length;if(card&&card.dataset.sid!==drag.sid)idx=cards.indexOf(card)+(card.classList.contains('drop-after')?1:0);clear();const d=drag;drag=null;moveScene(d.cid,d.sid,list.dataset.corkDrop,idx)});
+ root.addEventListener('dragend',()=>{drag=null;clear();$$('.cork .dragging').forEach(x=>x.classList.remove('dragging'))});
+ $$('.cork textarea').forEach(autoGrow)}
+
+/* ---------- 1.3: typewriter scrolling ---------- */
+function typewriter(){if(!P.typewriter)return;const sc=$('.ed-scroll'),ed=$('#editor'),s=getSelection();if(!sc||!ed||!s.rangeCount||!ed.contains(s.anchorNode))return;
+ let rect=s.getRangeAt(0).getBoundingClientRect();if(!rect.height){const el=s.anchorNode.nodeType===1?s.anchorNode:s.anchorNode.parentElement;if(!el)return;rect=el.getBoundingClientRect()}
+ const box=sc.getBoundingClientRect(),target=box.top+box.height*.45;const dy=rect.top-target;if(Math.abs(dy)>4)sc.scrollTop+=dy}
+
+/* ---------- 1.3: repeated-word checker ---------- */
+const REP_STOP=new Set(['ที่','และ','ก็','ใน','ของ','ให้','เป็น','มี','ว่า','กับ','จะ','ไม่','ได้','นี้','นั้น','the','a','an','and','of','to','in']);
+function repAnalyze(){const ed=$('#editor'),c=curChapter();const text=ed?htmlToText(ed.innerHTML):c?htmlToText(c.html):'';const W=+P.repWin||50,MIN=+P.repMin||3,ign=P.repIgnore!==false;
+ const words=[];if(seg){for(const g of seg.segment(text))if(g.isWordLike){const w=g.segment.toLowerCase();if([...w].length>=2&&!/^\d+$/.test(w))words.push(w)}}else text.toLowerCase().split(/\s+/).forEach(w=>{if(w.length>=2)words.push(w)});
+ const pos=new Map();words.forEach((w,i)=>{if(ign&&REP_STOP.has(w))return;if(!pos.has(w))pos.set(w,[]);pos.get(w).push(i)});
+ const near=[],freq=[];for(const [w,ps] of pos){freq.push([w,ps.length]);if(ps.length<MIN)continue;let best=0,j=0;for(let i=0;i<ps.length;i++){while(ps[i]-ps[j]>=W)j++;best=Math.max(best,i-j+1)}if(best>=MIN)near.push({w,best,total:ps.length})}
+ near.sort((a,b)=>b.best-a.best||b.total-a.total);freq.sort((a,b)=>b[1]-a[1]);return {near:near.slice(0,40),freq:freq.slice(0,12),total:words.length}}
+function refReview(){return `<div class="ref-body"><div class="muted" style="font-size:13px;line-height:1.6">หาคำที่ใช้ซ้ำถี่ ๆ ในระยะใกล้กัน คลิกคำเพื่อไฮไลต์ในเนื้อหา (คลิกซ้ำเพื่อไปจุดถัดไป) — ไม่มีการแก้ไขต้นฉบับ</div>
+ <div class="grid2" style="gap:8px"><div class="field"><label for="repWin">ระยะที่ตรวจ</label><select id="repWin" class="in">${[[30,'30 คำ (ใกล้มาก)'],[50,'50 คำ'],[100,'100 คำ'],[200,'200 คำ']].map(([v,l])=>`<option value="${v}" ${(+P.repWin||50)===v?'selected':''}>${l}</option>`).join('')}</select></div>
+ <div class="field"><label for="repMin">ซ้ำตั้งแต่</label><select id="repMin" class="in">${[2,3,4,5].map(v=>`<option value="${v}" ${(+P.repMin||3)===v?'selected':''}>${v} ครั้งขึ้นไป</option>`).join('')}</select></div></div>
+ <label class="check" style="padding:8px 12px"><input type="checkbox" id="repIgn" ${P.repIgnore!==false?'checked':''}><span style="font-size:13.5px">ไม่นับคำพื้นฐาน<small>ที่ และ ก็ ใน ของ ให้ เป็น มี ว่า กับ จะ ไม่ ได้ นี้ นั้น</small></span></label>
+ <div id="repRes">${repResultsHtml()}</div></div>`}
+function repResultsHtml(){const r=repAnalyze();if(!r.total)return '<div class="muted" style="font-size:13px">ยังไม่มีเนื้อหาในบทนี้</div>';
+ return `<div class="lbl" style="margin:4px 0 6px">คำที่ซ้ำถี่ในระยะ ${+P.repWin||50} คำ (${r.near.length})</div><div class="rep-list">${r.near.map(x=>`<button class="rep-it" data-act="repWord" data-v="${esc(x.w)}"><b>${esc(x.w)}</b><span class="chip warm">${x.best} ครั้ง</span><small>ทั้งบท ${x.total}</small></button>`).join('')||'<div class="muted" style="font-size:13px">ไม่พบคำซ้ำถี่ — เยี่ยมมาก ✨</div>'}</div>
+ <div class="lbl" style="margin:14px 0 6px">คำที่ใช้บ่อยที่สุดในบท</div><div class="tagpick">${r.freq.map(([w,c])=>`<button class="chip" data-act="repWord" data-v="${esc(w)}">${esc(w)} · ${c}</button>`).join('')}</div>
+ <button class="btn sm" data-act="repClear" style="margin-top:12px">ล้างไฮไลต์</button>`}
+function mountReview(){const ids=['repWin','repMin','repIgn'];if(!$('#repWin'))return;ids.forEach(id=>$('#'+id).addEventListener('change',()=>{P.repWin=+$('#repWin').value;P.repMin=+$('#repMin').value;P.repIgnore=$('#repIgn').checked;savePrefs();repClear();$('#repRes').innerHTML=repResultsHtml()}))}
+function repHighlight(word){const ed=$('#editor');if(!ed)return;const ranges=[];
+ for(const t of textNodes(ed)){const tx=t.textContent;if(seg){for(const g of seg.segment(tx))if(g.segment.toLowerCase()===word){const r=document.createRange();r.setStart(t,g.index);r.setEnd(t,g.index+g.segment.length);ranges.push(r)}}else{let i=tx.toLowerCase().indexOf(word);while(i>=0){const r=document.createRange();r.setStart(t,i);r.setEnd(t,i+word.length);ranges.push(r);i=tx.toLowerCase().indexOf(word,i+word.length)}}}
+ if(!ranges.length)return toast('ไม่พบคำนี้ในหน้าเขียน');
+ if(S.repW===word)S.repIdx=(S.repIdx+1)%ranges.length;else{S.repW=word;S.repIdx=0}const cur=ranges[S.repIdx];
+ if(window.CSS&&CSS.highlights&&window.Highlight){CSS.highlights.set('inkrep',new Highlight(...ranges));CSS.highlights.set('inkrep-cur',new Highlight(cur))}
+ const el=cur.startContainer.parentElement;if(el)el.scrollIntoView({block:'center',behavior:'smooth'});toast(`“${word}” ${ranges.length} ครั้ง · จุดที่ ${S.repIdx+1}`)}
+function repClear(){try{if(window.CSS&&CSS.highlights){CSS.highlights.delete('inkrep');CSS.highlights.delete('inkrep-cur')}}catch(e){}S.repW=null}
+
+/* ---------- 1.3: copy for web-novel sites ---------- */
+function webCopyModal(){commitEditor();const n=N(),c=curChapter();if(!c)return;const idx=n.chapters.indexOf(c);
+ const o=Object.assign({title:true,prefix:'ตอนที่',gap:true,indent:false,rich:true,scene:'✻ ✻ ✻'},P.webCopy||{});
+ const build=()=>{const ps=htmlToParas(c.html).filter(p=>p.kind==='hr'||paraText(p).trim());const lines=[],htm=[],ind=' '.repeat(8);
+  if(o.title){const tt=`${o.prefix} ${idx+1}${c.title?' '+c.title:''}`;lines.push(tt);htm.push(`<p style="text-align:center"><b>${xesc(tt)}</b></p>`)}
+  for(const p of ps){if(p.kind==='hr'){lines.push(o.scene);htm.push(`<p style="text-align:center">${xesc(o.scene)}</p>`);continue}
+   const center=/^(center|right)$/.test(p.align),head=/^h[1-3]$/.test(p.kind),pre=center||head||!o.indent?'':ind;
+   lines.push(pre+paraText(p).trim());
+   const body=o.rich?runsHtml({runs:p.runs.map(r=>({t:r.t,b:r.b||head,i:r.i||p.kind==='quote',u:r.u,s:r.s}))}).trim():xesc(paraText(p).trim());
+   htm.push(`<p${center?` style="text-align:${p.align}"`:''}>${pre}${body}</p>`)}
+  return {text:lines.join(o.gap?'\n\n':'\n'),html:htm.join(o.gap?'<p><br></p>':'')}};
+ const ck=(id,on,l,sm)=>`<label class="check" style="padding:8px 12px"><input type="checkbox" id="${id}" ${on?'checked':''}><span style="font-size:13.5px">${l}${sm?`<small>${sm}</small>`:''}</span></label>`;
+ modal(`${mHead('คัดลอกสำหรับเว็บนิยาย')}<p class="muted" style="margin:0;font-size:13.5px">คัดลอกตอนนี้แล้ววางลงหน้าเขียนของ Dek-D, ReadAWrite, Fictionlog, Joylada หรือ Facebook ได้ทันที (Ctrl+V)</p>
+ <div class="grid2" style="gap:10px">${ck('wcT',o.title,'ใส่ชื่อตอนไว้บนสุด')}${ck('wcG',o.gap,'เว้นบรรทัดระหว่างย่อหน้า','อ่านง่ายบนมือถือ เว็บนิยายส่วนใหญ่นิยมแบบนี้')}${ck('wcI',o.indent,'ย่อหน้าด้วยการเว้นวรรค','เว้นต้นย่อหน้าแบบหนังสือ')}${ck('wcR',o.rich,'คงตัวหนา ตัวเอียง และการจัดกึ่งกลาง','ปิดถ้าเว็บปลายทางรับได้แค่ข้อความล้วน')}
+ <div class="field"><label for="wcP">คำนำหน้าชื่อตอน</label><select id="wcP" class="in">${['ตอนที่','บทที่','Chapter'].map(v=>`<option ${o.prefix===v?'selected':''}>${v}</option>`).join('')}</select></div>
+ <div class="field"><label for="wcS">ตัวคั่นฉาก</label><select id="wcS" class="in">${['✻ ✻ ✻','***','◆ ◆ ◆','⁂','──────'].map(v=>`<option ${o.scene===v?'selected':''}>${v}</option>`).join('')}</select></div></div>
+ <div class="field"><label>ตัวอย่างที่จะคัดลอก</label><div class="wc-prev" id="wcPrev"></div></div>
+ <div class="modal-f"><span class="muted" id="wcInfo" style="font-size:12.5px"></span><span class="grow"></span><button class="btn" data-m="close">ปิด</button><button class="btn primary" id="wcCopy">${ic('copy',15)} คัดลอก</button></div>`,null,
+ bg=>{const upd=()=>{o.title=$('#wcT',bg).checked;o.gap=$('#wcG',bg).checked;o.indent=$('#wcI',bg).checked;o.rich=$('#wcR',bg).checked;o.prefix=$('#wcP',bg).value;o.scene=$('#wcS',bg).value;P.webCopy={...o};savePrefs();const b=build();$('#wcPrev',bg).innerHTML=b.html||'<span class="muted">(บทนี้ยังว่าง)</span>';$('#wcInfo',bg).textContent=`${num(countWords(b.text))} คำ · ${num(b.text.replace(/\s/g,'').length)} ตัวอักษร`};
+  bg.addEventListener('change',upd);upd();
+  $('#wcCopy',bg).addEventListener('click',async()=>{const b=build();try{if(o.rich&&window.ClipboardItem&&navigator.clipboard&&navigator.clipboard.write)await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([b.html],{type:'text/html'}),'text/plain':new Blob([b.text],{type:'text/plain'})})]);else await navigator.clipboard.writeText(b.text);toast('คัดลอกแล้ว — ไปวางในหน้าเขียนของเว็บนิยายได้เลย (Ctrl+V)')}
+   catch(e){const ta=document.createElement('textarea');ta.value=b.text;bg.appendChild(ta);ta.select();try{document.execCommand('copy');toast('คัดลอกเป็นข้อความล้วนแล้ว')}catch(e2){toast('คัดลอกไม่สำเร็จ')}ta.remove()}})},{wide:true})}
+
+/* ---------- 1.3: maps for locations ---------- */
+function locViewSeg(){return `<div class="seg" style="margin-bottom:16px;max-width:340px"><button class="${S.locView!=='map'?'on':''}" data-act="locView" data-v="info">${ic('pin',14)} ข้อมูลสถานที่</button><button class="${S.locView==='map'?'on':''}" data-act="locView" data-v="map">${ic('map',14)} แผนที่</button></div>`}
+function curMap(){const n=N();n.maps=n.maps||[];let m=n.maps.find(x=>x.id===S.mapId);if(!m){m=n.maps[0];S.mapId=m&&m.id}return m}
+function renderMap(){const n=N(),m=curMap();
+ const head=`<div class="map-bar">${locViewSeg()}<span style="flex:1"></span>${m?`<select class="in" id="mapSel" style="width:auto;max-width:220px" aria-label="เลือกแผนที่">${n.maps.map(x=>`<option value="${x.id}" ${x.id===m.id?'selected':''}>${esc(x.name)}</option>`).join('')}</select><button class="icon-btn" data-act="mapRename" title="เปลี่ยนชื่อหรือลบแผนที่">${ic('edit',16)}</button>`:''}<button class="btn sm" data-act="mapAdd">${ic('plus',14)} แผนที่ใหม่</button></div>`;
+ if(!m)return `<div class="pane-in">${head}<div class="empty" style="margin-top:6vh">${ART.book}<div class="big">ยังไม่มีแผนที่</div>อัปโหลดรูปแผนที่ที่วาดเองหรือทำจากโปรแกรมอื่น (เช่น Inkarnate, Wonderdraft) แล้วปักหมุดสถานที่ในเรื่องได้<br><br><button class="btn primary" data-act="mapAdd">${ic('image',15)} อัปโหลดรูปแผนที่</button></div></div>`;
+ const sel=S.sel.locations;
+ return `<div class="pane-in map-in">${head}<div class="map-tools"><button class="btn sm ${S.pinMode?'primary':''}" data-act="pinMode">${ic('pin',14)} ${S.pinMode?'คลิกบนแผนที่เพื่อปักหมุด… (Esc ยกเลิก)':'ปักหมุดสถานที่'}</button><span class="muted" style="font-size:12.5px">ลากหมุดเพื่อย้าย · คลิกหมุดเพื่อดูข้อมูล</span><span style="flex:1"></span>
+ <span class="zoom"><button class="icon-btn" data-act="mapZoom" data-v="-1" title="ย่อแผนที่">${ic('minus',14)}</button><span>${Math.round((S.mapZ||1)*100)}%</span><button class="icon-btn" data-act="mapZoom" data-v="1" title="ขยายแผนที่">${ic('plus',14)}</button></span></div>
+ <div class="map-wrap"><div class="map-stage ${S.pinMode?'pinning':''}" id="mapStage" style="width:${(S.mapZ||1)*100}%"><img src="${m.img}" alt="${esc(m.name)}" draggable="false">${m.pins.map(q=>{const l=n.locations.find(x=>x.id===q.loc);return `<button class="map-pin ${l&&l.id===sel?'on':''}" data-pin="${q.id}" style="left:${(q.x*100).toFixed(3)}%;top:${(q.y*100).toFixed(3)}%" title="${esc(l?l.name:'(สถานที่ถูกลบ)')}"><span class="mp-l">${esc(l?l.name:'?')}</span><span class="mp-dot"></span></button>`}).join('')}</div></div></div>`}
+function mountMap(){const ms=$('#mapSel');if(ms)ms.addEventListener('change',()=>{S.mapId=ms.value;rerenderMain()});const stage=$('#mapStage'),m=curMap();if(!stage||!m)return;let drag=null;
+ stage.addEventListener('pointerdown',e=>{const pin=e.target.closest('.map-pin');if(!pin)return;e.preventDefault();const q=m.pins.find(x=>x.id===pin.dataset.pin);if(!q)return;drag={pin,q,sx:e.clientX,sy:e.clientY,moved:false};pin.setPointerCapture(e.pointerId)});
+ stage.addEventListener('pointermove',e=>{if(!drag)return;if(Math.abs(e.clientX-drag.sx)+Math.abs(e.clientY-drag.sy)>3)drag.moved=true;if(!drag.moved)return;const r=stage.getBoundingClientRect();drag.q.x=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width));drag.q.y=Math.min(1,Math.max(0,(e.clientY-r.top)/r.height));drag.pin.style.left=drag.q.x*100+'%';drag.pin.style.top=drag.q.y*100+'%'});
+ stage.addEventListener('pointerup',()=>{if(!drag)return;const d=drag;drag=null;if(d.moved){touch();save()}else pinMenu(d.pin,d.q)});
+ stage.addEventListener('click',e=>{if(!S.pinMode||e.target.closest('.map-pin'))return;const r=stage.getBoundingClientRect();pickLocForPin(m,(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height)})}
+function pinMenu(el,q){const n=N(),l=n.locations.find(x=>x.id===q.loc);
+ pop(el,`<div class="ph">${l?esc(l.type||'สถานที่'):''}</div><div style="padding:2px 8px 8px;max-width:260px"><b style="font-family:var(--serif)">${esc(l?l.name:'(สถานที่ถูกลบ)')}</b>${l&&l.description?`<div class="muted" style="font-size:12.5px;margin-top:4px;white-space:normal">${esc(l.description.slice(0,140))}</div>`:''}</div>${l?`<button class="pi" data-pick="open">${ic('pin',14)} เปิดข้อมูลสถานที่</button>`:''}<button class="pi" data-pick="del">${ic('trash',14)} ลบหมุดนี้</button>`,
+ v=>{const m=curMap();if(v==='open'&&l){S.locView='info';S.sel.locations=l.id;rerenderMain()}if(v==='del'){m.pins=m.pins.filter(x=>x!==q);touch();save();rerenderMain()}})}
+function pickLocForPin(m,x,y){const n=N();
+ modal(`${mHead('ปักหมุดสถานที่')}<div class="pick">${n.locations.map(l=>`<div class="li" data-ploc="${l.id}" tabindex="0" role="button"><div class="li-name">${esc(l.name)}</div><div class="li-sub">${esc(l.type||'')}</div></div>`).join('')||'<div class="muted" style="font-size:13px">ยังไม่มีสถานที่ — สร้างใหม่ด้านล่างได้เลย</div>'}</div>
+ <div class="field"><label for="newLoc">หรือสร้างสถานที่ใหม่</label><div style="display:flex;gap:8px"><input class="in" id="newLoc" placeholder="ชื่อสถานที่"><button class="btn primary" id="newLocBtn">สร้างและปักหมุด</button></div></div>`,null,
+ bg=>{const put=loc=>{m.pins.push({id:uid(),loc,x:Math.min(1,Math.max(0,x)),y:Math.min(1,Math.max(0,y))});S.pinMode=false;S.sel.locations=loc;touch();save();closeModal();rerenderMain();toast('ปักหมุดแล้ว')};
+  bg.addEventListener('click',e=>{const it=e.target.closest('[data-ploc]');if(it)put(it.dataset.ploc)});
+  $('#newLocBtn',bg).addEventListener('click',()=>{const v=$('#newLoc',bg).value.trim();if(!v)return $('#newLoc',bg).focus();const l={id:uid(),name:v,folder:'',...ENT.locations.mk()};n.locations.unshift(l);put(l.id)})})}
+
+/* ---------- 1.3: image gallery for characters & locations ---------- */
+function pickFiles(accept){return new Promise(res=>{const i=document.createElement('input');i.type='file';i.accept=accept;i.multiple=true;i.onchange=()=>res([...i.files]);i.click()})}
+function galleryHtml(sec,x){const g=x.gallery||[];return `<div class="field"><label>ภาพประกอบ</label><div class="gal">${g.map((u,i)=>`<button class="gal-it ${x.img===u?'main':''}" data-act="galView" data-i="${i}" title="ดูรูปขนาดใหญ่"><img src="${u}" alt=""></button>`).join('')}<button class="gal-add" data-act="galAdd" title="เพิ่มรูปภาพ (เลือกได้หลายรูป)">${ic('plus',20)}<span>เพิ่มรูป</span></button></div>
+ <div class="muted" style="font-size:12.5px">${sec==='characters'?'เช่น ภาพตัวละคร ชุด อาวุธ หรือภาพแรงบันดาลใจ':'เช่น ภาพบรรยากาศ ผังอาคาร หรือภาพอ้างอิง'} · คลิกรูปเพื่อดูใหญ่ ตั้งเป็นรูปหลัก หรือลบ</div></div>`}
+function galleryModal(i){const sec=S.sec,x=curEnt(sec);if(!x)return;let k=i;const g=()=>x.gallery||[];
+ const body=()=>`<div class="gal-big"><img src="${g()[k]}" alt=""></div><div class="modal-f"><span class="muted" style="font-size:13px">${k+1} / ${g().length}${x.img===g()[k]?' · รูปหลัก':''}</span><span class="grow"></span><button class="btn sm" data-g="prev" ${g().length<2?'disabled':''} title="รูปก่อนหน้า">‹</button><button class="btn sm" data-g="next" ${g().length<2?'disabled':''} title="รูปถัดไป">›</button><button class="btn sm" data-g="main" ${x.img===g()[k]?'disabled':''}>ตั้งเป็นรูปหลัก</button><button class="btn sm danger" data-g="del">ลบรูป</button><button class="btn primary sm" data-m="close">ปิด</button></div>`;
+ modal(`${mHead(esc(x.name)+' — ภาพประกอบ')}<div id="galBody">${body()}</div>`,null,bg=>bg.addEventListener('click',e=>{const b=e.target.closest('[data-g]');if(!b)return;const a=b.dataset.g;
+  if(a==='prev')k=(k-1+g().length)%g().length;if(a==='next')k=(k+1)%g().length;if(a==='main'){x.img=g()[k];touch();save()}
+  if(a==='del'){const [u]=x.gallery.splice(k,1);if(x.img===u)x.img=x.gallery[0]||'';touch();save();if(!g().length){closeModal();return}k=Math.min(k,g().length-1)}
+  $('#galBody',bg).innerHTML=body()}),{wide:true,onClose:()=>rerenderMain()})}
 
 /* ---------- 1.2: Word-like editing tools ---------- */
 function edFocus(){const ed=$('#editor');if(!ed)return;ed.focus();const s=getSelection();if(savedRange&&ed.contains(savedRange.startContainer)){s.removeAllRanges();s.addRange(savedRange)}else if(!ed.contains(s.anchorNode))placeEnd(ed)}
@@ -1666,8 +1891,8 @@ function colorMenu(el,k){const list=k==='fore'?FORE:HILITE;
   document.execCommand('styleWithCSS',false,false);commitEditor()})}
 function stripColor(){const s=getSelection(),ed=$('#editor');if(!s.rangeCount||!ed)return;const r=s.getRangeAt(0);$$('span,font',ed).forEach(el=>{if(r.intersectsNode(el)){el.style.color='';el.removeAttribute('color');if(!el.getAttribute('style'))el.removeAttribute('style')}})}
 const SPECIAL=['—','–','…','“','”','‘','’','«','»','ๆ','ฯ','•','★','☆','♪','※','→','✻','°','×','÷'];
-function insertMenu(el){pop(el,`<div class="ph">แทรก</div><button class="pi" data-pick="scene">✻ ตัวคั่นฉาก</button><button class="pi" data-pick="hr">─ เส้นคั่น</button><button class="pi" data-pick="date">${ic('clock',15)} วันที่วันนี้</button><div class="ph">อักขระพิเศษ</div><div class="chars">${SPECIAL.map(c=>`<button data-pick="ch:${c}" title="แทรก ${c}">${c}</button>`).join('')}</div>`,
- v=>{edFocus();if(v==='scene')document.execCommand('insertHTML',false,'<div style="text-align:center">✻ ✻ ✻</div><div><br></div>');else if(v==='hr')document.execCommand('insertHTML',false,'<hr><div><br></div>');else if(v==='date')document.execCommand('insertText',false,new Date().toLocaleDateString('th-TH',{dateStyle:'long'}));else if(v.startsWith('ch:'))document.execCommand('insertText',false,v.slice(3));commitEditor()})}
+function insertMenu(el){pop(el,`<div class="ph">แทรก</div><button class="pi" data-pick="newscene">✻ เริ่มฉากใหม่ (ตัวแบ่งฉาก)</button><button class="pi" data-pick="hr">─ เส้นคั่น</button><button class="pi" data-pick="date">${ic('clock',15)} วันที่วันนี้</button><div class="ph">อักขระพิเศษ</div><div class="chars">${SPECIAL.map(c=>`<button data-pick="ch:${c}" title="แทรก ${c}">${c}</button>`).join('')}</div>`,
+ v=>{edFocus();if(v==='newscene')document.execCommand('insertHTML',false,`<hr data-sid="${uid()}"><div><br></div>`);else if(v==='hr')document.execCommand('insertHTML',false,'<hr><div><br></div>');else if(v==='date')document.execCommand('insertText',false,new Date().toLocaleDateString('th-TH',{dateStyle:'long'}));else if(v.startsWith('ch:'))document.execCommand('insertText',false,v.slice(3));commitEditor()})}
 
 /* ---------- 1.2: import Word / text / markdown files ---------- */
 function pickFile(accept){return new Promise(res=>{const i=document.createElement('input');i.type='file';i.accept=accept;i.onchange=()=>res(i.files[0]||null);i.click()})}
