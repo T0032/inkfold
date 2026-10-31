@@ -452,6 +452,33 @@ body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 .shell.navtop .nav a.on::before{left:12px;right:12px;top:auto;bottom:-6px;width:auto;height:3px;border-radius:3px 3px 0 0}
 .shell.navtop .main{flex:1;min-height:0}
 
+/* ---------- 1.4: files, status, single window ---------- */
+.filebar{display:flex;align-items:center;gap:10px;min-width:0}
+.fchip{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;background:var(--surface2);border:1px solid var(--line2);font-size:12.5px;flex:none;max-width:200px;white-space:nowrap}
+.fchip .fc-n{overflow:hidden;text-overflow:ellipsis;min-width:0}
+.top .ntitle{min-width:60px;flex-shrink:1}
+.fchip:hover{border-color:var(--accent)}
+.asw{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);cursor:pointer;position:relative;white-space:nowrap}
+.asw input{position:absolute;opacity:0;width:1px;height:1px}
+.asw-t{width:30px;height:17px;border-radius:999px;background:var(--line);position:relative;transition:.2s;flex:none}
+.asw-t::after{content:'';position:absolute;left:2px;top:2px;width:13px;height:13px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.asw input:checked+.asw-t{background:var(--accent)}
+.asw input:checked+.asw-t::after{left:15px}
+.asw input:focus-visible+.asw-t{outline:2px solid var(--accent);outline-offset:2px}
+.saved .st{white-space:nowrap}
+.saved.warn .dot{background:var(--warm)}
+.saved.warn{color:var(--warm-ink)}
+.saved.err{color:var(--danger)}.saved.err .dot{background:var(--danger)}
+.saved.act{cursor:pointer;text-decoration:underline}
+.sb-file{display:inline-flex;gap:4px;align-items:center;font-size:11.5px;color:var(--accent-2)!important}
+.pop .pi kbd{margin-left:auto;font-size:11px;color:var(--faint);font-family:var(--ui);border:0;padding:0}
+.pop .pi small{margin-left:auto;color:var(--faint);font-size:11px;flex:none}
+.pop .pi .pi-n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:190px}
+#saveErr{position:fixed;left:16px;bottom:16px;z-index:95;max-width:min(560px,calc(100vw - 32px));background:var(--danger);color:#fff;border-radius:12px;padding:10px 14px;display:flex;gap:10px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.2);font-size:14px;line-height:1.5}
+#saveErr button{color:#fff;text-decoration:underline;font-weight:600;flex:none}
+.elsewhere{position:fixed;inset:0;z-index:150;background:rgba(40,35,30,.45);backdrop-filter:blur(4px);display:grid;place-items:center;padding:20px}
+@media (max-width:760px){.filebar .asw .hide-sm,.fchip{max-width:110px}}
+
 /* ---------- 1.3: scenes, corkboard, review, web copy, maps, gallery ---------- */
 .sc-tg{margin-left:6px;font-size:10.5px;padding:0 7px;border-radius:999px;background:var(--surface2);color:var(--muted);letter-spacing:0;line-height:1.7}
 .sc-tg:hover{background:var(--accent-soft);color:var(--accent-2)}
@@ -574,7 +601,7 @@ body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 <input type="file" id="imgIn" accept="image/*" class="hidden">
 <script>
 'use strict';
-const APP_NAME='Inkfold';const APP_VERSION='1.3.1';
+const APP_NAME='Inkfold';const APP_VERSION='1.4.0';
 /* ---------- helpers ---------- */
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -670,7 +697,7 @@ const REL={love:{n:'ความรัก',c:'#D48A9E',d:''},family:{n:'คร�
 const MOODS=['😄','🙂','😐','😩','🔥'];
 const CARD_TYPES=['note','scene','characters','locations','chapters'];
 const TRASH_KIND={novel:'นิยาย',chapters:'บท',characters:'ตัวละคร',locations:'สถานที่',glossary:'คำศัพท์',ideas:'ไอเดีย',threads:'ปมเรื่อง',timeline:'เหตุการณ์',board:'กระดาน'};
-const TRASH_DAYS=30, SNAP_MAX=30;
+const TRASH_DAYS=30, SNAP_MAX=60, SNAP_EVERY=15*60e3;
 const PREF_KEY='inkfold.prefs';
 const PREF_DEFAULT={anim:true,launch:true,novelAnim:true,speed:'normal',sound:true,pageSound:true,volume:60,iconStyle:'hand',libView:'shelf',edWidth:780,edLine:1.95,ac:true,remindDays:7,navPos:'side',navHidden:false,listHidden:false,indent:false,spell:false,toolbar:true,typewriter:false,repWin:50,repMin:3,repIgnore:true};
 const P=Object.assign({},PREF_DEFAULT,(()=>{try{return JSON.parse(localStorage.getItem(PREF_KEY))||{}}catch(e){return {}}})());
@@ -721,7 +748,7 @@ function normalize(n){
  if(!ID_RE.test(String(n.id)))n.id=uid();
  for(const k of ['chapters','characters','locations','glossary','boards','relations','timeline','ideas','threads'])if(!Array.isArray(n[k]))n[k]=[];
  n.folders=n.folders&&typeof n.folders==='object'?n.folders:{};for(const k of ['characters','locations','glossary'])n.folders[k]=Array.isArray(n.folders[k])?n.folders[k]:[];
- if(!okColor(n.color))n.color=COLORS[0];if(n.spine&&!okColor(n.spine))n.spine='';if(n.cover&&!okImg(n.cover))n.cover='';
+ if(!okColor(n.color))n.color=COLORS[0];if(n.spine&&!okColor(n.spine))n.spine='';n.fileName=typeof n.fileName==='string'?n.fileName.slice(0,200):'';n.fileAuto=n.fileAuto!==false;n.fileSavedAt=+n.fileSavedAt||0;if(n.cover&&!okImg(n.cover))n.cover='';
  n.goal=+n.goal||0;const tg=n.target||{};n.target={words:+tg.words||0,date:/^\d{4}-\d\d-\d\d$/.test(tg.date||'')?tg.date:''};
  n.characters.forEach(c=>{if(!okColor(c.color))c.color=COLORS[0];if(c.img&&!okImg(c.img))c.img='';c.gallery=(Array.isArray(c.gallery)?c.gallery:[]).filter(okImg)});
  n.locations.forEach(l=>{if(l.img&&!okImg(l.img))l.img='';l.gallery=(Array.isArray(l.gallery)?l.gallery:[]).filter(okImg)});
@@ -758,20 +785,21 @@ async function loadDb(){
 }
 let saveT,writing=Promise.resolve();
 function save(){
+ if(S.readonly)return;
  const json=JSON.stringify(db);
  writing=writing.then(async()=>{
   if(ST.mode==='idb'){try{await IDB.set('data',json);try{localStorage.removeItem(KEY)}catch(e){}}catch(e){ST.mode='local'}}
-  if(ST.mode==='local'){try{localStorage.setItem(KEY,json)}catch(e){toast('บันทึกไม่สำเร็จ: พื้นที่เก็บข้อมูลเต็ม — โปรดสำรองเป็นไฟล์ทันที')}}
-  setSaved(false);backupSoon();
+  if(ST.mode==='local'){try{localStorage.setItem(KEY,json)}catch(e){showSaveError('บันทึกในเครื่องไม่สำเร็จ — พื้นที่เก็บข้อมูลเต็ม โปรดใช้ “บันทึกเป็น…” หรือสำรองเป็นไฟล์ทันที',()=>save(),'local');return}}
+  hideSaveError('local');setSaved(false);backupSoon();
  });
 }
 function saveSoon(){setSaved(true);clearTimeout(saveT);saveT=setTimeout(save,450)}
-function setSaved(busy){const el=$('#savedInd');if(!el)return;el.classList.toggle('busy',busy);el.lastChild.textContent=busy?' กำลังบันทึก…':(FS.ok?' บันทึกแล้ว (เครื่อง + ไฟล์)':' บันทึกในเครื่องแล้ว')}
+const LS={at:0};function setSaved(busy){if(!busy)LS.at=Date.now();updateStatus(busy)}
 const FS={handle:null,ok:false,last:0,t:null,name:''};
 const backupJson=()=>JSON.stringify({app:'inkfold',type:'library',version:APP_VERSION,savedAt:new Date().toISOString(),novels:db.novels});
 function backupSoon(){if(!FS.ok||FS.t)return;FS.t=setTimeout(()=>{FS.t=null;writeBackupFile()},Math.max(0,15000-(Date.now()-FS.last)))}
 async function writeBackupFile(){if(!FS.handle||!FS.ok)return;try{const w=await FS.handle.createWritable();await w.write(backupJson());await w.close();FS.last=Date.now();db.settings.lastBackup=Date.now();await quietSave()}catch(e){FS.ok=false;toast('บันทึกลงไฟล์สำรองไม่ได้ — เปิดสิทธิ์อีกครั้งในหน้าตั้งค่า');refreshBanner()}}
-async function quietSave(){const json=JSON.stringify(db);if(ST.mode==='idb'){try{await IDB.set('data',json);return}catch(e){}}try{localStorage.setItem(KEY,json)}catch(e){}}
+async function quietSave(){if(S.readonly)return;const json=JSON.stringify(db);if(ST.mode==='idb'){try{await IDB.set('data',json);return}catch(e){}}try{localStorage.setItem(KEY,json)}catch(e){}}
 async function initFileBackup(){try{const h=await IDB.get('fileHandle');if(!h||!h.queryPermission)return;FS.handle=h;FS.name=h.name;FS.ok=(await h.queryPermission({mode:'readwrite'}))==='granted'}catch(e){}}
 async function linkBackupFile(){
  if(!window.showSaveFilePicker){toast('เบราว์เซอร์นี้ยังไม่รองรับ — ใช้ Chrome หรือ Edge บนคอมพิวเตอร์');return}
@@ -781,7 +809,7 @@ async function linkBackupFile(){
 async function regrantBackup(){if(!FS.handle)return;try{FS.ok=(await FS.handle.requestPermission({mode:'readwrite'}))==='granted';if(FS.ok){await writeBackupFile();toast('กลับมาบันทึกลงไฟล์อัตโนมัติแล้ว')}}catch(e){}reopenSettings()}
 async function unlinkBackup(){FS.handle=null;FS.ok=false;FS.name='';await IDB.del('fileHandle');toast('ยกเลิกการบันทึกลงไฟล์แล้ว');reopenSettings()}
 function N(){return db.novels.find(n=>n.id===S.nid)}
-function touch(n){(n||N()).updated=Date.now()}
+function touch(n){n=n||N();if(!n)return;n.updated=Date.now();if(typeof FH!=='undefined'&&FH.has(n.id))fileDirty(n)}
 
 /* ---------- sample novel ---------- */
 function seed(){
@@ -878,7 +906,7 @@ function backupBanner(){
  const last=db.settings.lastBackup,days=last?Math.floor((Date.now()-last)/864e5):null;
  const rd=+P.remindDays;if(!rd||(last&&days<rd))return '';
  return `<div class="banner" id="bkBanner"><span class="grow">${last?`ยังไม่ได้สำรองข้อมูลมา <b>${days} วัน</b>`:'<b>ยังไม่เคยสำรองข้อมูล</b>'} — ข้อมูลอยู่ในเบราว์เซอร์นี้เท่านั้น ถ้าล้างข้อมูลเบราว์เซอร์งานจะหาย</span>
- <button class="btn sm" data-act="backupAll">${ic('down',14)} สำรองตอนนี้</button>${window.showSaveFilePicker?`<button class="btn primary sm" data-act="linkFile">${ic('save',14)} บันทึกลงไฟล์อัตโนมัติ</button>`:''}</div>`;
+ <button class="btn sm" data-act="backupAll">${ic('down',14)} สำรองตอนนี้</button>${window.showSaveFilePicker?`<button class="btn primary sm" data-act="linkFile">${ic('save',14)} สำรองทั้งคลังอัตโนมัติ</button>`:''}</div>`;
 }
 function refreshBanner(){const b=$('#bkBanner');const h=backupBanner();if(b){if(h)b.outerHTML=h;else b.remove()}else if(h){const host=$('.lib')||$('.ov-page');if(host)host.insertAdjacentHTML('afterbegin',h)}}
 
@@ -890,7 +918,7 @@ function renderLibrary(){
   <div class="nbody">${n.genre?`<div><span class="chip">${esc(n.genre)}</span></div>`:''}<h3>${esc(n.title)}</h3><div class="syn">${esc(n.synopsis)||'<i>ยังไม่มีเรื่องย่อ</i>'}</div>
   <div class="meta"><span>${n.chapters.length} บท</span><span>${num(totalWords(n))} คำ</span><span style="margin-left:auto">แก้ไข ${fmtDate(n.updated)}</span></div></div></div>`).join('')}
   <button class="newcard" data-act="newNovel"><div style="text-align:center">${ic('plus',28)}<div style="margin-top:6px">เริ่มเรื่องใหม่</div></div></button></div>`;
- return `<header class="top"><div class="brand"><div class="logo">${ic('book')}</div><span class="brand-name">Inkfold</span></div><div class="spacer"></div>
+ return `<header class="top"><div class="brand"><div class="logo">${ic('book')}</div><span class="brand-name">Inkfold</span></div><button class="btn ghost sm" data-act="fileMenu" title="ไฟล์: เปิด / เปิดล่าสุด">${ic('note',15)} ไฟล์</button><div class="spacer"></div>
  <button class="btn primary sm install-btn ${installEvt?'':'hidden'}" data-act="install">${ic('install',15)} ติดตั้งเป็นแอป</button>
  <button class="btn ghost sm hide-sm" data-act="importJson">${ic('up',16)} นำเข้า</button>
  <button class="btn ghost sm hide-sm" data-act="backupAll">${ic('down',16)} สำรองทั้งคลัง</button>
@@ -911,7 +939,7 @@ function shelfHtml(ns){
 function bookHtml(n,i){
  const tw=totalWords(n),w=Math.round(40+Math.min(34,Math.sqrt(tw)/5+n.chapters.length*1.5)),h=172+(hashStr(n.id)%6)*7,d=Math.round(h*.7),c=spineOf(n),ink=inkFor(c);
  return `<div class="sb-slot" style="--i:${i};--w:${w}px;--h:${h}px;--d:${d}px">
-  <div class="sb-label"><b>${esc(n.title)}</b><span>${n.genre?esc(n.genre)+' · ':''}${n.chapters.length} บท · ${num(tw)} คำ</span><span class="sb-acts"><button class="sb-btn" data-act="editNovel" data-id="${n.id}" title="แก้ไขข้อมูลนิยาย">${ic('edit',13)}</button><button class="sb-btn" data-act="delNovel" data-id="${n.id}" title="ย้ายนิยายไปถังขยะ">${ic('trash',13)}</button></span></div>
+  <div class="sb-label"><b>${esc(n.title)}</b><span>${n.genre?esc(n.genre)+' · ':''}${n.chapters.length} บท · ${num(tw)} คำ</span>${n.fileName?`<span class="sb-file">${ic('note',11)} ${esc(n.fileName)}</span>`:''}<span class="sb-acts"><button class="sb-btn" data-act="editNovel" data-id="${n.id}" title="แก้ไขข้อมูลนิยาย">${ic('edit',13)}</button><button class="sb-btn" data-act="delNovel" data-id="${n.id}" title="ย้ายนิยายไปถังขยะ">${ic('trash',13)}</button></span></div>
   <div class="sbook" data-act="open" data-id="${n.id}" tabindex="0" role="button" aria-label="เปิด ${esc(n.title)}" style="--c:${c};--ink:${ink}">
    <div class="sb-spine"><span class="sb-band"></span><span class="sb-title">${esc(n.title)}</span><span class="sb-em">${esc(initial(n.title))}</span><span class="sb-band b"></span></div>
    <div class="sb-cover">${n.cover?`<img src="${n.cover}" alt="">`:`<div class="sb-cf"><span>${esc(n.title)}</span></div>`}</div>
@@ -922,10 +950,10 @@ function renderNovel(){
  const n=N();const cnt={chapters:n.chapters.length,characters:n.characters.length,locations:n.locations.length,glossary:n.glossary.length,ideas:n.ideas.filter(i=>!i.done).length};
  const tc=db.trash.filter(t=>t.nid===n.id).length;
  return `<div class="shell ${S.focus?'focus':''} ${S.collapsed?'collapsed':''} ${P.navPos==='top'?'navtop':''} ${P.navHidden?'navhide':''}" id="shell">
- <header class="top"><button class="btn ghost sm" data-act="home">${ic('back',16)} <span class="hide-sm">คลังนิยาย</span></button><div class="vsep"></div>
+ <header class="top"><button class="btn ghost sm" data-act="home">${ic('back',16)} <span class="hide-sm">คลังนิยาย</span></button><button class="btn ghost sm" data-act="fileMenu" title="ไฟล์: เปิด / บันทึก / บันทึกเป็น…">${ic('note',15)} ไฟล์</button><div class="vsep"></div>
  <span class="st-dot" style="background:${n.color};width:10px;height:10px"></span><div class="ntitle">${esc(n.title)}</div>${n.genre?`<span class="chip hide-sm">${esc(n.genre)}</span>`:''}
  <button class="icon-btn" data-act="editNovel" data-id="${n.id}" title="ข้อมูลและปกของนิยายเรื่องนี้">${ic('edit',16)}</button>
- <div class="spacer"></div><div class="saved hide-sm" id="savedInd"><span class="dot"></span> ${FS.ok?'บันทึกแล้ว (เครื่อง + ไฟล์)':'บันทึกในเครื่องแล้ว'}</div><button class="icon-btn ${P.navHidden?'':'on'}" data-act="toggleNav" title="แสดง/ซ่อนแถบเมนู (Ctrl+\\)">${ic('sidebar',17)}</button><button class="icon-btn" data-act="fullscreen" title="เต็มจอ (F11)">${ic('max',17)}</button><button class="btn ghost sm" data-act="settings" title="ตั้งค่าทั้งหมด">${ic('gear',17)} <span class="hide-sm">ตั้งค่า</span></button>${themeSwitch()}</header>
+ <div class="spacer"></div>${fileBarHtml(n)}<button class="icon-btn ${P.navHidden?'':'on'}" data-act="toggleNav" title="แสดง/ซ่อนแถบเมนู (Ctrl+\\)">${ic('sidebar',17)}</button><button class="icon-btn" data-act="fullscreen" title="เต็มจอ (F11)">${ic('max',17)}</button><button class="btn ghost sm" data-act="settings" title="ตั้งค่าทั้งหมด">${ic('gear',17)} <span class="hide-sm">ตั้งค่า</span></button>${themeSwitch()}</header>
  <div class="body"><nav class="nav" aria-label="เมนูนิยาย"><div style="display:flex;align-items:center"><div class="nlabel" style="flex:1">เมนู</div><button class="icon-btn" data-act="collapse" title="ย่อ/ขยายเมนู" style="width:28px;height:28px">${ic(S.collapsed?'right':'left',15)}</button></div>
  ${SECS.map(([k,l,i])=>`<a class="${S.sec===k?'on':''}" data-act="sec" data-v="${k}" title="${l}" tabindex="0" role="button">${ic(i)}<span class="txt">${l}</span>${cnt[k]!=null?`<span class="cnt">${cnt[k]}</span>`:''}</a>`).join('')}
  <div class="grow"></div><a data-act="trash" data-v="${n.id}" title="ถังขยะ" tabindex="0" role="button">${ic('trash')}<span class="txt">ถังขยะ</span><span class="cnt">${tc||''}</span></a>
@@ -938,7 +966,7 @@ function renderSection(){
 }
 function rerenderMain(){const m=$('#main');if(!m)return render();const st=m.scrollTop;hideAC();m.innerHTML=renderSection();if(S.animate){S.animate=false;const f=m.firstElementChild;if(f)f.classList.add('pg-in')}afterRender();m.scrollTop=st;
  $$('.nav a[data-act="sec"]').forEach(a=>a.classList.toggle('on',a.dataset.v===S.sec))}
-function afterRender(){if(S.sec==='chapters')mountEditor();if(S.sec==='locations'&&S.locView==='map')mountMap();if(S.sec==='board')mountBoard();$$('textarea.auto').forEach(autoGrow);labelButtons()}
+function afterRender(){updateStatus();if(S.sec==='chapters')mountEditor();if(S.sec==='locations'&&S.locView==='map')mountMap();if(S.sec==='board')mountBoard();$$('textarea.auto').forEach(autoGrow);labelButtons()}
 function autoGrow(t){t.style.height='auto';t.style.height=t.scrollHeight+'px'}
 function avatar(c,sz=54){const fs=Math.round(sz*.42);return c.img?`<img class="avatar" src="${c.img}" alt="" style="width:${sz}px;height:${sz}px">`:`<span class="avatar" style="width:${sz}px;height:${sz}px;font-size:${fs}px;background:${c.color||COLORS[0]}">${esc(initial(c.name))}</span>`}
 
@@ -1082,13 +1110,16 @@ function mountEditor(){
 }
 function placeEnd(el){const r=document.createRange();r.selectNodeContents(el);r.collapse(false);const s=getSelection();s.removeAllRanges();s.addRange(r);saveRange()}
 function saveRange(){const s=getSelection();if(s.rangeCount&&$('#editor')&&$('#editor').contains(s.anchorNode))savedRange=s.getRangeAt(0).cloneRange()}
-function addSnap(c,label){if(!c.html&&!label)return;c.snaps=c.snaps||[];c.snaps.push({t:Date.now(),html:c.html,words:c.words||0,label:label||''});if(c.snaps.length>SNAP_MAX){const auto=c.snaps.findIndex(s=>!s.label);c.snaps.splice(auto>=0?auto:0,1)}}
+function addSnap(c,label){if(!c.html&&!label)return;c.snaps=c.snaps||[];c.snaps.push({t:Date.now(),html:c.html,words:c.words||0,label:label||''});pruneSnaps(c)}
+function pruneSnaps(c){const now=Date.now(),H=36e5,keep=[],seen=new Set();
+ for(const q of [...c.snaps].reverse()){const age=now-q.t;const key=q.label||age<2*H?'k'+q.t:age<48*H?'h'+Math.floor(q.t/H):'d'+dkey(new Date(q.t));if(seen.has(key))continue;seen.add(key);keep.push(q)}
+ c.snaps=keep.reverse();while(c.snaps.length>SNAP_MAX){const i=c.snaps.findIndex(q=>!q.label);c.snaps.splice(i>=0?i:0,1)}}
 function commitEditor(){
  clearTimeout(edT);
  const ed=$('#editor');if(!ed)return;const n=N(),c=curChapter();if(!c)return;
  const html=ed.innerHTML;if(html===c.html){setSaved(false);return}
  const last=(c.snaps||[]).filter(s=>!s.label).pop();
- if(c.html&&(!last||dkey(new Date(last.t))!==today()))addSnap(c,'');
+ if(c.html&&(!last||Date.now()-last.t>SNAP_EVERY))addSnap(c,'');
  c.html=html;updateChapterWords(n,c,countWords(htmlToText(c.html)));touch(n);save();updateWC();
  const li=$(`[data-li="${c.id}"] .li-w`);if(li)li.textContent=num(c.words)+' คำ';
 }
@@ -1339,7 +1370,8 @@ function secExport(){const n=N();
  <div class="ex-grid">${ex.map(([k,t,d,c,i])=>`<div class="card ex"><div class="ico" style="background:${c}22;color:${c}">${ic(i,22)}</div><h3>${t}</h3><p>${d}</p><button class="btn" data-act="export" data-v="${k}" style="background:${c};border-color:${c};color:#fff;justify-content:center">${ic('down',16)} ส่งออก</button></div>`).join('')}</div></div>`}
 const xesc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'');
 const fname=n=>(n.title||'novel').replace(/[\\/:*?"<>|]+/g,'_').slice(0,60);
-function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
+let CAPTURE=null;
+function download(blob,name){if(CAPTURE){CAPTURE(blob,name);return}const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
 const chTitle=(c,i)=>`บทที่ ${i+1}${c.title?' '+c.title:''}`;
 function runsHtml(p){return p.runs.map(r=>{let t=xesc(r.t);if(r.b)t=`<b>${t}</b>`;if(r.i)t=`<i>${t}</i>`;if(r.u)t=`<u>${t}</u>`;if(r.s)t=`<s>${t}</s>`;if(r.c||r.bg)t=`<span style="${r.c?'color:'+r.c+';':''}${r.bg?'background-color:'+r.bg:''}">${t}</span>`;return t}).join('')}
 function parasHtml(html){return htmlToParas(html).map(p=>{const t=runsHtml(p);if(!t.trim())return '<p class="blank">&#160;</p>';const st=p.align&&/^(center|right|justify)$/.test(p.align)?` style="text-align:${p.align}"`:'';
@@ -1411,7 +1443,7 @@ function doExport(k){commitEditor();const n=N();
  else if(k==='md'){const t=`# ${n.title}\n\n`+(n.synopsis?`> ${n.synopsis}\n\n`:'')+n.chapters.map((c,i)=>`## ${chTitle(c,i)}\n\n`+htmlToParas(c.html).map(mdRuns).filter(x=>x.trim()).join('\n\n')).join('\n\n---\n\n');download(new Blob([t],{type:'text/markdown;charset=utf-8'}),fname(n)+'.md')}
  else if(k==='docx')exportDocx(n);else if(k==='epub')exportEpub(n);else if(k==='pdf')exportPdf(n);else if(k==='bible')exportBible(n);
  else if(k==='json')download(new Blob([JSON.stringify({app:'inkfold',type:'novel',version:APP_VERSION,novel:n},null,1)],{type:'application/json'}),fname(n)+'.json');
- if(k!=='pdf'&&k!=='bible')toast('สร้างไฟล์เรียบร้อย')}
+ if(k!=='pdf'&&k!=='bible'&&!CAPTURE)toast('สร้างไฟล์เรียบร้อย')}
 
 /* ---------- images ---------- */
 function readImage(file,max){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const s=Math.min(1,max/Math.max(im.width,im.height));const cv=document.createElement('canvas');cv.width=Math.max(1,Math.round(im.width*s));cv.height=Math.max(1,Math.round(im.height*s));const g=cv.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,cv.width,cv.height);g.drawImage(im,0,0,cv.width,cv.height);res(cv.toDataURL('image/jpeg',.85))};im.onerror=rej;im.src=fr.result};fr.onerror=rej;fr.readAsDataURL(file)})}
@@ -1483,7 +1515,7 @@ function historyModal(){commitEditor();const n=N(),c=curChapter();let sel=-1;
  const snaps=()=>[...(c.snaps||[])].map((s,i)=>({...s,i})).reverse();
  const listHtml=()=>`<div class="li ${sel===-1?'on':''}" data-h="-1" tabindex="0" role="button"><div class="li-name">ฉบับปัจจุบัน</div><div class="li-sub">${num(c.words)} คำ</div></div>`+snaps().map(s=>`<div class="li ${sel===s.i?'on':''}" data-h="${s.i}" tabindex="0" role="button"><div class="li-name">${fmtDT(s.t)}</div><div class="li-sub">${num(s.words)} คำ${s.label?' · '+esc(s.label):' · บันทึกอัตโนมัติ'}</div></div>`).join('');
  const prevText=()=>{const h=sel===-1?c.html:c.snaps[sel].html;return esc(htmlToText(h).slice(0,6000))||'<span class="muted">(ว่าง)</span>'};
- modal(`${mHead('ประวัติเวอร์ชัน — '+esc(c.title||'บทนี้'))}<p class="muted" style="margin:0;font-size:13.5px">ระบบเก็บเวอร์ชันให้อัตโนมัติวันละครั้ง และทุกครั้งก่อนแทนที่คำ (สูงสุด ${SNAP_MAX} เวอร์ชัน)</p>
+ modal(`${mHead('ประวัติเวอร์ชัน — '+esc(c.title||'บทนี้'))}<p class="muted" style="margin:0;font-size:13.5px">ระบบเก็บเวอร์ชันอัตโนมัติทุก 15 นาทีที่มีการเขียน — 2 ชั่วโมงล่าสุดเก็บทุกจุด, 2 วันล่าสุดเก็บชั่วโมงละ 1, เก่ากว่านั้นวันละ 1 — และทุกครั้งก่อนแทนที่คำ ย้ายฉาก หรือนำเข้าไฟล์</p>
  <div class="hist"><div class="hl" id="hL">${listHtml()}</div><div class="hp" id="hP">${prevText()}</div></div>
  <div class="modal-f"><button class="btn" id="hSave">${ic('save',14)} บันทึกเวอร์ชันนี้ไว้</button><span class="grow"></span><button class="btn" data-m="close">ปิด</button><button class="btn primary" id="hRestore" disabled>กู้คืนเวอร์ชันที่เลือก</button></div>`,null,
  bg=>{const refresh=()=>{$('#hL',bg).innerHTML=listHtml();$('#hP',bg).innerHTML=prevText();$('#hRestore',bg).disabled=sel===-1};
@@ -1544,7 +1576,8 @@ async function settingsModal(tab){
   body=`<div class="field"><label>ที่เก็บข้อมูลในเบราว์เซอร์</label><div class="kv"><span>ระบบจัดเก็บ</span><b>${ST.mode==='idb'?'IndexedDB (จุได้มาก)':'localStorage (จำกัด ~5 MB)'}</b></div>
   <div class="kv"><span>ป้องกันเบราว์เซอร์ลบข้อมูลเอง</span><b>${ST.persisted?'เปิดแล้ว':'ยังไม่ได้รับอนุญาต'}</b></div>${est?`<div class="kv"><span>พื้นที่ที่ใช้</span><b>${est}</b></div>`:''}
   <div class="kv"><span>สำรองล่าสุด</span><b>${db.settings.lastBackup?fmtDT(db.settings.lastBackup):'ยังไม่เคย'}</b></div></div>
-  <div class="field"><label>บันทึกลงไฟล์อัตโนมัติ</label>${fsRow}</div>
+  <div class="field"><label>ไฟล์นิยาย (.inkfold) แบบ Word</label><div class="muted" style="font-size:13px;line-height:1.6">แต่ละเรื่องบันทึกเป็นไฟล์ของตัวเองได้: เมนู “ไฟล์” → บันทึกเป็น… (Ctrl+Shift+S) · เปิดไฟล์ด้วย Ctrl+O · บันทึกด้วย Ctrl+S · เปิด/ปิดบันทึกอัตโนมัติได้ที่สวิตช์ข้างชื่อไฟล์ด้านบน${HAS_FS?'':'<br><b>เบราว์เซอร์นี้เซฟทับไฟล์เดิมไม่ได้</b> — “บันทึก” จะดาวน์โหลดไฟล์ใหม่แทน ใช้ Chrome หรือ Edge บนคอมพิวเตอร์เพื่อบันทึกแบบ Word'}</div></div>
+ <div class="field"><label>สำรองทั้งคลังลงไฟล์อัตโนมัติ (.json รวมทุกเรื่อง)</label>${fsRow}</div>
   <div class="field"><label for="remindSel">เตือนให้สำรองข้อมูลเมื่อไม่ได้สำรองเกิน</label><select id="remindSel" class="in" style="max-width:220px">${[[3,'3 วัน'],[7,'7 วัน'],[14,'14 วัน'],[30,'30 วัน'],[0,'ไม่ต้องเตือน']].map(([v,l])=>`<option value="${v}" ${+P.remindDays===v?'selected':''}>${l}</option>`).join('')}</select></div>
   <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" data-s="backup">${ic('down',14)} สำรองทั้งคลัง</button><button class="btn sm" data-s="import">${ic('up',14)} นำเข้า</button><button class="btn sm" data-s="trash">${ic('trash',14)} ถังขยะ</button></div>`}
  if(t==='about')body=`<div style="display:flex;gap:16px;align-items:center"><img src="icons/icon-192.png" width="64" height="64" alt="" style="border-radius:14px"><div><div class="brand-name" style="font-size:32px;color:var(--accent-2)">Inkfold</div><div class="muted">เวอร์ชัน ${APP_VERSION} · โต๊ะเขียนนิยายของคุณ</div></div></div>
@@ -1591,7 +1624,7 @@ async function importFile(f){
  const list=d&&(d.novels||(d.novel?[d.novel]:d.chapters?[d]:null));if(!Array.isArray(list))return toast('ไฟล์นี้ไม่ใช่ไฟล์สำรองของ Inkfold หรือโต๊ะนักเขียน');
  let c=0,bad=0;
  for(const nv of list){if(!nv||typeof nv!=='object'||!Array.isArray(nv.chapters)){bad++;continue}
-  try{checkIds(nv)}catch(e){bad++;continue}normalize(nv);
+  try{checkIds(nv)}catch(e){bad++;continue}normalize(nv);nv.fileName='';
   if(db.novels.some(x=>x.id===nv.id)){const v=await askChoice('มีนิยายเรื่องนี้อยู่แล้ว',`“<b>${esc(nv.title)}</b>” มีอยู่ในคลังแล้ว จะทำอย่างไรกับไฟล์ที่นำเข้า?`,[{label:'เขียนทับของเดิม',v:'over'},{label:'เพิ่มเป็นสำเนา',v:'copy',primary:true},{label:'ข้าม',v:'skip'}]);
    if(v==='skip')continue;if(v==='copy'){nv.id=uid();nv.title+=' (สำเนา)'}else{const old=db.novels.find(x=>x.id===nv.id);trashPut('novel',old,{});db.novels=db.novels.filter(x=>x!==old)}}
   db.novels.push(nv);c++}
@@ -1603,6 +1636,8 @@ let installEvt=null;
 const A={
  theme:el=>{db.settings.theme=el.dataset.v;document.documentElement.dataset.theme=el.dataset.v;save();$$('.themes button').forEach(b=>b.classList.toggle('on',b.dataset.v===el.dataset.v))},
  libView:el=>{P.libView=el.dataset.v;savePrefs();render()},
+ fileMenu:el=>fileMenu(el),
+ fileGrant:()=>{const n=N();if(n)saveNovelFile(n,{interactive:true}).then(ok=>{if(ok)toast('บันทึกลงไฟล์แล้ว')})},
  toggleTW:el=>{P.typewriter=!P.typewriter;savePrefs();const sc=$('.ed-scroll');if(sc)sc.classList.toggle('tw',P.typewriter);el.classList.toggle('on',P.typewriter);if(P.typewriter){edFocus();typewriter()}toast(P.typewriter?'เปิด Typewriter Scrolling — บรรทัดที่พิมพ์จะอยู่กลางจอ':'ปิด Typewriter Scrolling')},
  webCopy:()=>webCopyModal(),
  openReview:()=>{commitEditor();S.refOpen=true;S.refTab='review';S.keepFocus=true;rerenderMain()},
@@ -1723,6 +1758,7 @@ document.addEventListener('input',e=>{
  else if(el.dataset.rr==='list'){if(S.sec==='chapters'){$('#chList').innerHTML=chapterListHtml()}else if(f==='tags'){clearTimeout(window._tagT);window._tagT=setTimeout(()=>{const t=$('#f_tags'),st=t&&t.selectionStart,had=document.activeElement===t;rerenderMain();const t2=$('#f_tags');if(t2&&had){t2.focus();t2.setSelectionRange(st,st)}},800)}else{$('#entItems').innerHTML=entListItems(S.sec)}}
 });
 document.addEventListener('change',e=>{const el=e.target;
+ if(el.dataset.actChange==='fileAuto'){const n=N();if(n){n.fileAuto=el.checked;quietSave();const st=FST[n.id];if(el.checked&&st&&st.dirty)saveNovelFile(n,{interactive:true});updateStatus();toast(el.checked?'เปิดบันทึกอัตโนมัติ — งานจะบันทึกลงไฟล์เองระหว่างเขียน':'ปิดบันทึกอัตโนมัติ — กด Ctrl+S เพื่อบันทึกลงไฟล์')}return}
  if(el.matches('[data-fontsel]')){db.settings.edFont=el.value;save();applyPref('edFont');const ed=$('#editor');if(ed)ed.focus();return}
  if(el.matches('[data-block]')){edFocus();document.execCommand('formatBlock',false,'<'+el.value+'>');commitEditor();tbState();return}
  if(el.dataset.actChange==='edFont'){db.settings.edFont=el.value;save();$('#editor').classList.toggle('sans',el.value==='sans')}
@@ -1739,18 +1775,98 @@ document.addEventListener('keydown',e=>{
  const k=(e.key||'').toLowerCase(),mod=e.ctrlKey||e.metaKey,inField=/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)||e.target.isContentEditable;
  if(e.key==='Enter'&&e.target.id==='ideaIn'){e.preventDefault();A.addIdea();return}
  if((e.key==='Enter'||e.key===' ')&&!inField&&e.target.matches&&e.target.matches('[role=button]:not(button),[data-tr],[data-h]')){e.preventDefault();e.target.click();return}
- if(mod&&k==='s'){e.preventDefault();commitEditor();save();toast('บันทึกแล้ว')}
+ if(mod&&k==='s'){e.preventDefault();commitEditor();save();if(e.shiftKey)fileSaveAs();else fileSave();return}
+ if(mod&&k==='o'){e.preventDefault();fileOpen();return}
  if(mod&&e.key==='\\'&&S.nid){e.preventDefault();A.toggleNav();return}
  if(mod&&(k==='f'||k==='h')&&S.nid&&!$('#modalRoot').innerHTML){e.preventDefault();A.openFind()}
  if(mod&&k==='z'&&!e.shiftKey&&S.sec==='board'&&(S.bmode==='free'||S.bmode==='rel')&&!inField&&!$('#modalRoot').innerHTML){e.preventDefault();undoBoard()}
  if(e.key==='Escape'){if($('.pop')){closePop();return}if(S.pinMode&&!$('#modalRoot').innerHTML){S.pinMode=false;rerenderMain();return}const cp=$('.cov-ov');if(cp){cp.remove();return}if($('#modalRoot').innerHTML){closeModal();return}if(S.linkFrom||S.relFrom){S.linkFrom=S.relFrom=null;rerenderMain();return}if(S.focus){A.focus()}}
 });
 $('#fileIn').addEventListener('change',e=>{const f=e.target.files[0];e.target.value='';if(f)importFile(f)});
-window.addEventListener('beforeunload',()=>{if(db)commitEditor()});
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&db){commitEditor();clearTimeout(saveT);save();if(FS.ok){clearTimeout(FS.t);FS.t=null;writeBackupFile()}}});
+window.addEventListener('beforeunload',e=>{if(!db||S.readonly)return;commitEditor();if(Object.entries(FST).some(([id,q])=>q.dirty&&FH.has(id))){e.preventDefault();e.returnValue=''}});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&db&&!S.readonly){for(const n of db.novels){const q=FST[n.id];if(q&&q.dirty&&q.perm&&n.fileAuto!==false){clearTimeout(q.t);saveNovelFile(n)}}commitEditor();clearTimeout(saveT);save();if(FS.ok){clearTimeout(FS.t);FS.t=null;writeBackupFile()}}});
 window.addEventListener('resize',()=>{if(S.sec==='board')drawLinks()});
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;$$('.install-btn').forEach(b=>b.classList.remove('hidden'))});
 window.addEventListener('appinstalled',()=>{installEvt=null;toast('ติดตั้ง Inkfold เป็นแอปแล้ว')});
+
+/* ---------- 1.4: novel files (.inkfold) — open / save / save as / autosave ---------- */
+const HAS_FS=!!(window.showOpenFilePicker&&window.showSaveFilePicker);
+const FH=new Map(),FST={};
+async function loadHandles(){for(const n of db.novels){if(!n.fileName)continue;try{const h=await IDB.get('fh:'+n.id);if(h&&h.queryPermission){FH.set(n.id,h);FST[n.id]={perm:(await h.queryPermission({mode:'readwrite'}))==='granted',dirty:false,savedAt:n.fileSavedAt}}else n.fileName=''}catch(e){n.fileName=''}}}
+async function deflateRaw(u8){if(!window.CompressionStream)return null;try{return new Uint8Array(await new Response(new Blob([u8]).stream().pipeThrough(new CompressionStream('deflate-raw'))).arrayBuffer())}catch(e){return null}}
+async function makeZipAsync(files,type){const enc=new TextEncoder(),parts=[],cen=[];let off=0,cs=0;
+ for(const f of files){const nm=enc.encode(f.name),raw=typeof f.data==='string'?enc.encode(f.data):f.data,crc=crc32(raw);let d=raw,m=0;if(!f.store){const z=await deflateRaw(raw);if(z&&z.length<raw.length){d=z;m=8}}
+  const h=new DataView(new ArrayBuffer(30));h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint16(8,m,true);h.setUint16(10,0,true);h.setUint16(12,0x21,true);h.setUint32(14,crc,true);h.setUint32(18,d.length,true);h.setUint32(22,raw.length,true);h.setUint16(26,nm.length,true);h.setUint16(28,0,true);parts.push(h.buffer,nm,d);
+  const c=new DataView(new ArrayBuffer(46));c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0x0800,true);c.setUint16(10,m,true);c.setUint16(12,0,true);c.setUint16(14,0x21,true);c.setUint32(16,crc,true);c.setUint32(20,d.length,true);c.setUint32(24,raw.length,true);c.setUint16(28,nm.length,true);c.setUint32(42,off,true);cen.push(c.buffer,nm);cs+=46+nm.length;off+=30+nm.length+d.length}
+ const e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cs,true);e.setUint32(16,off,true);return new Blob([...parts,...cen,e.buffer],{type})}
+function stripLocal(n){const c={...n};delete c.fileName;delete c.fileAuto;delete c.fileSavedAt;return c}
+async function novelFileBlob(n){return makeZipAsync([{name:'mimetype',data:'application/x-inkfold',store:true},{name:'novel.json',data:JSON.stringify({app:'inkfold',type:'novel-file',format:1,version:APP_VERSION,savedAt:new Date().toISOString(),novel:stripLocal(n)})}],'application/x-inkfold')}
+async function readNovelFile(f){const buf=await f.arrayBuffer(),u=new Uint8Array(buf);const txt=u[0]===0x50&&u[1]===0x4b?await unzipEntry(buf,'novel.json'):new TextDecoder().decode(u);
+ const d=JSON.parse(txt),nv=d&&(d.novel||(Array.isArray(d.chapters)?d:null));if(!nv||!Array.isArray(nv.chapters))throw new Error('bad file');checkIds(nv);normalize(nv);nv.fileName='';return {novel:nv,savedAt:Date.parse(d.savedAt)||0}}
+async function writeToHandle(h,blob){const w=await h.createWritable();await w.write(blob);await w.close()}
+async function saveNovelFile(n,{interactive=false}={}){if(S.readonly)return false;const h=FH.get(n.id);if(!h)return false;const st=FST[n.id]||(FST[n.id]={});clearTimeout(st.t);
+ try{let pm=await h.queryPermission({mode:'readwrite'});if(pm!=='granted'&&interactive)pm=await h.requestPermission({mode:'readwrite'});st.perm=pm==='granted';if(!st.perm){updateStatus();return false}
+  st.saving=true;updateStatus();await writeToHandle(h,await novelFileBlob(n));st.saving=false;st.dirty=false;st.err='';n.fileSavedAt=st.savedAt=Date.now();hideSaveError('file');quietSave();updateStatus();return true}
+ catch(e){st.saving=false;st.err=e&&e.name==='NotFoundError'?'ไม่พบไฟล์แล้ว (อาจถูกย้าย เปลี่ยนชื่อ หรือลบ) — ใช้ “บันทึกเป็น…” เพื่อเลือกที่เก็บใหม่':'เขียนไฟล์ไม่สำเร็จ (ไฟล์อาจเปิดอยู่ในโปรแกรมอื่น หรือไม่มีสิทธิ์เขียน)';
+  showSaveError(`บันทึก “${n.fileName}” ไม่สำเร็จ — ${st.err}`,()=>saveNovelFile(n,{interactive:true}),'file');updateStatus();return false}}
+function fileDirty(n){const st=FST[n.id]||(FST[n.id]={});st.dirty=true;updateStatus();if(n.fileAuto!==false&&st.perm&&!S.readonly){clearTimeout(st.t);st.t=setTimeout(()=>saveNovelFile(n),2500)}}
+async function fileSave(){const n=N();if(!n)return toast('บันทึกในเครื่องแล้ว');
+ if(FH.has(n.id)){if(await saveNovelFile(n,{interactive:true}))toast(`บันทึกลง “${n.fileName}” แล้ว`);return}
+ if(HAS_FS)return fileSaveAs();toast('บันทึกในเครื่องแล้ว — กด Ctrl+Shift+S เพื่อดาวน์โหลดเป็นไฟล์ .inkfold')}
+function exportBlob(k){let got=null;CAPTURE=b=>{got=b};try{doExport(k)}finally{CAPTURE=null}return got}
+async function fileSaveAs(){const n=N();if(!n)return toast('เปิดนิยายเรื่องที่ต้องการก่อน แล้วค่อยบันทึกเป็นไฟล์');commitEditor();
+ if(!HAS_FS){download(await novelFileBlob(n),fname(n)+'.inkfold');return toast('ดาวน์โหลดไฟล์ .inkfold แล้ว — เบราว์เซอร์นี้เซฟทับไฟล์เดิมไม่ได้ ใช้ Chrome หรือ Edge เพื่อบันทึกแบบ Word')}
+ let h;try{h=await showSaveFilePicker({suggestedName:fname(n)+'.inkfold',types:[{description:'ไฟล์นิยาย Inkfold — ครบทุกอย่าง แก้ไขต่อได้',accept:{'application/x-inkfold':['.inkfold']}},{description:'Word (.docx) — เฉพาะเนื้อเรื่อง',accept:{'application/vnd.openxmlformats-officedocument.wordprocessingml.document':['.docx']}},{description:'E-Book (.epub)',accept:{'application/epub+zip':['.epub']}},{description:'Markdown (.md)',accept:{'text/markdown':['.md']}},{description:'ข้อความล้วน (.txt)',accept:{'text/plain':['.txt']}}]})}catch(e){return}
+ const ext=((h.name.match(/\.([a-z0-9]+)$/i)||[])[1]||'inkfold').toLowerCase();
+ if(ext==='inkfold'){FH.set(n.id,h);try{await IDB.set('fh:'+n.id,h)}catch(e){}n.fileName=h.name;FST[n.id]={perm:true,dirty:true};addRecent(h,n);
+  if(await saveNovelFile(n)){save();refreshFileBar();toast(`บันทึกเป็น “${h.name}” แล้ว — ${n.fileAuto!==false?'ต่อจากนี้งานจะบันทึกลงไฟล์นี้อัตโนมัติ':'กด Ctrl+S เพื่อบันทึก'}`)}}
+ else{const blob=exportBlob({docx:'docx',epub:'epub',md:'md',markdown:'md',txt:'txt'}[ext]||'txt');if(!blob)return toast('สร้างไฟล์ไม่สำเร็จ');try{await writeToHandle(h,blob);toast(`บันทึกสำเนาเป็น “${h.name}” แล้ว (งานที่เขียนต่อยังอยู่ในเรื่องเดิม)`)}catch(e){toast('เขียนไฟล์ไม่สำเร็จ')}}}
+async function fileOpen(){if(S.readonly)return;
+ if(HAS_FS){let hs;try{hs=await showOpenFilePicker({types:[{description:'ไฟล์นิยาย Inkfold',accept:{'application/x-inkfold':['.inkfold']}}]})}catch(e){return}return openFromHandle(hs[0])}
+ const f=await pickFile('.inkfold,.json');if(!f)return;let d=null;try{d=await readNovelFile(f)}catch(e){}openNovelData(d,null,f.name)}
+async function openFromHandle(h){let f;try{if((await h.queryPermission({mode:'read'}))!=='granted'&&(await h.requestPermission({mode:'readwrite'}))!=='granted')return toast('ไม่ได้รับอนุญาตให้เปิดไฟล์นี้');f=await h.getFile()}catch(e){return toast('เปิดไฟล์นี้ไม่ได้ (อาจถูกย้ายหรือลบไปแล้ว)')}
+ let d=null;try{d=await readNovelFile(f)}catch(e){}return openNovelData(d,h,f.name)}
+async function openNovelData(d,h,name){if(!d)return toast('ไฟล์นี้ไม่ใช่ไฟล์นิยาย Inkfold หรือไฟล์เสียหาย');commitEditor();const nv=d.novel,ex=db.novels.find(x=>x.id===nv.id);let trashOld=false;
+ if(ex){let same=false;const oh=FH.get(ex.id);if(h&&oh){try{same=await oh.isSameEntry(h)}catch(e){}}
+  if(same){if(ex.updated>(d.savedAt||0)+3000){const v=await askChoice('พบงานที่ยังไม่ได้บันทึกลงไฟล์',`ฉบับในเครื่องของ “<b>${esc(ex.title)}</b>” ใหม่กว่าไฟล์ (แก้ไขล่าสุด ${fmtDT(ex.updated)}, ไฟล์บันทึกเมื่อ ${fmtDT(d.savedAt)}) — อาจเกิดจากปิดโปรแกรมก่อนบันทึก จะใช้ฉบับไหน?`,[{label:'ใช้ฉบับในเครื่อง (กู้คืน)',v:'local',primary:true},{label:'ใช้ฉบับจากไฟล์',v:'file'},{label:'ยกเลิก',v:'cancel'}]);
+    if(v==='cancel')return;if(v==='local'){S.nid=ex.id;S.sec='overview';S.sel={};render();fileDirty(ex);toast('ใช้ฉบับในเครื่องแล้ว — กด Ctrl+S เพื่อบันทึกลงไฟล์');return}}}
+  else{const v=await askChoice('มีนิยายเรื่องนี้ในคลังแล้ว',`“<b>${esc(nv.title)}</b>” มีอยู่ในคลังแล้ว จะเปิดไฟล์นี้อย่างไร?`,[{label:'ใช้ฉบับจากไฟล์แทน',v:'file',primary:true},{label:'เปิดเป็นสำเนาแยก',v:'copy'},{label:'ยกเลิก',v:'cancel'}]);
+   if(v==='cancel')return;if(v==='copy'){nv.id=uid();nv.title+=' (สำเนา)'}else trashOld=true}}
+ const old=db.novels.find(x=>x.id===nv.id);if(old){if(trashOld)trashPut('novel',old,{});db.novels=db.novels.filter(x=>x!==old)}
+ nv.fileName=h?h.name:'';nv.fileAuto=old?old.fileAuto!==false:true;nv.fileSavedAt=d.savedAt||Date.now();db.novels.push(nv);
+ if(h){FH.set(nv.id,h);try{await IDB.set('fh:'+nv.id,h)}catch(e){}let pm='prompt';try{pm=await h.queryPermission({mode:'readwrite'})}catch(e){}FST[nv.id]={perm:pm==='granted',dirty:false,savedAt:nv.fileSavedAt};addRecent(h,nv)}
+ else{FH.delete(nv.id);delete FST[nv.id]}
+ save();S.nid=nv.id;S.sec='overview';S.sel={};S.bid=null;render();toast(`เปิด “${name}” แล้ว${h?'':' (เปิดแบบไม่ผูกไฟล์ — ใช้ “บันทึกเป็น…” เพื่อบันทึกเป็นไฟล์)'}`)}
+async function addRecent(h,n){try{const l=(await IDB.get('recent'))||[],keep=[];for(const r of l){let same=false;try{same=await r.handle.isSameEntry(h)}catch(e){}if(!same)keep.push(r)}keep.unshift({name:h.name,handle:h,nid:n.id,at:Date.now()});await IDB.set('recent',keep.slice(0,8))}catch(e){}}
+async function fileUnlink(n){FH.delete(n.id);delete FST[n.id];await IDB.del('fh:'+n.id);n.fileName='';save();refreshFileBar();toast('เลิกผูกกับไฟล์แล้ว — งานยังอยู่ในคลังนิยายตามเดิม')}
+async function fileMenu(el){const n=S.nid?N():null;let rec=[];try{rec=((await IDB.get('recent'))||[]).slice(0,6)}catch(e){}
+ pop(el,`<div class="ph">ไฟล์</div><button class="pi" data-pick="new">${ic('plus',14)} นิยายเรื่องใหม่</button><button class="pi" data-pick="open">${ic('folder',14)} เปิด…<kbd>Ctrl+O</kbd></button>
+ ${n?`<button class="pi" data-pick="save">${ic('save',14)} บันทึก<kbd>Ctrl+S</kbd></button><button class="pi" data-pick="saveas">${ic('copy',14)} บันทึกเป็น…<kbd>Ctrl+Shift+S</kbd></button><button class="pi" data-pick="export">${ic('down',14)} ส่งออก (PDF, Word, EPUB…)</button>${n.fileName?`<button class="pi" data-pick="unlink">${ic('x',14)} เลิกผูกกับไฟล์</button>`:''}`:''}
+ ${rec.length?`<div class="ph">เปิดล่าสุด</div>${rec.map((r,i)=>`<button class="pi" data-pick="rec:${i}">${ic('note',14)} <span class="pi-n">${esc(r.name)}</span><small>${fmtDate(r.at)}</small></button>`).join('')}`:''}
+ ${HAS_FS?'':'<div class="ph" style="white-space:normal;max-width:270px;line-height:1.5">เบราว์เซอร์นี้เซฟทับไฟล์เดิมไม่ได้ “บันทึกเป็น…” จะดาวน์โหลดไฟล์ใหม่แทน — ใช้ Chrome หรือ Edge บนคอมพิวเตอร์เพื่อบันทึกแบบ Word</div>'}`,
+ v=>{if(v==='new')novelModal();if(v==='open')fileOpen();if(v==='save')fileSave();if(v==='saveas')fileSaveAs();if(v==='export'){commitEditor();S.sec='export';rerenderMain()}if(v==='unlink'&&n)fileUnlink(n);if(v.startsWith('rec:')){const r=rec[+v.slice(4)];if(r)openFromHandle(r.handle)}})}
+function fileBarHtml(n){return `<div class="filebar">${n.fileName?`<button class="fchip" data-act="fileMenu" title="ไฟล์ของเรื่องนี้">${ic('note',13)} <span class="fc-n">${esc(n.fileName)}</span></button><label class="asw" title="บันทึกอัตโนมัติลงไฟล์"><input type="checkbox" data-act-change="fileAuto" ${n.fileAuto!==false?'checked':''} aria-label="บันทึกอัตโนมัติลงไฟล์"><span class="asw-t"></span><span class="hide-sm">บันทึกอัตโนมัติ</span></label>`:''}<div class="saved" id="savedInd" role="status"><span class="dot"></span><span class="st"></span></div></div>`}
+function refreshFileBar(){const fb=$('.filebar'),n=N();if(fb&&n)fb.outerHTML=fileBarHtml(n);updateStatus()}
+function updateStatus(busy){const el=$('#savedInd');if(!el||!db)return;const n=S.nid?N():null,st=n&&FST[n.id];const t=x=>new Date(x).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});let txt,cls='';
+ if(n&&n.fileName&&FH.has(n.id)&&st){if(st.saving){txt='กำลังบันทึกลงไฟล์…';cls='busy'}else if(st.err){txt='• บันทึกไฟล์ไม่สำเร็จ';cls='err'}else if(!st.perm){txt='• กดที่นี่เพื่ออนุญาตบันทึกลงไฟล์';cls='warn act'}else if(st.dirty){txt=n.fileAuto!==false?'กำลังจะบันทึก…':'• ยังไม่ได้บันทึก (Ctrl+S)';cls=n.fileAuto!==false?'busy':'warn'}else txt='บันทึกลงไฟล์แล้ว '+t(st.savedAt||n.fileSavedAt||Date.now())}
+ else{txt=busy?'กำลังบันทึก…':'บันทึกในเครื่องแล้ว'+(LS.at?' '+t(LS.at):'');cls=busy?'busy':''}
+ el.className='saved '+cls;el.querySelector('.st').textContent=txt;if(cls.includes('act')){el.dataset.act='fileGrant';el.tabIndex=0;el.setAttribute('role','button')}else{delete el.dataset.act;el.removeAttribute('tabindex');el.setAttribute('role','status')}
+ const dirty=n&&st&&st.dirty&&FH.has(n.id);document.title=(dirty?'• ':'')+(n?(n.fileName||n.title)+' — ':'')+'Inkfold'}
+function showSaveError(msg,retry,kind){let b=$('#saveErr');if(!b){b=document.createElement('div');b.id='saveErr';b.setAttribute('role','alert');document.body.appendChild(b)}b.dataset.kind=kind||'';
+ b.innerHTML=`${ic('x',16)}<span style="flex:1">${esc(msg)}</span>${retry?'<button type="button" data-r>ลองอีกครั้ง</button>':''}<button type="button" data-c>ปิด</button>`;
+ if(retry)b.querySelector('[data-r]').onclick=()=>retry();b.querySelector('[data-c]').onclick=()=>b.remove()}
+function hideSaveError(kind){const b=$('#saveErr');if(b&&(!kind||b.dataset.kind===kind))b.remove()}
+
+/* ---------- 1.4: only one window edits at a time ---------- */
+const TAB={bc:null,release:null,primary:true};
+function tabGuard(){return new Promise(res=>{if(!navigator.locks)return res(true);navigator.locks.request('inkfold-main',{ifAvailable:true},lock=>{if(!lock){res(false);return}res(true);return new Promise(r=>{TAB.release=r})}).catch(()=>res(true))})}
+async function handOff(){commitEditor();clearTimeout(saveT);save();for(const n of db.novels){const q=FST[n.id];if(q&&q.dirty&&q.perm)await saveNovelFile(n)}await writing;S.readonly=true;TAB.primary=false;if(TAB.release)TAB.release();showElsewhere('ย้ายไปใช้ในอีกหน้าต่างแล้ว')}
+function showElsewhere(msg){let o=$('.elsewhere');if(!o){o=document.createElement('div');o.className='elsewhere';document.body.appendChild(o)}
+ o.innerHTML=`<div class="card modal" role="dialog" aria-modal="true"><div class="modal-h"><h3>${esc(msg)}</h3></div><p style="margin:0;line-height:1.7" class="muted">เพื่อไม่ให้งานเขียนทับกัน Inkfold แก้ไขได้ทีละหน้าต่าง หน้าต่างนี้จึงหยุดบันทึกไว้ก่อน</p><div class="modal-f"><span class="grow"></span><button class="btn primary" id="takeOver">ใช้หน้าต่างนี้แทน</button></div></div>`;
+ $('#takeOver',o).onclick=takeOver}
+function takeOver(){const b=$('#takeOver');if(b){b.disabled=true;b.textContent='กำลังย้ายมาที่หน้าต่างนี้…'}try{TAB.bc&&TAB.bc.postMessage('takeover')}catch(e){}
+ if(!navigator.locks){location.reload();return}
+ navigator.locks.request('inkfold-main',()=>{try{sessionStorage.setItem('inkfold.skipIntro','1')}catch(e){}location.reload();return new Promise(()=>{})})}
 
 /* ---------- 1.3: scenes (split by scene markers inside a chapter) ---------- */
 const SCN=new Map();
@@ -2076,12 +2192,17 @@ function playBook(o){
 
 /* ---------- start ---------- */
 (async()=>{
- if(P.anim&&P.launch)playLaunch();
+ TAB.primary=await tabGuard();if(!TAB.primary)S.readonly=true;
+ try{TAB.bc=new BroadcastChannel('inkfold');TAB.bc.onmessage=e=>{if(e.data==='takeover'&&TAB.primary)handOff()}}catch(e){}
+ let skipIntro=false;try{skipIntro=!!sessionStorage.getItem('inkfold.skipIntro');sessionStorage.removeItem('inkfold.skipIntro')}catch(e){}
+ if(P.anim&&P.launch&&TAB.primary&&!skipIntro)playLaunch();
  db=await loadDb();
  document.documentElement.dataset.theme=db.settings.theme||'paper';
- await initFileBackup();await loadFonts();
+ await initFileBackup();await loadFonts();await loadHandles();
  try{if(navigator.storage&&navigator.storage.persist){ST.persisted=await navigator.storage.persisted()||await navigator.storage.persist()}}catch(e){}
  save();render();
+ if(!TAB.primary)showElsewhere('Inkfold เปิดอยู่ในอีกหน้าต่างหนึ่งแล้ว');
+ if('launchQueue' in window)launchQueue.setConsumer(q=>{if(q.files&&q.files.length&&TAB.primary)openFromHandle(q.files[0])});
  db.novels.filter(n=>n.cover&&!okColor(n.spine)).forEach(n=>coverColor(n.cover).then(c=>{if(c){n.spine=c;save();if(!S.nid)render()}}));
  if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
 })();
