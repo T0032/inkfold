@@ -1,6 +1,6 @@
 {
-  "name": "Inkfold — โต๊ะเขียนนิยาย",
-  "short_name": "Inkfold",
+  "name": "Novelist Workshop — โต๊ะเขียนนิยาย",
+  "short_name": "NW",
   "description": "เครื่องมือช่วยเขียนนิยาย วางโครงเรื่อง เก็บข้อมูลตัวละคร และส่งออกต้นฉบับ ทำงานออฟไลน์",
   "lang": "th",
   "start_url": "./",

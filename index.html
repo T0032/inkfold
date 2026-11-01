@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Inkfold — โต๊ะเขียนนิยาย</title>
-<meta name="description" content="Inkfold — เครื่องมือช่วยเขียนนิยาย วางโครงเรื่อง เก็บข้อมูลตัวละคร และส่งออกต้นฉบับ ทำงานออฟไลน์ ข้อมูลอยู่ในเครื่องของคุณ">
+<title>Novelist Workshop — โต๊ะเขียนนิยาย</title>
+<meta name="description" content="Novelist Workshop (NW) — เครื่องมือช่วยเขียนนิยาย วางโครงเรื่อง เก็บข้อมูลตัวละคร และส่งออกต้นฉบับ ทำงานออฟไลน์ ข้อมูลอยู่ในเครื่องของคุณ">
 <meta name="theme-color" content="#5E7A6C">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
@@ -62,7 +62,10 @@ textarea.in{resize:vertical;min-height:90px;line-height:1.65}
 /* top */
 .top{height:60px;display:flex;align-items:center;gap:12px;padding:0 20px;border-bottom:1px solid var(--line2);background:var(--surface)}
 .brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-weight:700;font-size:19px;color:var(--accent-2)}
-.brand .logo{width:32px;height:32px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center}
+.brand .logo{width:32px;height:32px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;color:var(--accent-2);flex:none}
+.nw-mark{width:24px;height:24px;display:block}
+.brand .brand-name{font-size:21px;white-space:nowrap}
+@media (max-width:900px){.brand .brand-name{display:none}}
 .top .spacer{flex:1}
 .themes{display:flex;gap:6px;padding:4px;border-radius:999px;background:var(--surface2);border:1px solid var(--line2)}
 .themes button{width:22px;height:22px;border-radius:50%;border:2px solid transparent}
@@ -379,6 +382,7 @@ body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 #intro .cf img{width:100%;height:100%;object-fit:cover;display:block}
 #intro .cf-frame{position:absolute;inset:7% 8% 7% 13%;border:1.5px solid rgba(240,222,176,.8);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:10px;box-shadow:inset 0 0 0 5px transparent,inset 0 0 0 6.5px rgba(240,222,176,.4)}
 #intro .cf-title{font-family:var(--display);font-weight:700;font-size:clamp(24px,5.2vw,46px);line-height:1.1;letter-spacing:.03em;text-shadow:0 1px 0 rgba(0,0,0,.28);overflow-wrap:anywhere}
+#intro .cf-title.long{font-size:clamp(20px,3.6vw,34px);overflow-wrap:normal}
 #intro .cf-sub{font-family:var(--serif);font-size:clamp(11px,1.8vw,14px);opacity:.92}
 #intro .cb{transform:rotateY(180deg);border-radius:10px 2px 2px 10px;background-color:color-mix(in srgb,var(--cover) 50%,#F3EBDD);background-image:radial-gradient(rgba(255,255,255,.3) 1px,transparent 1.6px);background-size:12px 12px}
 #intro .sp{position:absolute;inset:12%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;color:#5A4F42;animation:iFade .6s ease var(--tx-s) both}
@@ -582,14 +586,20 @@ body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 .modal>*{flex-shrink:0}
 .set{display:grid;grid-template-columns:190px 1fr;gap:20px;min-height:430px}
 .set-nav{display:flex;flex-direction:column;gap:4px;border-right:1px solid var(--line2);padding-right:14px}
-.set-nav button{text-align:left;padding:9px 12px;border-radius:10px;color:var(--muted);display:flex;gap:9px;align-items:center;font-size:14px}
+.set-nav button{text-align:left;padding:9px 12px;border-radius:10px;color:var(--muted);display:flex;gap:9px;align-items:center;font-size:14px;transition:background .25s,color .25s}
+.modal-bg.still,.modal.still{animation:none}
+.modal.setm{height:min(660px,90vh);overflow:hidden}
+.modal.setm .set{flex:1 1 auto;min-height:0}
+.modal.setm .set-body{overflow-y:auto;overscroll-behavior:contain;padding:2px 8px 4px 2px;scrollbar-gutter:stable}
+.set-body.enter{animation:setIn .32s cubic-bezier(.2,.75,.25,1)}
+@keyframes setIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .set-nav button:hover{background:var(--surface2)}
 .set-nav button.on{background:var(--accent-soft);color:var(--accent-2);font-weight:600}
 .set-body{display:flex;flex-direction:column;gap:16px;min-width:0}
 .rng{display:flex;align-items:center;gap:12px}
 .rng input{flex:1;accent-color:var(--accent)}
 .rng output{min-width:56px;text-align:right;font-size:13px;color:var(--muted)}
-@media (max-width:760px){.set{grid-template-columns:1fr}.set-nav{flex-direction:row;flex-wrap:wrap;border:0;padding:0}}
+@media (max-width:760px){.modal.setm{height:auto;overflow:auto}.modal.setm .set-body{overflow:visible}.set{grid-template-columns:1fr}.set-nav{flex-direction:row;flex-wrap:wrap;border:0;padding:0}}
 </style>
 </head>
 <body>
@@ -601,7 +611,7 @@ body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 <input type="file" id="imgIn" accept="image/*" class="hidden">
 <script>
 'use strict';
-const APP_NAME='Inkfold';const APP_VERSION='1.4.0';
+const APP_NAME='Novelist Workshop';const APP_VERSION='1.5.0';
 /* ---------- helpers ---------- */
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -803,7 +813,7 @@ async function quietSave(){if(S.readonly)return;const json=JSON.stringify(db);if
 async function initFileBackup(){try{const h=await IDB.get('fileHandle');if(!h||!h.queryPermission)return;FS.handle=h;FS.name=h.name;FS.ok=(await h.queryPermission({mode:'readwrite'}))==='granted'}catch(e){}}
 async function linkBackupFile(){
  if(!window.showSaveFilePicker){toast('เบราว์เซอร์นี้ยังไม่รองรับ — ใช้ Chrome หรือ Edge บนคอมพิวเตอร์');return}
- try{const h=await showSaveFilePicker({suggestedName:'Inkfold-autosave.json',types:[{description:'ไฟล์สำรอง JSON',accept:{'application/json':['.json']}}]});
+ try{const h=await showSaveFilePicker({suggestedName:'NW-autosave.json',types:[{description:'ไฟล์สำรอง JSON',accept:{'application/json':['.json']}}]});
   FS.handle=h;FS.name=h.name;FS.ok=true;try{await IDB.set('fileHandle',h)}catch(e){}await writeBackupFile();toast('เชื่อมไฟล์แล้ว — งานจะถูกบันทึกลงไฟล์นี้อัตโนมัติ');reopenSettings()}catch(e){}
 }
 async function regrantBackup(){if(!FS.handle)return;try{FS.ok=(await FS.handle.requestPermission({mode:'readwrite'}))==='granted';if(FS.ok){await writeBackupFile();toast('กลับมาบันทึกลงไฟล์อัตโนมัติแล้ว')}}catch(e){}reopenSettings()}
@@ -918,7 +928,7 @@ function renderLibrary(){
   <div class="nbody">${n.genre?`<div><span class="chip">${esc(n.genre)}</span></div>`:''}<h3>${esc(n.title)}</h3><div class="syn">${esc(n.synopsis)||'<i>ยังไม่มีเรื่องย่อ</i>'}</div>
   <div class="meta"><span>${n.chapters.length} บท</span><span>${num(totalWords(n))} คำ</span><span style="margin-left:auto">แก้ไข ${fmtDate(n.updated)}</span></div></div></div>`).join('')}
   <button class="newcard" data-act="newNovel"><div style="text-align:center">${ic('plus',28)}<div style="margin-top:6px">เริ่มเรื่องใหม่</div></div></button></div>`;
- return `<header class="top"><div class="brand"><div class="logo">${ic('book')}</div><span class="brand-name">Inkfold</span></div><button class="btn ghost sm" data-act="fileMenu" title="ไฟล์: เปิด / เปิดล่าสุด">${ic('note',15)} ไฟล์</button><div class="spacer"></div>
+ return `<header class="top"><div class="brand" title="Novelist Workshop"><div class="logo"><svg class="nw-mark" viewBox="60 70 420 330" aria-hidden="true"><path d="M92 372V176l90 196V176l50 196 44-110 44 110 44-158" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(364 214) rotate(38)"><path d="M0 0-24-70Q-24-118 0-150 24-118 24-70Z" fill="#C99A48"/><circle cy="-84" r="10" fill="var(--accent-soft)"/></g></svg></div><span class="brand-name">Novelist Workshop</span></div><button class="btn ghost sm" data-act="fileMenu" title="ไฟล์: เปิด / เปิดล่าสุด">${ic('note',15)} ไฟล์</button><div class="spacer"></div>
  <button class="btn primary sm install-btn ${installEvt?'':'hidden'}" data-act="install">${ic('install',15)} ติดตั้งเป็นแอป</button>
  <button class="btn ghost sm hide-sm" data-act="importJson">${ic('up',16)} นำเข้า</button>
  <button class="btn ghost sm hide-sm" data-act="backupAll">${ic('down',16)} สำรองทั้งคลัง</button>
@@ -927,7 +937,7 @@ function renderLibrary(){
  <div class="seg" style="flex:none" role="group" aria-label="รูปแบบการแสดงคลัง"><button class="${view==='shelf'?'on':''}" data-act="libView" data-v="shelf">${ic('book',15)} ชั้นหนังสือ</button><button class="${view==='cards'?'on':''}" data-act="libView" data-v="cards">${ic('grid',15)} การ์ด</button></div>
  <button class="btn primary" data-act="newNovel">${ic('plus',16)} นิยายเรื่องใหม่</button></div>
  ${view==='shelf'?shelfHtml(ns):cards}
- <div class="foot">Inkfold เวอร์ชัน ${APP_VERSION} · ทำงานออฟไลน์ได้ · ไม่มีการส่งเนื้อหาของคุณออกไปที่ใด</div></div>`;
+ <div class="foot">Novelist Workshop เวอร์ชัน ${APP_VERSION} · ทำงานออฟไลน์ได้ · ไม่มีการส่งเนื้อหาของคุณออกไปที่ใด</div></div>`;
 }
 function spineOf(n){return okColor(n.spine)?n.spine:n.color}
 function inkFor(hex){const c=String(hex).replace('#','');const f=c.length===3?[...c].map(x=>x+x).join(''):c.slice(0,6);const [r,g,b]=[0,2,4].map(i=>parseInt(f.slice(i,i+2),16)/255);const L=.2126*r+.7152*g+.0722*b;return L>.6?'#3A3128':'#FBF3DF'}
@@ -1451,13 +1461,15 @@ function pickImage(max){return new Promise(res=>{const i=$('#imgIn');i.value='';
 
 /* ---------- modals ---------- */
 let modalOnClose=null;
-function modal(html,onSave,mount,opts={}){const root=$('#modalRoot');const prevFocus=document.activeElement;
- root.innerHTML=`<div class="modal-bg"><div class="card modal ${opts.wide?'wide':''}" role="dialog" aria-modal="true">${html}</div></div>`;
+function modal(html,onSave,mount,opts={}){const root=$('#modalRoot');const old=root.firstChild,reuse=!!(opts.key&&old&&old.dataset&&old.dataset.key===opts.key);const prevFocus=document.activeElement;
+ if(reuse&&opts.swap){const nb=document.createElement('div');nb.innerHTML=`<div class="modal-bg still" data-key="${opts.key}"><div class="card modal ${opts.wide?'wide':''} ${opts.cls||''} still" role="dialog" aria-modal="true">${html}</div></div>`;const bgN=nb.firstChild;root.replaceChild(bgN,old);opts.swap(bgN,old);wireModal(bgN,onSave,mount,true);return}
+ root.innerHTML=`<div class="modal-bg" ${opts.key?`data-key="${opts.key}"`:''}><div class="card modal ${opts.wide?'wide':''} ${opts.cls||''}" role="dialog" aria-modal="true">${html}</div></div>`;
  modalOnClose=()=>{if(opts.onClose)opts.onClose();if(prevFocus&&prevFocus.focus&&document.contains(prevFocus))prevFocus.focus()};
- const bg=root.firstChild;bg.addEventListener('mousedown',e=>{if(e.target===bg)closeModal()});
+ wireModal(root.firstChild,onSave,mount,false)}
+function wireModal(bg,onSave,mount,reused){bg.addEventListener('mousedown',e=>{if(e.target===bg)closeModal()});
  bg.addEventListener('click',e=>{const a=e.target.closest('[data-m]');if(!a)return;if(a.dataset.m==='close')closeModal();if(a.dataset.m==='save'){if(onSave&&onSave(bg)!==false)closeModal()}});
  bg.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.tagName==='INPUT'&&e.target.type!=='checkbox'&&onSave){e.preventDefault();if(onSave(bg)!==false)closeModal()}});
- if(mount)mount(bg);labelButtons(bg);const f=$('input:not([type=checkbox]),textarea,button',bg);if(f)setTimeout(()=>f.focus(),30)}
+ if(mount)mount(bg);labelButtons(bg);if(reused){const on=$('.set-nav button.on',bg);if(on&&bg.contains(document.activeElement)===false)on.focus({preventScroll:true});return}const f=$('input:not([type=checkbox]),textarea,button',bg);if(f)setTimeout(()=>f.focus(),30)}
 function closeModal(){const r=$('#modalRoot');if(!r.innerHTML)return;r.innerHTML='';const f=modalOnClose;modalOnClose=null;if(f)f()}
 const mHead=t=>`<div class="modal-h"><h3>${t}</h3><button class="icon-btn" data-m="close" title="ปิด">${ic('x',18)}</button></div>`;
 function askChoice(title,msg,btns){return new Promise(res=>{let done=false;const fin=v=>{if(!done){done=true;res(v)}};
@@ -1580,7 +1592,7 @@ async function settingsModal(tab){
  <div class="field"><label>สำรองทั้งคลังลงไฟล์อัตโนมัติ (.json รวมทุกเรื่อง)</label>${fsRow}</div>
   <div class="field"><label for="remindSel">เตือนให้สำรองข้อมูลเมื่อไม่ได้สำรองเกิน</label><select id="remindSel" class="in" style="max-width:220px">${[[3,'3 วัน'],[7,'7 วัน'],[14,'14 วัน'],[30,'30 วัน'],[0,'ไม่ต้องเตือน']].map(([v,l])=>`<option value="${v}" ${+P.remindDays===v?'selected':''}>${l}</option>`).join('')}</select></div>
   <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" data-s="backup">${ic('down',14)} สำรองทั้งคลัง</button><button class="btn sm" data-s="import">${ic('up',14)} นำเข้า</button><button class="btn sm" data-s="trash">${ic('trash',14)} ถังขยะ</button></div>`}
- if(t==='about')body=`<div style="display:flex;gap:16px;align-items:center"><img src="icons/icon-192.png" width="64" height="64" alt="" style="border-radius:14px"><div><div class="brand-name" style="font-size:32px;color:var(--accent-2)">Inkfold</div><div class="muted">เวอร์ชัน ${APP_VERSION} · โต๊ะเขียนนิยายของคุณ</div></div></div>
+ if(t==='about')body=`<div style="display:flex;gap:16px;align-items:center"><img src="icons/icon-192.png" width="64" height="64" alt="" style="border-radius:14px"><div><div class="brand-name" style="font-size:30px;color:var(--accent-2)">Novelist Workshop</div><div class="muted" style="font-size:12.5px">NW · เดิมชื่อ Inkfold</div><div class="muted">เวอร์ชัน ${APP_VERSION} · โต๊ะเขียนนิยายของคุณ</div></div></div>
   <p style="margin:0;line-height:1.7">งานเขียนทั้งหมดเก็บอยู่ในเครื่องของคุณเท่านั้น ไม่มีการส่งเนื้อหาหรือข้อมูลการใช้งานไปที่ใด ใช้งานออฟไลน์ได้ และนำเข้าไฟล์สำรองจาก “โต๊ะนักเขียน” ได้</p>
   <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" data-s="replay">${ic('book',14)} ดูอนิเมชันเปิดหนังสือ</button><button class="btn sm danger" data-s="reset">คืนค่าการตั้งค่าเริ่มต้น</button></div>
   <div class="muted" style="font-size:12.5px">ฟอนต์ IBM Plex Sans Thai, Noto Serif Thai, Cormorant Garamond และ Sarabun ใช้สัญญาอนุญาต SIL Open Font License</div>`;
@@ -1603,7 +1615,10 @@ async function settingsModal(tab){
    if(a==='backup')A.backupAll();if(a==='import'){closeModal();A.importJson()}if(a==='trash'){closeModal();trashModal('')}
    if(a==='reset'){if(!confirm('คืนค่าการตั้งค่าทั้งหมดเป็นค่าเริ่มต้น? (งานเขียนไม่หาย)'))return;Object.assign(P,PREF_DEFAULT);savePrefs();db.settings.edSize=18;db.settings.edFont='serif';save();applyPref('anim');applyPref('iconStyle');settingsModal();toast('คืนค่าการตั้งค่าเริ่มต้นแล้ว')}
   });
- },{wide:true});
+ },{wide:true,key:'settings',cls:'setm',swap:(nb,ob)=>{const nbd=$('.set-body',nb),obd=$('.set-body',ob);if(!nbd||!obd)return;
+  if(ob.dataset.tab===t){nbd.scrollTop=obd.scrollTop}else nbd.classList.add('enter');
+  const a=document.activeElement;if(a&&ob.contains(a)&&a.dataset){const k=a.dataset.stab?`[data-stab="${a.dataset.stab}"]`:a.dataset.p?`[data-p="${a.dataset.p}"]`:a.dataset.pv?`[data-pv="${a.dataset.pv}"][data-v="${a.dataset.v}"]`:'';const m=k&&$(k,nb);if(m)m.focus({preventScroll:true})}}});
+ $('#modalRoot .modal-bg').dataset.tab=t;
 }
 function applyPref(k){
  if(k==='anim')document.documentElement.classList.toggle('no-anim',!P.anim);
@@ -1620,8 +1635,8 @@ function reopenSettings(){const h=$('#modalRoot .modal-h h3');const wasOpen=h&&h
 
 /* ---------- import ---------- */
 async function importFile(f){
- let d;try{d=JSON.parse(await f.text())}catch(e){return toast('ไฟล์ไม่ถูกต้อง — ต้องเป็นไฟล์ JSON ที่ส่งออกจาก Inkfold หรือโต๊ะนักเขียน')}
- const list=d&&(d.novels||(d.novel?[d.novel]:d.chapters?[d]:null));if(!Array.isArray(list))return toast('ไฟล์นี้ไม่ใช่ไฟล์สำรองของ Inkfold หรือโต๊ะนักเขียน');
+ let d;try{d=JSON.parse(await f.text())}catch(e){return toast('ไฟล์ไม่ถูกต้อง — ต้องเป็นไฟล์ JSON ที่ส่งออกจาก Novelist Workshop (Inkfold) หรือโต๊ะนักเขียน')}
+ const list=d&&(d.novels||(d.novel?[d.novel]:d.chapters?[d]:null));if(!Array.isArray(list))return toast('ไฟล์นี้ไม่ใช่ไฟล์สำรองของ Novelist Workshop (Inkfold) หรือโต๊ะนักเขียน');
  let c=0,bad=0;
  for(const nv of list){if(!nv||typeof nv!=='object'||!Array.isArray(nv.chapters)){bad++;continue}
   try{checkIds(nv)}catch(e){bad++;continue}normalize(nv);nv.fileName='';
@@ -1719,7 +1734,7 @@ const A={
  addEvent:()=>{N().timeline.push({id:uid(),when:'',title:'',text:'',chapterId:''});touch();save();rerenderMain();const t=$$('.tl-ev .when');t[t.length-1].focus()},
  moveEv:el=>{const n=N(),i=n.timeline.findIndex(e=>e.id===el.dataset.id),j=i+ +el.dataset.v;if(j<0||j>=n.timeline.length)return;const [e]=n.timeline.splice(i,1);n.timeline.splice(j,0,e);save();rerenderMain()},
  export:el=>doExport(el.dataset.v),
- backupAll:()=>{download(new Blob([backupJson()],{type:'application/json'}),`Inkfold-backup-${today()}.json`);db.settings.lastBackup=Date.now();save();refreshBanner();toast('ดาวน์โหลดไฟล์สำรองแล้ว — เก็บไว้ในที่ปลอดภัย เช่น Google Drive')},
+ backupAll:()=>{download(new Blob([backupJson()],{type:'application/json'}),`NW-backup-${today()}.json`);db.settings.lastBackup=Date.now();save();refreshBanner();toast('ดาวน์โหลดไฟล์สำรองแล้ว — เก็บไว้ในที่ปลอดภัย เช่น Google Drive')},
  importJson:()=>$('#fileIn').click(),
  trash:el=>{commitEditor();trashModal(el.dataset.v||'')},
  settings:()=>settingsModal(),
@@ -1787,7 +1802,7 @@ window.addEventListener('beforeunload',e=>{if(!db||S.readonly)return;commitEdito
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&db&&!S.readonly){for(const n of db.novels){const q=FST[n.id];if(q&&q.dirty&&q.perm&&n.fileAuto!==false){clearTimeout(q.t);saveNovelFile(n)}}commitEditor();clearTimeout(saveT);save();if(FS.ok){clearTimeout(FS.t);FS.t=null;writeBackupFile()}}});
 window.addEventListener('resize',()=>{if(S.sec==='board')drawLinks()});
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;$$('.install-btn').forEach(b=>b.classList.remove('hidden'))});
-window.addEventListener('appinstalled',()=>{installEvt=null;toast('ติดตั้ง Inkfold เป็นแอปแล้ว')});
+window.addEventListener('appinstalled',()=>{installEvt=null;toast('ติดตั้ง Novelist Workshop เป็นแอปแล้ว')});
 
 /* ---------- 1.4: novel files (.inkfold) — open / save / save as / autosave ---------- */
 const HAS_FS=!!(window.showOpenFilePicker&&window.showSaveFilePicker);
@@ -1816,17 +1831,17 @@ async function fileSave(){const n=N();if(!n)return toast('บันทึกใ�
 function exportBlob(k){let got=null;CAPTURE=b=>{got=b};try{doExport(k)}finally{CAPTURE=null}return got}
 async function fileSaveAs(){const n=N();if(!n)return toast('เปิดนิยายเรื่องที่ต้องการก่อน แล้วค่อยบันทึกเป็นไฟล์');commitEditor();
  if(!HAS_FS){download(await novelFileBlob(n),fname(n)+'.inkfold');return toast('ดาวน์โหลดไฟล์ .inkfold แล้ว — เบราว์เซอร์นี้เซฟทับไฟล์เดิมไม่ได้ ใช้ Chrome หรือ Edge เพื่อบันทึกแบบ Word')}
- let h;try{h=await showSaveFilePicker({suggestedName:fname(n)+'.inkfold',types:[{description:'ไฟล์นิยาย Inkfold — ครบทุกอย่าง แก้ไขต่อได้',accept:{'application/x-inkfold':['.inkfold']}},{description:'Word (.docx) — เฉพาะเนื้อเรื่อง',accept:{'application/vnd.openxmlformats-officedocument.wordprocessingml.document':['.docx']}},{description:'E-Book (.epub)',accept:{'application/epub+zip':['.epub']}},{description:'Markdown (.md)',accept:{'text/markdown':['.md']}},{description:'ข้อความล้วน (.txt)',accept:{'text/plain':['.txt']}}]})}catch(e){return}
+ let h;try{h=await showSaveFilePicker({suggestedName:fname(n)+'.inkfold',types:[{description:'ไฟล์นิยาย Novelist Workshop — ครบทุกอย่าง แก้ไขต่อได้',accept:{'application/x-inkfold':['.inkfold']}},{description:'Word (.docx) — เฉพาะเนื้อเรื่อง',accept:{'application/vnd.openxmlformats-officedocument.wordprocessingml.document':['.docx']}},{description:'E-Book (.epub)',accept:{'application/epub+zip':['.epub']}},{description:'Markdown (.md)',accept:{'text/markdown':['.md']}},{description:'ข้อความล้วน (.txt)',accept:{'text/plain':['.txt']}}]})}catch(e){return}
  const ext=((h.name.match(/\.([a-z0-9]+)$/i)||[])[1]||'inkfold').toLowerCase();
  if(ext==='inkfold'){FH.set(n.id,h);try{await IDB.set('fh:'+n.id,h)}catch(e){}n.fileName=h.name;FST[n.id]={perm:true,dirty:true};addRecent(h,n);
   if(await saveNovelFile(n)){save();refreshFileBar();toast(`บันทึกเป็น “${h.name}” แล้ว — ${n.fileAuto!==false?'ต่อจากนี้งานจะบันทึกลงไฟล์นี้อัตโนมัติ':'กด Ctrl+S เพื่อบันทึก'}`)}}
  else{const blob=exportBlob({docx:'docx',epub:'epub',md:'md',markdown:'md',txt:'txt'}[ext]||'txt');if(!blob)return toast('สร้างไฟล์ไม่สำเร็จ');try{await writeToHandle(h,blob);toast(`บันทึกสำเนาเป็น “${h.name}” แล้ว (งานที่เขียนต่อยังอยู่ในเรื่องเดิม)`)}catch(e){toast('เขียนไฟล์ไม่สำเร็จ')}}}
 async function fileOpen(){if(S.readonly)return;
- if(HAS_FS){let hs;try{hs=await showOpenFilePicker({types:[{description:'ไฟล์นิยาย Inkfold',accept:{'application/x-inkfold':['.inkfold']}}]})}catch(e){return}return openFromHandle(hs[0])}
+ if(HAS_FS){let hs;try{hs=await showOpenFilePicker({types:[{description:'ไฟล์นิยาย Novelist Workshop',accept:{'application/x-inkfold':['.inkfold']}}]})}catch(e){return}return openFromHandle(hs[0])}
  const f=await pickFile('.inkfold,.json');if(!f)return;let d=null;try{d=await readNovelFile(f)}catch(e){}openNovelData(d,null,f.name)}
 async function openFromHandle(h){let f;try{if((await h.queryPermission({mode:'read'}))!=='granted'&&(await h.requestPermission({mode:'readwrite'}))!=='granted')return toast('ไม่ได้รับอนุญาตให้เปิดไฟล์นี้');f=await h.getFile()}catch(e){return toast('เปิดไฟล์นี้ไม่ได้ (อาจถูกย้ายหรือลบไปแล้ว)')}
  let d=null;try{d=await readNovelFile(f)}catch(e){}return openNovelData(d,h,f.name)}
-async function openNovelData(d,h,name){if(!d)return toast('ไฟล์นี้ไม่ใช่ไฟล์นิยาย Inkfold หรือไฟล์เสียหาย');commitEditor();const nv=d.novel,ex=db.novels.find(x=>x.id===nv.id);let trashOld=false;
+async function openNovelData(d,h,name){if(!d)return toast('ไฟล์นี้ไม่ใช่ไฟล์นิยาย Novelist Workshop หรือไฟล์เสียหาย');commitEditor();const nv=d.novel,ex=db.novels.find(x=>x.id===nv.id);let trashOld=false;
  if(ex){let same=false;const oh=FH.get(ex.id);if(h&&oh){try{same=await oh.isSameEntry(h)}catch(e){}}
   if(same){if(ex.updated>(d.savedAt||0)+3000){const v=await askChoice('พบงานที่ยังไม่ได้บันทึกลงไฟล์',`ฉบับในเครื่องของ “<b>${esc(ex.title)}</b>” ใหม่กว่าไฟล์ (แก้ไขล่าสุด ${fmtDT(ex.updated)}, ไฟล์บันทึกเมื่อ ${fmtDT(d.savedAt)}) — อาจเกิดจากปิดโปรแกรมก่อนบันทึก จะใช้ฉบับไหน?`,[{label:'ใช้ฉบับในเครื่อง (กู้คืน)',v:'local',primary:true},{label:'ใช้ฉบับจากไฟล์',v:'file'},{label:'ยกเลิก',v:'cancel'}]);
     if(v==='cancel')return;if(v==='local'){S.nid=ex.id;S.sec='overview';S.sel={};render();fileDirty(ex);toast('ใช้ฉบับในเครื่องแล้ว — กด Ctrl+S เพื่อบันทึกลงไฟล์');return}}}
@@ -1851,7 +1866,7 @@ function updateStatus(busy){const el=$('#savedInd');if(!el||!db)return;const n=S
  if(n&&n.fileName&&FH.has(n.id)&&st){if(st.saving){txt='กำลังบันทึกลงไฟล์…';cls='busy'}else if(st.err){txt='• บันทึกไฟล์ไม่สำเร็จ';cls='err'}else if(!st.perm){txt='• กดที่นี่เพื่ออนุญาตบันทึกลงไฟล์';cls='warn act'}else if(st.dirty){txt=n.fileAuto!==false?'กำลังจะบันทึก…':'• ยังไม่ได้บันทึก (Ctrl+S)';cls=n.fileAuto!==false?'busy':'warn'}else txt='บันทึกลงไฟล์แล้ว '+t(st.savedAt||n.fileSavedAt||Date.now())}
  else{txt=busy?'กำลังบันทึก…':'บันทึกในเครื่องแล้ว'+(LS.at?' '+t(LS.at):'');cls=busy?'busy':''}
  el.className='saved '+cls;el.querySelector('.st').textContent=txt;if(cls.includes('act')){el.dataset.act='fileGrant';el.tabIndex=0;el.setAttribute('role','button')}else{delete el.dataset.act;el.removeAttribute('tabindex');el.setAttribute('role','status')}
- const dirty=n&&st&&st.dirty&&FH.has(n.id);document.title=(dirty?'• ':'')+(n?(n.fileName||n.title)+' — ':'')+'Inkfold'}
+ const dirty=n&&st&&st.dirty&&FH.has(n.id);document.title=(dirty?'• ':'')+(n?(n.fileName||n.title)+' — ':'')+'Novelist Workshop'}
 function showSaveError(msg,retry,kind){let b=$('#saveErr');if(!b){b=document.createElement('div');b.id='saveErr';b.setAttribute('role','alert');document.body.appendChild(b)}b.dataset.kind=kind||'';
  b.innerHTML=`${ic('x',16)}<span style="flex:1">${esc(msg)}</span>${retry?'<button type="button" data-r>ลองอีกครั้ง</button>':''}<button type="button" data-c>ปิด</button>`;
  if(retry)b.querySelector('[data-r]').onclick=()=>retry();b.querySelector('[data-c]').onclick=()=>b.remove()}
@@ -1862,7 +1877,7 @@ const TAB={bc:null,release:null,primary:true};
 function tabGuard(){return new Promise(res=>{if(!navigator.locks)return res(true);navigator.locks.request('inkfold-main',{ifAvailable:true},lock=>{if(!lock){res(false);return}res(true);return new Promise(r=>{TAB.release=r})}).catch(()=>res(true))})}
 async function handOff(){commitEditor();clearTimeout(saveT);save();for(const n of db.novels){const q=FST[n.id];if(q&&q.dirty&&q.perm)await saveNovelFile(n)}await writing;S.readonly=true;TAB.primary=false;if(TAB.release)TAB.release();showElsewhere('ย้ายไปใช้ในอีกหน้าต่างแล้ว')}
 function showElsewhere(msg){let o=$('.elsewhere');if(!o){o=document.createElement('div');o.className='elsewhere';document.body.appendChild(o)}
- o.innerHTML=`<div class="card modal" role="dialog" aria-modal="true"><div class="modal-h"><h3>${esc(msg)}</h3></div><p style="margin:0;line-height:1.7" class="muted">เพื่อไม่ให้งานเขียนทับกัน Inkfold แก้ไขได้ทีละหน้าต่าง หน้าต่างนี้จึงหยุดบันทึกไว้ก่อน</p><div class="modal-f"><span class="grow"></span><button class="btn primary" id="takeOver">ใช้หน้าต่างนี้แทน</button></div></div>`;
+ o.innerHTML=`<div class="card modal" role="dialog" aria-modal="true"><div class="modal-h"><h3>${esc(msg)}</h3></div><p style="margin:0;line-height:1.7" class="muted">เพื่อไม่ให้งานเขียนทับกัน Novelist Workshop แก้ไขได้ทีละหน้าต่าง หน้าต่างนี้จึงหยุดบันทึกไว้ก่อน</p><div class="modal-f"><span class="grow"></span><button class="btn primary" id="takeOver">ใช้หน้าต่างนี้แทน</button></div></div>`;
  $('#takeOver',o).onclick=takeOver}
 function takeOver(){const b=$('#takeOver');if(b){b.disabled=true;b.textContent='กำลังย้ายมาที่หน้าต่างนี้…'}try{TAB.bc&&TAB.bc.postMessage('takeover')}catch(e){}
  if(!navigator.locks){location.reload();return}
@@ -2165,14 +2180,14 @@ const QUILL='<svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true">
 const introOn=()=>!!P.anim;
 document.documentElement.classList.toggle('no-anim',!introOn());
 function setIntro(on){P.anim=on;savePrefs();document.documentElement.classList.toggle('no-anim',!on);toast(on?'เปิดอนิเมชันแล้ว':'ปิดอนิเมชันแล้ว')}
-function playLaunch(){playBook({title:'Inkfold',sub:'โต๊ะเขียนนิยายของคุณ',left:'Inkfold',leftSub:'ทุกเรื่องราวเริ่มจากหน้ากระดาษหนึ่งหน้า',right:'เปิดโต๊ะเขียน…',color:'#5E7A6C'})}
+function playLaunch(){playBook({title:'Novelist Workshop',sub:'โต๊ะเขียนนิยายของคุณ',left:'Novelist Workshop',leftSub:'ทุกเรื่องราวเริ่มจากหน้ากระดาษหนึ่งหน้า',right:'เปิดโต๊ะเขียน…',color:'#5E7A6C'})}
 function playBook(o){
  const prev=$('#intro');if(prev)prev.remove();
  const fast=!!o.fast,t=(fast?.55:1)*({slow:1.35,normal:1,fast:.7}[P.speed]||1),n=fast?4:7,s=x=>(x*t).toFixed(3)+'s';
  const leafEnd=1.25+(n-1)*.16+.9,textAt=leafEnd-.3,zoomAt=leafEnd+(fast?.2:.6);
  const el=document.createElement('div');el.id='intro';el.setAttribute('role','presentation');
  el.style.cssText=`--cover:${okColor(o.color)?o.color:'#5E7A6C'};--a-d:${s(.8)};--c-s:${s(.75)};--c-d:${s(1.25)};--tx-s:${s(textAt)};--z-d:${s(.95)}`;
- const front=o.cover&&okImg(o.cover)?`<img src="${o.cover}" alt="">`:`<div class="cf-frame"><div class="cf-em">${QUILL}</div><div class="cf-title">${esc(o.title)}</div>${o.sub?`<div class="cf-sub">${esc(o.sub)}</div>`:''}</div>`;
+ const front=o.cover&&okImg(o.cover)?`<img src="${o.cover}" alt="">`:`<div class="cf-frame"><div class="cf-em">${QUILL}</div><div class="cf-title${Math.max(...String(o.title).split(/\s+/).map(w=>w.length))>7?' long':''}">${esc(o.title)}</div>${o.sub?`<div class="cf-sub">${esc(o.sub)}</div>`:''}</div>`;
  el.innerHTML=`<div class="i-zoom"><div class="i-pos"><div class="book">
   <div class="b-half b-back"></div>
   <div class="b-half b-block"><div class="sp sp-r"><div class="sp-orn">❦</div><div>${esc(o.right||'')}</div></div></div>
@@ -2201,7 +2216,7 @@ function playBook(o){
  await initFileBackup();await loadFonts();await loadHandles();
  try{if(navigator.storage&&navigator.storage.persist){ST.persisted=await navigator.storage.persisted()||await navigator.storage.persist()}}catch(e){}
  save();render();
- if(!TAB.primary)showElsewhere('Inkfold เปิดอยู่ในอีกหน้าต่างหนึ่งแล้ว');
+ if(!TAB.primary)showElsewhere('Novelist Workshop เปิดอยู่ในอีกหน้าต่างหนึ่งแล้ว');
  if('launchQueue' in window)launchQueue.setConsumer(q=>{if(q.files&&q.files.length&&TAB.primary)openFromHandle(q.files[0])});
  db.novels.filter(n=>n.cover&&!okColor(n.spine)).forEach(n=>coverColor(n.cover).then(c=>{if(c){n.spine=c;save();if(!S.nid)render()}}));
  if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
