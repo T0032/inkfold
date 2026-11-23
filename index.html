@@ -612,7 +612,7 @@ body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 <input type="file" id="imgIn" accept="image/*" class="hidden">
 <script>
 'use strict';
-const APP_NAME='Novelist Workshop';const APP_VERSION='1.5.1';
+const APP_NAME='Novelist Workshop';const APP_VERSION='1.6.0';
 /* ---------- helpers ---------- */
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -796,7 +796,7 @@ async function loadDb(){
  if(!raw){try{raw=localStorage.getItem(KEY)}catch(e){}}
  let d=null;try{d=raw?JSON.parse(raw):null}catch(e){}
  if(d&&Array.isArray(d.novels))return normalizeDb(d);
- const fresh=blankDb();fresh.novels=[seed()];return fresh;
+ return blankDb();
 }
 let saveT,writing=Promise.resolve();
 function save(){
@@ -826,29 +826,122 @@ async function unlinkBackup(){FS.handle=null;FS.ok=false;FS.name='';await IDB.de
 function N(){return db.novels.find(n=>n.id===S.nid)}
 function touch(n){n=n||N();if(!n)return;n.updated=Date.now();if(typeof FH!=='undefined'&&FH.has(n.id))fileDirty(n)}
 
-/* ---------- sample novel ---------- */
-function seed(){
- const n=blankNovel({title:'ดาบแห่งสายลม',genre:'แฟนตาซี',synopsis:'เด็กสาวจากหมู่บ้านชายขอบได้ครอบครองดาบที่ฟังเสียงลมได้ และต้องออกเดินทางเพื่อค้นหาความจริงของบิดาที่หายสาบสูญ',color:'#7F9C8C',target:{words:60000,date:''}});
- const c1={id:uid(),name:'ลินิน วาเลนเทีย',role:'ตัวเอก',age:'17',tags:'ดื้อ, ใจดี',personality:'ดื้อรั้นแต่จริงใจ ชอบช่วยคนอื่นจนลืมตัวเอง',appearance:'ผมสีน้ำตาลอ่อน มัดหางม้า ตาสีเขียวหม่น',want:'ตามหาพ่อที่หายไป',fear:'การถูกทิ้งไว้คนเดียว',backstory:'เติบโตกับยายในหมู่บ้านเชิงเขา',notes:'',folder:'',color:'#7F9C8C',img:''};
- const c2={id:uid(),name:'คาเอล โรว์แลนด์',role:'สมทบ',age:'19',tags:'เงียบ, เจ้าเล่ห์',personality:'พูดน้อย ช่างสังเกต',appearance:'ผมดำ มีแผลเป็นที่คิ้ว',want:'ล้างมลทินให้ตระกูล',fear:'อดีตของตัวเอง',backstory:'',notes:'',folder:'',color:'#8A9BB8',img:''};
- const c3={id:uid(),name:'ท่านเซราฟ',role:'ตัวร้าย',age:'ไม่ทราบ',tags:'',personality:'สุภาพ ใจเย็น และน่ากลัว',appearance:'',want:'ครอบครองดาบแห่งสายลม',fear:'',backstory:'',notes:'',folder:'',color:'#C48A8A',img:''};
- n.characters=[c1,c2,c3];
- const l1={id:uid(),name:'หมู่บ้านเอลมอร์',type:'หมู่บ้าน',region:'เชิงเขาตะวันตก',tags:'บ้านเกิด',atmosphere:'สงบ ลมพัดแรงตลอดปี กลิ่นหญ้าแห้ง',description:'หมู่บ้านเล็ก ๆ บนเนินเขาทางตะวันตก',notes:'',folder:''};
- n.locations=[l1];
- n.glossary=[{id:uid(),name:'ดาบแห่งสายลม',kind:'item',folder:'',tags:'',ac:true,fields:[{label:'ลักษณะ',text:'ใบดาบใสราวแก้ว มีเสียงหวีดเบา ๆ เมื่อมีลมพัด'},{label:'ความสามารถ',text:'ฟังเสียงลมและรับรู้สิ่งที่ลมพาผ่านมา'},{label:'ผู้ครอบครอง',text:'ลินิน'}]}];
- const html='ลมพัดผ่านทุ่งหญ้าเหมือนเสียงกระซิบ <b>ลินิน</b> หยุดเดินแล้วเงยหน้ามองท้องฟ้า<div><br></div><div>"วันนี้ลมแปลก ๆ" เธอพึมพำกับตัวเอง</div>';
- n.chapters=[{id:uid(),title:'เสียงกระซิบของลม',html,status:'draft',words:0,summary:'ลินินรู้สึกถึงลมที่ผิดปกติระหว่างไปเก็บสมุนไพร',pov:c1.id,chars:[c1.id],locs:[l1.id],notes:'',snaps:[]},{id:uid(),title:'ชายแปลกหน้า',html:'',status:'idea',words:0,summary:'',pov:'',chars:[],locs:[],notes:'',snaps:[]}];
- n.chapters.forEach(c=>c.words=countWords(htmlToText(c.html)));
- const b=n.boards[0];const s1={id:uid(),type:'scene',x:120,y:110,title:'ลินินพบดาบ',goal:'หาสมุนไพรให้ยาย',conflict:'พายุลมพัดมาไม่ทันตั้งตัว',outcome:'พบดาบในโพรงไม้'};
- const s2={id:uid(),type:'scene',x:470,y:170,title:'คาเอลปรากฏตัว',goal:'',conflict:'',outcome:''};
- const s3={id:uid(),type:'note',x:300,y:470,title:'ปมเรื่องพ่อ',text:'พ่อเคยเป็นผู้พิทักษ์ดาบมาก่อน'};
- b.cards=[s1,s2,s3];b.links=[{id:uid(),from:s1.id,to:s2.id,style:'cause',label:''},{id:uid(),from:s3.id,to:s1.id,style:'flashback',label:''}];
- n.relations=[{id:uid(),a:c1.id,b:c2.id,type:'ally',label:'เพื่อนร่วมทาง',mutual:true},{id:uid(),a:c3.id,b:c1.id,type:'hate',label:'ต้องการดาบ',mutual:false}];
- n.timeline=[{id:uid(),when:'ปีที่ 0',title:'พ่อของลินินหายตัวไป',text:'',chapterId:''},{id:uid(),when:'12 ปีต่อมา',title:'ลินินพบดาบ',text:'',chapterId:n.chapters[0].id}];
- n.ideas=[{id:uid(),text:'ลมสามารถพาความทรงจำมาได้?',done:false},{id:uid(),text:'คาเอลเคยรู้จักพ่อของลินิน',done:false}];
- n.threads=[{id:uid(),title:'พ่อหายไปไหน',status:'open',planted:n.chapters[0].id,resolved:'',notes:''}];
+/* ---------- 1.6.0: built-in guide novel (manual + sample story + test material) ---------- */
+const GUIDE_VER=1;
+function guideMap(){try{const W=960,H=640,cv=document.createElement('canvas');cv.width=W;cv.height=H;const g=cv.getContext('2d');
+ const bg=g.createLinearGradient(0,0,W,H);bg.addColorStop(0,'#EFE3C8');bg.addColorStop(1,'#DCC9A3');g.fillStyle=bg;g.fillRect(0,0,W,H);
+ g.strokeStyle='rgba(120,90,50,.35)';g.lineWidth=10;g.strokeRect(14,14,W-28,H-28);
+ // mountains (west)
+ g.fillStyle='#9C8B73';for(let i=0;i<7;i++){const x=60+i*48,y=120+((i*37)%90);g.beginPath();g.moveTo(x,y+90);g.lineTo(x+40,y);g.lineTo(x+80,y+90);g.closePath();g.fill()}
+ g.fillStyle='#F4EEDF';for(let i=0;i<7;i++){const x=60+i*48,y=120+((i*37)%90);g.beginPath();g.moveTo(x+28,y+24);g.lineTo(x+40,y);g.lineTo(x+52,y+24);g.closePath();g.fill()}
+ // forest (center)
+ g.fillStyle='#6E8B66';for(let i=0;i<46;i++){const x=430+(i*53)%260,y=250+(i*29)%170;g.beginPath();g.arc(x,y,16,0,7);g.fill()}
+ // river
+ g.strokeStyle='#7FA3B5';g.lineWidth=12;g.beginPath();g.moveTo(W-40,60);g.bezierCurveTo(700,200,820,360,620,470);g.bezierCurveTo(470,560,300,520,120,600);g.stroke();
+ // road
+ g.strokeStyle='rgba(110,80,45,.7)';g.setLineDash([12,10]);g.lineWidth=4;g.beginPath();g.moveTo(190,330);g.bezierCurveTo(330,360,420,320,540,330);g.bezierCurveTo(660,340,740,200,820,150);g.stroke();g.setLineDash([]);
+ // tower (north-east)
+ g.fillStyle='#5E5A66';g.fillRect(806,92,26,64);g.beginPath();g.moveTo(800,92);g.lineTo(819,62);g.lineTo(838,92);g.fill();
+ // village
+ g.fillStyle='#B07A55';for(const [x,y] of [[170,312],[196,330],[150,338]]){g.fillRect(x,y,18,14);g.beginPath();g.moveTo(x-3,y);g.lineTo(x+9,y-10);g.lineTo(x+21,y);g.fill()}
+ // compass
+ g.strokeStyle='#6B5536';g.lineWidth=2;g.beginPath();g.moveTo(880,520);g.lineTo(880,600);g.moveTo(840,560);g.lineTo(920,560);g.stroke();g.fillStyle='#6B5536';g.font='bold 22px serif';g.fillText('N',872,512);
+ return cv.toDataURL('image/jpeg',.82)}catch(e){return ''}}
+function guideNovel(){
+ const p=t=>`<div>${t}</div>`,gap='<div><br></div>',H=t=>`<h3>${t}</h3>`,ul=a=>`<ul>${a.map(x=>`<li>${x}</li>`).join('')}</ul>`,ol=a=>`<ol>${a.map(x=>`<li>${x}</li>`).join('')}</ol>`,tip=t=>`<blockquote>${t}</blockquote>`;
+ const n=blankNovel({title:'คู่มือ · ดาบแห่งสายลม',genre:'คู่มือและตัวอย่าง',synopsis:'คู่มือการใช้ Novelist Workshop ที่เป็นนิยายตัวอย่างไปพร้อมกัน — อ่านวิธีใช้แต่ละระบบ แล้วลองกับข้อมูลที่เตรียมไว้ได้ทันที แก้หรือลบได้ตามสบาย คืนค่าได้ที่ ตั้งค่า › เกี่ยวกับ',color:'#6E9C9A',goal:500,guide:GUIDE_VER});
+ const dt=new Date();dt.setDate(dt.getDate()+60);n.target={words:30000,date:dkey(dt)};
+ const C=(o)=>Object.assign({id:uid(),name:'',role:'',age:'',tags:'',personality:'',appearance:'',want:'',fear:'',backstory:'',notes:'',folder:'',color:COLORS[0],img:''},o);
+ const c1=C({name:'ลินิน วาเลนเทีย',role:'ตัวเอก',age:'17',tags:'ดื้อ, ใจดี',personality:'ดื้อรั้นแต่จริงใจ ชอบช่วยคนอื่นจนลืมตัวเอง',appearance:'ผมสีน้ำตาลอ่อน มัดหางม้า ตาสีเขียวหม่น',want:'ตามหาพ่อที่หายไป',fear:'การถูกทิ้งไว้คนเดียว',backstory:'เติบโตกับยายโรซาในหมู่บ้านเอลมอร์',color:'#7F9C8C',notes:'(ตัวอย่าง) ลองพิมพ์ “ลิ” ในหน้าเขียนแล้วกด Tab ระบบจะเติมชื่อนี้ให้'});
+ const c2=C({name:'คาเอล โรว์แลนด์',role:'สมทบ',age:'19',tags:'เงียบ, เจ้าเล่ห์',personality:'พูดน้อย ช่างสังเกต',appearance:'ผมดำ มีแผลเป็นที่คิ้ว',want:'ล้างมลทินให้ตระกูล',fear:'อดีตของตัวเอง',backstory:'เคยเป็นศิษย์ของผู้พิทักษ์ลม',color:'#8A9BB8'});
+ const c3=C({name:'ท่านเซราฟ',role:'ตัวร้าย',age:'ไม่ทราบ',tags:'สุภาพ, น่ากลัว',personality:'สุภาพ ใจเย็น และน่ากลัว',want:'ครอบครองดาบแห่งสายลม',fear:'ความเงียบไร้ลม',color:'#C48A8A'});
+ const c4=C({name:'ยายโรซา',role:'สมทบ',age:'72',tags:'อบอุ่น',personality:'ใจดี เก็บความลับเก่ง',want:'ให้หลานปลอดภัย',color:'#C9A863',backstory:'รู้เรื่องดาบมากกว่าที่ยอมเล่า'});
+ n.characters=[c1,c2,c3,c4];
+ const L=(o)=>Object.assign({id:uid(),name:'',type:'',region:'',tags:'',atmosphere:'',description:'',notes:'',folder:''},o);
+ const l1=L({name:'หมู่บ้านเอลมอร์',type:'หมู่บ้าน',region:'เชิงเขาตะวันตก',tags:'บ้านเกิด',atmosphere:'สงบ ลมพัดแรงตลอดปี กลิ่นหญ้าแห้ง',description:'หมู่บ้านเล็ก ๆ บนเนินเขาทางตะวันตก'});
+ const l2=L({name:'ป่าเสียงหวีด',type:'ป่า',region:'ใจกลางแผ่นดิน',tags:'อันตราย',atmosphere:'ต้นไม้สูง ลมลอดใบไม้เป็นเสียงหวีด',description:'ป่าที่ดาบแห่งสายลมถูกซ่อนไว้ในโพรงไม้'});
+ const l3=L({name:'หอคอยลมเหนือ',type:'หอคอย',region:'ตะวันออกเฉียงเหนือ',tags:'ฐานศัตรู',atmosphere:'หนาว เงียบผิดปกติ',description:'ที่มั่นของท่านเซราฟ'});
+ n.locations=[l1,l2,l3];
+ const img=guideMap();if(img){const mid=uid();n.maps=[{id:mid,name:'แผ่นดินสายลม',img,pins:[{id:uid(),loc:l1.id,x:.19,y:.5},{id:uid(),loc:l2.id,x:.58,y:.48},{id:uid(),loc:l3.id,x:.86,y:.15}]}]}
+ n.glossary=[
+  {id:uid(),name:'ดาบแห่งสายลม',kind:'item',folder:'',tags:'',ac:true,fields:[{label:'ลักษณะ',text:'ใบดาบใสราวแก้ว มีเสียงหวีดเบา ๆ เมื่อมีลมพัด'},{label:'ความสามารถ',text:'ฟังเสียงลมและรับรู้สิ่งที่ลมพาผ่านมา'},{label:'ผู้ครอบครอง',text:'ลินิน'}]},
+  {id:uid(),name:'ผู้พิทักษ์ลม',kind:'culture',folder:'',tags:'',ac:true,fields:[{label:'ความเชื่อ',text:'ลมจดจำทุกสิ่งที่มันพัดผ่าน'},{label:'ธรรมเนียม',text:'ผูกริบบิ้นสีฟ้าไว้ที่ข้อมือเมื่อออกเดินทาง'}]},
+  {id:uid(),name:'ภาษาลม',kind:'power',folder:'',tags:'',ac:true,fields:[{label:'ที่มาของพลัง',text:'ได้มาเมื่อสัมผัสดาบแห่งสายลม'},{label:'เงื่อนไข / ข้อจำกัด',text:'ใช้ไม่ได้ในที่ที่ไม่มีลม'},{label:'ราคาที่ต้องจ่าย',text:'ได้ยินเสียงของคนที่จากไปแล้วด้วย'}]}];
+ const sid=()=>uid(),ch=(o)=>Object.assign({id:uid(),title:'',html:'',status:'draft',words:0,summary:'',pov:'',chars:[],locs:[],notes:'',snaps:[],smeta:{},scene0:''},o);
+ // story chapters (with scenes)
+ const a1=sid(),a2=sid();
+ const s1=ch({title:'บทที่ 1 · เสียงกระซิบของลม',status:'revise',pov:c1.id,chars:[c1.id,c4.id],locs:[l1.id,l2.id],scene0:a1,
+  summary:'ลินินรู้สึกถึงลมที่ผิดปกติระหว่างไปเก็บสมุนไพร และพบดาบในโพรงไม้',notes:'(โน้ตบท) ตรงนี้ควรใส่รายละเอียดกลิ่นของพายุเพิ่ม — โน้ตนี้ไม่ถูกนับคำและไม่ถูกส่งออก',
+  html:[p('ลมพัดผ่านทุ่งหญ้าเหมือนเสียงกระซิบ <b>ลินิน</b> หยุดเดินแล้วเงยหน้ามองท้องฟ้า'),p('“วันนี้ลมแปลก ๆ” เธอพึมพำกับตัวเอง ตะกร้าสมุนไพรในมือเบาหวิว เพราะยายโรซาสั่งให้เก็บรากต้นเงินให้ได้ก่อนพลบค่ำ'),p('เมฆสีหม่นเคลื่อนเข้ามาจากทางตะวันออกเร็วเกินกว่าที่ควรจะเป็น ใบหญ้าทั้งทุ่งเอนไปทางเดียวกัน ราวกับมีใครบางคนเรียกพวกมันอยู่')].join(gap)+`<hr data-sid="${a2}">`+
+   [p('พายุมาถึงก่อนที่เธอจะวิ่งกลับถึงหมู่บ้าน ลินินหลบเข้าไปในชายป่าเสียงหวีด แล้วมุดเข้าโพรงของต้นไม้ใหญ่ที่สุดเท่าที่หาได้'),p('ในความมืด มีบางอย่างส่งเสียงหวีดเบา ๆ ตอบเสียงลมข้างนอก — ใบดาบใสราวแก้วปักอยู่ในเนื้อไม้ ราวกับรอเธอมานานแล้ว'),p('ทันทีที่ปลายนิ้วแตะด้ามดาบ เสียงหนึ่งก็ลอยมากับลม เสียงที่เธอไม่ได้ยินมาสิบสองปี')].join(gap)});
+ s1.smeta={[a1]:{title:'ลมผิดปกติ',summary:'ลินินออกไปเก็บสมุนไพร',status:'done'},[a2]:{title:'ดาบในโพรงไม้',summary:'หลบพายุแล้วพบดาบ',status:'revise'}};
+ s1.snaps=[{t:Date.now()-5*3600e3,html:p('ลมพัดผ่านทุ่งหญ้า ลินินหยุดเดินแล้วมองท้องฟ้า')+gap+p('“วันนี้ลมแปลก ๆ” เธอว่า'),words:0,label:'ร่างแรก (ตัวอย่างประวัติเวอร์ชัน)'}];
+ const b1=sid(),b2=sid();
+ const s2=ch({title:'บทที่ 2 · ชายแปลกหน้า',status:'draft',pov:c1.id,chars:[c1.id,c2.id,c4.id],locs:[l1.id],scene0:b1,summary:'คาเอลปรากฏตัวที่หมู่บ้านและรู้เรื่องดาบมากเกินไป',
+  html:[p('เช้าวันรุ่งขึ้น ชายหนุ่มผมดำคนหนึ่งนั่งรออยู่หน้าบ้านของยายโรซา แผลเป็นที่คิ้วทำให้สีหน้าเขาดูดุกว่าที่ตั้งใจ'),p('“เธอได้ยินมันใช่ไหม” <b>คาเอล โรว์แลนด์</b> ถามโดยไม่แนะนำตัว “เสียงลมที่พูดได้”')].join(gap)+`<hr data-sid="${b2}">`+
+   [p('ยายโรซาวางถ้วยชาลงช้า ๆ ดวงตาของแกมองดาบที่ห่อผ้าไว้บนโต๊ะ แล้วมองหน้าคาเอลนานกว่าที่ลินินเคยเห็นแกมองใคร'),p('“พ่อของหนูไม่ได้หายไปเฉย ๆ หรอก” แกพูดในที่สุด')].join(gap)});
+ s2.smeta={[b1]:{title:'ผู้มาเยือน',summary:'',status:'draft'},[b2]:{title:'ความลับของยาย',summary:'',status:'draft'}};
+ const s3=ch({title:'บทที่ 3 · เงาบนสันเขา',status:'idea',pov:c2.id,chars:[c2.id,c3.id],locs:[l3.id],summary:'(ยังเป็นแผน) มุมมองของคาเอล — เขารายงานเรื่องดาบให้ท่านเซราฟ หรือไม่?',
+  html:p('(บทนี้ยังอยู่ในขั้น “วางแผน” — ดูสถานะที่มุมขวาบนของหน้าเขียน แล้วลองเปลี่ยนเป็น “ร่าง” เมื่อเริ่มเขียน)')});
+ // guide chapters
+ const g0=ch({title:'เริ่มต้นที่นี่ (คู่มือ)',status:'done',summary:'ภาพรวมของเล่มคู่มือ แผนที่เมนู และคีย์ลัด',html:[
+  `<h2>ยินดีต้อนรับสู่ Novelist Workshop</h2>`,
+  p('เล่มนี้เป็นทั้ง <b>คู่มือ</b> และ <b>สนามทดลอง</b> ทุกอย่างในเล่ม ทั้งตัวละคร แผนที่ กระดาน และเนื้อเรื่อง ใส่ไว้ให้ลองใช้ได้จริง แก้ ลบ หรือเขียนต่อได้ตามสบาย'),
+  tip('ถ้าลองจนเละหรือเผลอลบทิ้ง ไปที่ <b>ตั้งค่า › เกี่ยวกับ › คืนค่าคู่มือ</b> จะได้เล่มนี้ฉบับเดิมกลับมา (ฉบับที่แก้ไว้จะย้ายไปถังขยะ ไม่หายทันที)'),
+  H('ในเล่มนี้มีอะไร'),ul(['<b>บทที่ 1–3</b> — นิยายตัวอย่าง “ดาบแห่งสายลม” มีฉาก สถานะบท มุมมองตัวละคร และประวัติเวอร์ชันให้ดู','<b>คู่มือ 1–7</b> — วิธีใช้แต่ละระบบ พร้อมขั้นตอน “ลองทำ” ที่ใช้ข้อมูลในเล่มนี้ได้เลย','ตัวละคร 4 คน สถานที่ 3 แห่งพร้อมแผนที่ปักหมุด คำศัพท์ 3 คำ กระดานวางแผน เส้นเวลา ผังความสัมพันธ์ ไอเดีย และปมเรื่อง']),
+  H('เมนูด้านซ้าย'),ul(['<b>ภาพรวม</b> — สถิติ เป้าหมาย กราฟการเขียน บันทึกประจำวัน','<b>โครงเรื่อง</b> — แก่นเรื่อง เรื่องย่อ โครงเรื่อง 3 องก์','<b>เนื้อหาบท</b> — หน้าเขียน แบ่งบทและฉาก','<b>ตัวละคร / ฉากและสถานที่ / คำศัพท์และโลก</b> — ข้อมูลในเรื่อง','<b>กระดานวางแผน</b> — กระดานอิสระ คอร์กบอร์ดฉาก เส้นเวลา ผังความสัมพันธ์','<b>ไอเดียและปมเรื่อง</b> — จดไอเดียเร็ว ๆ และติดตามปมที่ยังไม่คลี่คลาย','<b>ถังขยะ</b> และ <b>รวบรวมและส่งออก</b> อยู่ด้านล่าง']),
+  H('คีย์ลัดที่ควรรู้'),ul(['<b>Ctrl+S</b> บันทึกเป็นไฟล์ .inkfold · <b>Ctrl+Shift+S</b> บันทึกเป็น… · <b>Ctrl+O</b> เปิดไฟล์','<b>Ctrl+F</b> ค้นหาและแทนที่','<b>Ctrl+\\</b> ซ่อน/แสดงแถบเมนู · <b>F11</b> เต็มจอ'])].join('')});
+ const g1=ch({title:'คู่มือ 1 · เขียนและจัดรูปแบบ',status:'done',summary:'แถบเครื่องมือ ฉาก การเติมชื่ออัตโนมัติ โหมดโฟกัส และการนับคำ',html:[
+  `<h2>เขียนและจัดรูปแบบ</h2>`,p('หน้าเขียนทำงานคล้าย Word แถบเครื่องมือด้านบนมีหัวข้อ ตัวหนา ตัวเอียง ขีดเส้นใต้ สีตัวอักษร ไฮไลต์ การจัดย่อหน้า รายการ และปุ่ม <b>แทรก</b>'),
+  H('ลองทำ'),ol(['เลือกข้อความบรรทัดนี้แล้วกด <b>B</b> หรือ Ctrl+B ให้เป็นตัวหนา','กดปุ่ม <b>แทรก › เริ่มฉากใหม่</b> ระบบจะใส่ตัวแบ่งฉาก และรายการบทด้านซ้ายจะแสดงฉากย่อยใต้บทนี้','พิมพ์ <b>ลิ</b> แล้วกด <b>Tab</b> — ระบบเติมชื่อ “ลินิน วาเลนเทีย” ให้ ใช้ได้กับชื่อตัวละคร สถานที่ และคำศัพท์ทุกตัว','กดไอคอนลูกศรขยายมุมขวาบน เพื่อเข้า <b>โหมดโฟกัส</b> แล้วกด Esc เพื่อออก','ดูแถบล่างของหน้าเขียน: จำนวนคำภาษาไทย จำนวนตัวอักษร และเวลาอ่านโดยประมาณ']),
+  p('พิมพ์ตรงนี้ได้เลย → '),
+  tip('สถานะของบท (ร่าง / แก้ไข / เสร็จแล้ว / วางแผน) เปลี่ยนได้ที่กล่องมุมขวาบน และจะไปแสดงในหน้าภาพรวม')].join('')});
+ const g2=ch({title:'คู่มือ 2 · วางโครงเรื่อง',status:'done',summary:'โครงเรื่อง 3 องก์ กระดานอิสระ คอร์กบอร์ดฉาก เส้นเวลา ผังความสัมพันธ์ ไอเดียและปมเรื่อง',html:[
+  `<h2>วางโครงเรื่อง</h2>`,ul(['<b>โครงเรื่อง</b> — กรอกไว้แล้วครบทุกช่องเป็นตัวอย่าง: แก่นเรื่อง เรื่องย่อ องก์ 1–3 ธีม โทน และตอนจบ','<b>กระดานวางแผน › กระดานอิสระ</b> — การ์ดฉาก โน้ต และการ์ดตัวละคร ลากย้ายได้ การ์ดเชื่อมกันด้วยเส้นหลายแบบ เช่น “เพราะฉะนั้น” “ย้อนอดีต” “แต่ทว่า”','<b>คอร์กบอร์ดฉาก</b> — ฉากทุกฉากเรียงตามบท ลากย้ายฉากข้ามบทได้','<b>เส้นเวลา</b> — เหตุการณ์ 4 อย่างตามลำดับเวลาในเรื่อง ผูกกับบทได้','<b>ผังความสัมพันธ์</b> — ตัวละคร 4 คนกับความสัมพันธ์ 4 แบบ','<b>ไอเดียและปมเรื่อง</b> — ปม “พ่อหายไปไหน” ยังเปิดอยู่ ส่วน “ใครส่งคาเอลมา” คลี่คลายแล้ว']),
+  H('ลองทำ'),ol(['เปิด <b>กระดานวางแผน</b> แล้วลากการ์ด “ลินินพบดาบ” ไปที่อื่น','สลับไปแท็บ <b>เส้นเวลา</b> แล้วกด “เพิ่มเหตุการณ์”','ไปที่ <b>ไอเดียและปมเรื่อง</b> พิมพ์ไอเดียใหม่แล้วกด Enter'])].join('')});
+ const g3=ch({title:'คู่มือ 3 · ตัวละคร สถานที่ และคำศัพท์',status:'done',summary:'ข้อมูลในเรื่อง แผนที่ปักหมุด และการค้นว่าชื่อปรากฏในบทไหน',html:[
+  `<h2>ข้อมูลในเรื่อง (Story Bible)</h2>`,ul(['<b>ตัวละคร</b> — บทบาท อายุ แท็ก นิสัย รูปลักษณ์ ความต้องการ ความกลัว ประวัติ รูปภาพ และแกลเลอรี','<b>ฉากและสถานที่</b> — แท็บ <b>แผนที่</b> มีแผนที่ “แผ่นดินสายลม” ปักหมุดไว้ 3 จุด คลิกหมุดเพื่อดูข้อมูล ลากเพื่อย้าย','<b>คำศัพท์และโลก</b> — ไอเทม เวทมนตร์ เผ่าพันธุ์ วัฒนธรรม แต่ละแบบมีช่องข้อมูลต่างกัน']),
+  H('ลองทำ'),ol(['เปิดตัวละคร <b>คาเอล โรว์แลนด์</b> แล้วกด <b>ค้นในเนื้อเรื่อง</b> — ระบบบอกว่าชื่อนี้อยู่ในบทไหน กี่ครั้ง และใช้ช่องแทนที่เพื่อเปลี่ยนชื่อทั้งเรื่องได้','เปิดสถานที่ <b>ป่าเสียงหวีด</b> แล้วกดแท็บ <b>แผนที่</b>','ในหน้าเขียน เปิดแผงด้านขวา (ไอคอนแผงข้าง) แท็บ <b>ตัวละคร</b> เพื่อดูข้อมูลระหว่างเขียนโดยไม่ต้องเปลี่ยนหน้า'])].join('')});
+ const g4=ch({title:'คู่มือ 4 · ตรวจทาน (แบบฝึกหัด)',status:'revise',summary:'ค้นหาและแทนที่ ตรวจคำซ้ำ ตรวจคำที่มักเขียนผิด — มีย่อหน้าแบบฝึกหัดให้ลอง',html:[
+  `<h2>ตรวจทาน</h2>`,p('เปิดแผงด้านขวาของหน้าเขียน แล้วเลือกแท็บ:'),ul(['<b>ค้นหา</b> — ค้นหาและแทนที่ในบทนี้หรือทั้งเรื่อง (Ctrl+F)','<b>คำซ้ำ</b> — หาคำที่ใช้ถี่ ๆ ในระยะใกล้กัน ชื่อตัวละคร สถานที่ และคำศัพท์ในเรื่องนับเป็นคำเดียว','<b>คำผิด</b> — หาคำที่คนไทยมักเขียนผิด แล้วแก้ทีละคำหรือแก้ทั้งบท ย้อนกลับได้จากประวัติเวอร์ชัน']),
+  H('แบบฝึกหัด — ย่อหน้าด้านล่างตั้งใจเขียนผิดและใช้คำซ้ำ'),
+  p('ลินินเดินออกจากบ้าน เธอเดินผ่านทุ่งหญ้า เดินข้ามลำธาร แล้วเดินขึ้นเนินเขาโดยไม่หยุดพัก ลินินสังเกตุเห็นว่าลมพัดมาจากทิศเดียวกันตลอด ยายโรซาไม่อนุญาติให้เธอไปไกลกว่านี้ แต่นี่อาจเป็นโอกาศเดียวที่จะได้รู้ความจริง เธอเอามือแตะศรีษะ แล้วเงาของใครบางคนก็ปรากฎขึ้นบนสันเขา'),
+  H('ลองทำ'),ol(['เปิดแท็บ <b>คำซ้ำ</b> — ระบบจะพบ “เดิน” ถี่ ๆ และ “ลินิน” ถูกนับเป็นคำเดียว','เปิดแท็บ <b>คำผิด</b> — จะพบ 5 คำ คลิกคำเพื่อไฮไลต์ แล้วกด “แก้” หรือ “แก้ทั้งหมดในบทนี้”','เปิดแท็บ <b>ค้นหา</b> ลองแทนที่ “ลินิน” ด้วยชื่ออื่นทั้งเรื่อง แล้วแทนที่กลับ']),
+  tip('อยากให้เบราว์เซอร์ขีดเส้นใต้คำสะกดผิดด้วย เปิดได้ที่ ตั้งค่า › การเขียน › ตรวจคำสะกด')].join('')});
+ const g5=ch({title:'คู่มือ 5 · เป้าหมายและสถิติ',status:'done',summary:'เป้ารายวัน เป้าทั้งเรื่อง กราฟ 14 วัน และบันทึกประจำวัน',html:[
+  `<h2>เป้าหมายและสถิติ</h2>`,p('หน้า <b>ภาพรวม</b> แสดงจำนวนคำทั้งเรื่อง จำนวนบท ตัวละคร วันที่เขียนต่อเนื่อง ความคืบหน้าเทียบเป้าหมาย และกราฟคำที่เขียนใน 14 วันล่าสุด (เล่มนี้ใส่ตัวเลขตัวอย่างไว้ให้กราฟมีข้อมูล)'),
+  H('ลองทำ'),ol(['กดไอคอนดินสอข้างชื่อเรื่องด้านบน เพื่อตั้งเป้ารายวัน เป้าทั้งเรื่อง และกำหนดเสร็จ','เขียนเพิ่มในบทใดก็ได้ แล้วกลับไปดูว่าแถบ “วันนี้” ในภาพรวมขยับ','กดอีโมจิใน <b>บันทึกประจำวัน</b> แล้วจดสั้น ๆ ว่าวันนี้เขียนไปถึงไหน'])].join('')});
+ const g6=ch({title:'คู่มือ 6 · บันทึก ไฟล์ และความปลอดภัยของข้อมูล',status:'done',summary:'บันทึกอัตโนมัติ ไฟล์ .inkfold ประวัติเวอร์ชัน ถังขยะ และการสำรอง',html:[
+  `<h2>งานของคุณปลอดภัยแค่ไหน</h2>`,ul(['<b>บันทึกอัตโนมัติ</b> ในเครื่องทุกครั้งที่พิมพ์ ดูสถานะที่มุมขวาบน (“บันทึกในเครื่องแล้ว”)','<b>ไฟล์นิยาย .inkfold</b> — เมนู ไฟล์ › บันทึกเป็น… เก็บทุกอย่างของเรื่องไว้ในไฟล์เดียว ย้ายเครื่องหรือส่งต่อได้ เปิดสวิตช์ “บันทึกอัตโนมัติ” เพื่อเซฟลงไฟล์ให้เอง','<b>ประวัติเวอร์ชัน</b> — ระบบเก็บเวอร์ชันของแต่ละบทให้อัตโนมัติ บทที่ 1 มีเวอร์ชัน “ร่างแรก” ให้ลองกู้คืน','<b>ถังขยะ</b> — ของที่ลบอยู่ได้ 30 วัน กู้คืนได้','<b>กันเปิดซ้อน</b> — ถ้าเปิดโปรแกรมสองหน้าต่าง ระบบจะให้ใช้ได้ทีละหน้าต่าง กันงานทับกัน','<b>สำรองทั้งคลัง</b> — ปุ่มบนหน้าคลังนิยาย หรือ ตั้งค่า › ข้อมูลและการสำรอง']),
+  H('ลองทำ'),ol(['ไปที่ <b>บทที่ 1</b> กดไอคอนนาฬิกา (ประวัติเวอร์ชัน) แล้วเลือก “ร่างแรก” เพื่อเทียบกับฉบับปัจจุบัน','ลบบทที่ 3 (ไอคอนถังขยะมุมขวาบน) แล้วไปที่ <b>ถังขยะ</b> เมนูซ้ายล่าง กด “กู้คืน”']),
+  tip('ข้อมูลในเบราว์เซอร์จะหายถ้าล้างข้อมูลเว็บไซต์ ควรบันทึกเป็นไฟล์ .inkfold หรือสำรองทั้งคลังเป็นประจำ')].join('')});
+ const g7=ch({title:'คู่มือ 7 · นำเข้า ส่งออก และตั้งค่า',status:'done',summary:'ส่งออก DOCX PDF EPUB MD TXT นำเข้าไฟล์ และปรับหน้าตาโปรแกรม',html:[
+  `<h2>นำเข้าและส่งออก</h2>`,ul(['<b>รวบรวมและส่งออก</b> (เมนูซ้ายล่าง) — Word (.docx) PDF/พิมพ์ต้นฉบับ E-Book (.epub) Markdown ข้อความล้วน เอกสารข้อมูลเรื่อง และไฟล์สำรอง .json','<b>นำเข้า</b> — ในหน้าเขียน กดไอคอนลูกศรขึ้นบนแถบเครื่องมือ เพื่อนำเข้า .docx .txt .md เป็นบทใหม่หรือแทรกในบทนี้','<b>คัดลอกสำหรับเว็บนิยาย</b> — ปุ่ม “เว็บนิยาย” บนแถบเครื่องมือ จัดรูปแบบให้วางลงเว็บอย่าง Dek-D หรือ ReadAWrite ได้ทันที']),
+  H('ตั้งค่า'),ul(['<b>หน้าตา</b> — ธีมสี (กระดาษ ชาเขียว สนธยา) รูปแบบไอคอน ตำแหน่งเมนู','<b>การเขียน</b> — ฟอนต์ ขนาด ระยะบรรทัด ความกว้างหน้ากระดาษ เติมชื่ออัตโนมัติ ตรวจคำสะกด','<b>อนิเมชันและเสียง</b> — เปิด/ปิดอนิเมชันเปิดหนังสือและเสียงพลิกหน้า','<b>เกี่ยวกับ</b> — เปิดคู่มือ และ <b>คืนค่าคู่มือ</b>']),
+  H('ลองทำ'),ol(['ส่งออกเล่มนี้เป็น E-Book แล้วเปิดในแอปอ่านหนังสือ','เปลี่ยนธีมเป็น “สนธยา” จากวงกลมสีมุมขวาบน'])].join('')});
+ n.chapters=[g0,s1,s2,s3,g1,g2,g3,g4,g5,g6,g7];
+ n.chapters.forEach(c=>{c.words=countWords(htmlToText(c.html));c.snaps.forEach(s=>s.words=countWords(htmlToText(s.html)))});
+ n.outline={logline:'เมื่อเด็กสาวจากหมู่บ้านชายขอบได้ครอบครองดาบที่ฟังเสียงลมได้ เธอต้องตามหาความจริงของพ่อที่หายไป ก่อนที่ผู้ที่ต้องการดาบจะตามมาถึง',
+  synopsis:'ลินินพบดาบแห่งสายลมในโพรงไม้ระหว่างพายุ และได้ยินเสียงพ่อที่หายไปสิบสองปี ชายแปลกหน้าชื่อคาเอลปรากฏตัวพร้อมคำเตือน ทั้งคู่ออกเดินทางไปหอคอยลมเหนือ ที่ซึ่งท่านเซราฟรออยู่',
+  plot:'พบดาบ → คาเอลมาถึง → ยายเล่าความลับ → ออกเดินทาง → ความจริงเรื่องพ่อ → เผชิญหน้าท่านเซราฟ',
+  act1:'ชีวิตในหมู่บ้านเอลมอร์ / พายุและดาบ / การตัดสินใจออกเดินทาง',act2:'ผ่านป่าเสียงหวีด / ความลับของคาเอล / จุดพลิกผัน: พ่อเคยเป็นผู้พิทักษ์ลม',act3:'หอคอยลมเหนือ / เลือกระหว่างพ่อกับดาบ',
+  theme:'การปล่อยวางสิ่งที่สูญเสียไป',tone:'แฟนตาซีอบอุ่นปนเศร้า ลมเป็นสัญลักษณ์ของความทรงจำ',ending:'ลินินปล่อยให้เสียงพ่อจากไปกับลม และกลายเป็นผู้พิทักษ์ลมคนใหม่'};
+ const bd=n.boards[0];const k1={id:uid(),type:'scene',x:120,y:110,title:'ลินินพบดาบ',goal:'หาสมุนไพรให้ยาย',conflict:'พายุลมพัดมาไม่ทันตั้งตัว',outcome:'พบดาบในโพรงไม้'};
+ const k2={id:uid(),type:'scene',x:470,y:170,title:'คาเอลปรากฏตัว',goal:'เตือนลินิน',conflict:'ยายไม่ไว้ใจเขา',outcome:'ยายยอมเล่าความลับ'};
+ const k3={id:uid(),type:'note',x:300,y:470,title:'ปมเรื่องพ่อ',text:'พ่อเคยเป็นผู้พิทักษ์ดาบมาก่อน'},k4={id:uid(),type:'characters',ref:c3.id,text:'',x:760,y:380};
+ bd.cards=[k1,k2,k3,k4];bd.links=[{id:uid(),from:k1.id,to:k2.id,style:'cause',label:''},{id:uid(),from:k3.id,to:k1.id,style:'flashback',label:''},{id:uid(),from:k2.id,to:k4.id,style:'twist',label:'ใครส่งมา?'}];
+ n.relations=[{id:uid(),a:c1.id,b:c2.id,type:'ally',label:'เพื่อนร่วมทาง',mutual:true},{id:uid(),a:c3.id,b:c1.id,type:'hate',label:'ต้องการดาบ',mutual:false},{id:uid(),a:c4.id,b:c1.id,type:'family',label:'ยายกับหลาน',mutual:true},{id:uid(),a:c2.id,b:c3.id,type:'secret',label:'เคยรับใช้',mutual:false}];
+ n.timeline=[{id:uid(),when:'ปีที่ 0',title:'พ่อของลินินหายตัวไป',text:'หายไปในคืนที่ลมสงบผิดปกติ',chapterId:''},{id:uid(),when:'12 ปีต่อมา',title:'ลินินพบดาบ',text:'',chapterId:s1.id},{id:uid(),when:'วันถัดมา',title:'คาเอลมาถึงหมู่บ้าน',text:'',chapterId:s2.id},{id:uid(),when:'สามวันต่อมา',title:'ออกเดินทางสู่หอคอยลมเหนือ',text:'',chapterId:s3.id}];
+ n.ideas=[{id:uid(),text:'ลมสามารถพาความทรงจำมาได้?',done:false},{id:uid(),text:'คาเอลเคยรู้จักพ่อของลินิน',done:false},{id:uid(),text:'ฉากเปิดเรื่องด้วยเสียงลม',done:true}];
+ n.threads=[{id:uid(),title:'พ่อหายไปไหน',status:'open',planted:s1.id,resolved:'',notes:'ปูไว้ในบทที่ 1 ตอนได้ยินเสียง'},{id:uid(),title:'ใครส่งคาเอลมา',status:'resolved',planted:s2.id,resolved:s3.id,notes:''}];
+ const d=new Date();[220,0,480,350,610,0,290,540,700,180,0,460,390].forEach((w,i)=>{const x=new Date(d);x.setDate(d.getDate()-13+i);if(w)n.log[dkey(x)]=w});
+ try{const cv=(typeof COVERS!=='undefined')&&(COVERS.find(x=>x.id==='fantasy')||COVERS[0]);if(cv)n.cover=drawCover(cv,'ดาบแห่งสายลม','คู่มือ Novelist Workshop')||''}catch(e){}
  return n;
 }
+function guideIn(){return db.novels.find(x=>x.guide)}
+function openGuide(){let n=guideIn();if(!n){n=guideNovel();db.novels.push(n);db.settings.guide=GUIDE_VER;save()}closeModal();S.nid=n.id;S.sec='chapters';S.sel={chapters:n.chapters[0].id};S.bid=null;render()}
+function resetGuide(){if(!confirm('คืนค่าคู่มือเป็นฉบับเดิม?\nเล่มคู่มือที่แก้ไว้จะย้ายไปถังขยะ (กู้คืนได้ภายใน 30 วัน) นิยายเรื่องอื่นไม่ถูกแตะ'))return;
+ for(const o of db.novels.filter(x=>x.guide)){trashPut('novel',o,{})}db.novels=db.novels.filter(x=>!x.guide);const n=guideNovel();db.novels.push(n);db.settings.guide=GUIDE_VER;save();toast('คืนค่าคู่มือแล้ว');openGuide()}
 
 /* ---------- state ---------- */
 const S={nid:null,sec:'overview',sel:{},folder:{},tag:{},q:{},refOpen:false,refTab:'notes',refQ:'',focus:false,collapsed:false,
@@ -930,14 +1023,14 @@ function renderLibrary(){
  const cards=`<div class="lib-grid">${ns.map(n=>`<div class="card ncard" data-act="open" data-id="${n.id}" tabindex="0" role="button" aria-label="เปิด ${esc(n.title)}">
   ${n.cover?`<div class="cover img"><img src="${n.cover}" alt=""></div>`:`<div class="cover" style="background:linear-gradient(135deg,${n.color},${n.color}aa)"><span style="color:${n.color}">${esc(initial(n.title))}</span></div>`}
   <div class="menu"><button class="icon-btn" data-act="editNovel" data-id="${n.id}" title="แก้ไขข้อมูลนิยาย">${ic('edit',16)}</button><button class="icon-btn" data-act="delNovel" data-id="${n.id}" title="ย้ายนิยายไปถังขยะ">${ic('trash',16)}</button></div>
-  <div class="nbody">${n.genre?`<div><span class="chip">${esc(n.genre)}</span></div>`:''}<h3>${esc(n.title)}</h3><div class="syn">${esc(n.synopsis)||'<i>ยังไม่มีเรื่องย่อ</i>'}</div>
+  <div class="nbody">${n.genre||n.guide?`<div>${n.guide?'<span class="chip warm">คู่มือ</span> ':''}${n.genre?`<span class="chip">${esc(n.genre)}</span>`:''}</div>`:''}<h3>${esc(n.title)}</h3><div class="syn">${esc(n.synopsis)||'<i>ยังไม่มีเรื่องย่อ</i>'}</div>
   <div class="meta"><span>${n.chapters.length} บท</span><span>${num(totalWords(n))} คำ</span><span style="margin-left:auto">แก้ไข ${fmtDate(n.updated)}</span></div></div></div>`).join('')}
   <button class="newcard" data-act="newNovel"><div style="text-align:center">${ic('plus',28)}<div style="margin-top:6px">เริ่มเรื่องใหม่</div></div></button></div>`;
  return `<header class="top"><div class="brand" title="Novelist Workshop"><div class="logo"><svg class="nw-mark" viewBox="60 70 420 330" aria-hidden="true"><path d="M92 372V176l90 196V176l50 196 44-110 44 110 44-158" fill="none" stroke="currentColor" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(364 214) rotate(38)"><path d="M0 0-24-70Q-24-118 0-150 24-118 24-70Z" fill="#C99A48"/><circle cy="-84" r="10" fill="var(--accent-soft)"/></g></svg></div><span class="brand-name">Novelist Workshop</span></div><button class="btn ghost sm" data-act="fileMenu" title="ไฟล์: เปิด / เปิดล่าสุด">${ic('note',15)} ไฟล์</button><div class="spacer"></div>
  <button class="btn primary sm install-btn ${installEvt?'':'hidden'}" data-act="install">${ic('install',15)} ติดตั้งเป็นแอป</button>
  <button class="btn ghost sm hide-sm" data-act="importJson">${ic('up',16)} นำเข้า</button>
  <button class="btn ghost sm hide-sm" data-act="backupAll">${ic('down',16)} สำรองทั้งคลัง</button>
- <button class="icon-btn" data-act="trash" title="ถังขยะ">${ic('trash',17)}</button><button class="btn ghost sm" data-act="settings" title="ตั้งค่าทั้งหมด">${ic('gear',17)} <span class="hide-sm">ตั้งค่า</span></button>${themeSwitch()}</header>
+ <button class="btn ghost sm" data-act="openGuide" title="เปิดคู่มือการใช้งาน">${ic('book',16)} <span class="hide-sm">คู่มือ</span></button><button class="icon-btn" data-act="trash" title="ถังขยะ">${ic('trash',17)}</button><button class="btn ghost sm" data-act="settings" title="ตั้งค่าทั้งหมด">${ic('gear',17)} <span class="hide-sm">ตั้งค่า</span></button>${themeSwitch()}</header>
  <div class="lib">${backupBanner()}<div class="lib-head"><div class="lib-art">${ART.book}</div><div style="flex:1"><h1>คลังนิยายของฉัน</h1><p>วางโครง จดข้อมูล และเขียนเรื่องราวของคุณ — ข้อมูลทั้งหมดเก็บอยู่ในเครื่องนี้</p></div>
  <div class="seg" style="flex:none" role="group" aria-label="รูปแบบการแสดงคลัง"><button class="${view==='shelf'?'on':''}" data-act="libView" data-v="shelf">${ic('book',15)} ชั้นหนังสือ</button><button class="${view==='cards'?'on':''}" data-act="libView" data-v="cards">${ic('grid',15)} การ์ด</button></div>
  <button class="btn primary" data-act="newNovel">${ic('plus',16)} นิยายเรื่องใหม่</button></div>
@@ -954,7 +1047,7 @@ function shelfHtml(ns){
 function bookHtml(n,i){
  const tw=totalWords(n),w=Math.round(40+Math.min(34,Math.sqrt(tw)/5+n.chapters.length*1.5)),h=172+(hashStr(n.id)%6)*7,d=Math.round(h*.7),c=spineOf(n),ink=inkFor(c);
  return `<div class="sb-slot" style="--i:${i};--w:${w}px;--h:${h}px;--d:${d}px">
-  <div class="sb-label"><b>${esc(n.title)}</b><span>${n.genre?esc(n.genre)+' · ':''}${n.chapters.length} บท · ${num(tw)} คำ</span>${n.fileName?`<span class="sb-file">${ic('note',11)} ${esc(n.fileName)}</span>`:''}<span class="sb-acts"><button class="sb-btn" data-act="editNovel" data-id="${n.id}" title="แก้ไขข้อมูลนิยาย">${ic('edit',13)}</button><button class="sb-btn" data-act="delNovel" data-id="${n.id}" title="ย้ายนิยายไปถังขยะ">${ic('trash',13)}</button></span></div>
+  <div class="sb-label"><b>${esc(n.title)}</b>${n.guide?'<span class="chip warm">คู่มือ</span>':''}<span>${n.genre?esc(n.genre)+' · ':''}${n.chapters.length} บท · ${num(tw)} คำ</span>${n.fileName?`<span class="sb-file">${ic('note',11)} ${esc(n.fileName)}</span>`:''}<span class="sb-acts"><button class="sb-btn" data-act="editNovel" data-id="${n.id}" title="แก้ไขข้อมูลนิยาย">${ic('edit',13)}</button><button class="sb-btn" data-act="delNovel" data-id="${n.id}" title="ย้ายนิยายไปถังขยะ">${ic('trash',13)}</button></span></div>
   <div class="sbook" data-act="open" data-id="${n.id}" tabindex="0" role="button" aria-label="เปิด ${esc(n.title)}" style="--c:${c};--ink:${ink}">
    <div class="sb-spine"><span class="sb-band"></span><span class="sb-title">${esc(n.title)}</span><span class="sb-em">${esc(initial(n.title))}</span><span class="sb-band b"></span></div>
    <div class="sb-cover">${n.cover?`<img src="${n.cover}" alt="">`:`<div class="sb-cf"><span>${esc(n.title)}</span></div>`}</div>
@@ -1601,6 +1694,7 @@ async function settingsModal(tab){
   <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" data-s="backup">${ic('down',14)} สำรองทั้งคลัง</button><button class="btn sm" data-s="import">${ic('up',14)} นำเข้า</button><button class="btn sm" data-s="trash">${ic('trash',14)} ถังขยะ</button></div>`}
  if(t==='about')body=`<div style="display:flex;gap:16px;align-items:center"><img src="icons/icon-192.png" width="64" height="64" alt="" style="border-radius:14px"><div><div class="brand-name" style="font-size:30px;color:var(--accent-2)">Novelist Workshop</div><div class="muted" style="font-size:12.5px">NW · เดิมชื่อ Inkfold</div><div class="muted">เวอร์ชัน ${APP_VERSION} · โต๊ะเขียนนิยายของคุณ</div></div></div>
   <p style="margin:0;line-height:1.7">งานเขียนทั้งหมดเก็บอยู่ในเครื่องของคุณเท่านั้น ไม่มีการส่งเนื้อหาหรือข้อมูลการใช้งานไปที่ใด ใช้งานออฟไลน์ได้ และนำเข้าไฟล์สำรองจาก “โต๊ะนักเขียน” ได้</p>
+  <div class="field" style="margin:0"><label>คู่มือการใช้งาน</label><div class="muted" style="font-size:13px;line-height:1.6;margin-bottom:8px">เล่ม “คู่มือ · ดาบแห่งสายลม” อธิบายทุกระบบพร้อมข้อมูลตัวอย่างให้ลอง แก้หรือลบได้ตามสบาย ถ้าลองจนเละ กดคืนค่าเพื่อได้ฉบับเดิม (ฉบับที่แก้ไว้ย้ายไปถังขยะ)</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm primary" data-s="guide">${ic('book',14)} เปิดคู่มือ</button><button class="btn sm" data-s="guideReset">คืนค่าคู่มือ</button></div></div>
   <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" data-s="replay">${ic('book',14)} ดูอนิเมชันเปิดหนังสือ</button><button class="btn sm danger" data-s="reset">คืนค่าการตั้งค่าเริ่มต้น</button></div>
   <div class="muted" style="font-size:12.5px">ฟอนต์ IBM Plex Sans Thai, Noto Serif Thai, Cormorant Garamond และ Sarabun ใช้สัญญาอนุญาต SIL Open Font License</div>`;
  modal(`${mHead('ตั้งค่า')}<div class="set"><nav class="set-nav" aria-label="หมวดการตั้งค่า">${SETTABS.map(([k,l,i])=>`<button class="${t===k?'on':''}" data-stab="${k}">${ic(i,16)} ${l}</button>`).join('')}</nav><div class="set-body">${body}</div></div><div class="modal-f"><span class="grow"></span><button class="btn primary" data-m="close">เสร็จ</button></div>`,null,
@@ -1616,6 +1710,7 @@ async function settingsModal(tab){
    if(b.dataset.fontSet){db.settings.edFont=b.dataset.fontSet;save();applyPref('edFont');return settingsModal()}
    const a=b.dataset.s;
    if(a==='fontImport'){importFont().then(()=>settingsModal());return}
+   if(a==='guide'){openGuide();return}if(a==='guideReset'){closeModal();resetGuide();return}
    if(a==='replay'){closeModal();if(!P.anim){P.anim=true;savePrefs();applyPref('anim')}playLaunch()}
    if(a==='testSound'){const pv=P.sound;P.sound=true;sfx('cover');setTimeout(()=>{sfx('page');P.sound=pv},380)}
    if(a==='link')linkBackupFile();if(a==='regrant')regrantBackup();if(a==='unlink')unlinkBackup();
@@ -1684,6 +1779,7 @@ const A={
  importDoc:()=>importDocFlow(),
  printChapter:()=>{commitEditor();const n=N(),c=curChapter();if(!c)return;printHtml(c.title,`<h1>${esc(chTitle(c,n.chapters.indexOf(c)))}</h1>${parasHtml(c.html)}`)},newNovel:()=>novelModal(),editNovel:el=>novelModal(db.novels.find(x=>x.id===el.dataset.id)),delNovel:el=>delNovel(el.dataset.id),
  open:el=>{const n=db.novels.find(x=>x.id===el.dataset.id);const go=()=>{S.nid=el.dataset.id;S.sec='overview';S.sel={};S.bid=null;S.pan={x:40,y:20};S.z=1;render()};if(n&&P.anim&&P.novelAnim)playBook({title:n.title,sub:n.genre,color:spineOf(n),cover:n.cover,left:n.title,leftSub:(n.synopsis||'').slice(0,90),right:`${n.chapters.length} บท · ${num(totalWords(n))} คำ`,fast:true,onMid:go});else go()},
+ openGuide:()=>openGuide(),
  home:()=>{commitEditor();S.nid=null;S.focus=false;render()},
  sec:el=>{commitEditor();S.sec=el.dataset.v;S.linkFrom=S.relFrom=null;S.animate=true;rerenderMain()},
  collapse:()=>{commitEditor();S.collapsed=!S.collapsed;S.keepFocus=true;render()},
@@ -2240,6 +2336,7 @@ function playBook(o){
  db=await loadDb();
  document.documentElement.dataset.theme=db.settings.theme||'paper';
  await initFileBackup();await loadFonts();await loadHandles();
+ if(!db.settings.guide&&TAB.primary){try{await document.fonts.load('700 40px "Noto Serif Thai"')}catch(e){}db.novels.push(guideNovel());db.settings.guide=GUIDE_VER}
  try{if(navigator.storage&&navigator.storage.persist){ST.persisted=await navigator.storage.persisted()||await navigator.storage.persist()}}catch(e){}
  save();render();
  if(!TAB.primary)showElsewhere('Novelist Workshop เปิดอยู่ในอีกหน้าต่างหนึ่งแล้ว');
