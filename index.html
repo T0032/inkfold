@@ -520,11 +520,12 @@ body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 .cc-f{display:flex;align-items:center;justify-content:space-between;gap:6px;font-size:11.5px;color:var(--faint)}
 .cork-add{border:2px dashed rgba(120,90,60,.45);border-radius:8px;padding:6px;color:var(--muted);font-size:13px;display:flex;gap:6px;justify-content:center;align-items:center;background:rgba(255,255,255,.25)}
 .cork-add:hover{border-color:var(--accent);color:var(--accent-2)}
-::highlight(inkrep){background-color:rgba(232,190,110,.5)}
+::highlight(inksp){background:rgba(192,86,63,.25);text-decoration:underline wavy #C0563F}::highlight(inksp-cur){background:rgba(192,86,63,.5)}::highlight(inkrep){background-color:rgba(232,190,110,.5)}
 ::highlight(inkrep-cur){background-color:rgba(214,120,90,.6)}
 .rep-list{display:flex;flex-direction:column;gap:4px}
 .rep-it{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:9px;text-align:left;font-size:14px}
 .rep-it:hover{background:var(--surface)}
+.sp-it{display:flex;align-items:center;gap:6px;padding:4px 4px 4px 0;border-radius:9px}.sp-it:hover{background:var(--surface)}.sp-it .rep-it{flex:1;padding:4px 8px}.sp-bad{text-decoration:line-through;text-decoration-color:#C0563F;opacity:.85}
 .rep-it small{margin-left:auto;color:var(--faint);font-size:11.5px}
 .wc-prev{background:var(--paper);border:1px solid var(--line2);border-radius:var(--r-sm);padding:16px 20px;max-height:40vh;overflow:auto;font-family:var(--serif);line-height:1.8;font-size:15px}
 .wc-prev p{margin:0}
@@ -611,7 +612,7 @@ body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/20
 <input type="file" id="imgIn" accept="image/*" class="hidden">
 <script>
 'use strict';
-const APP_NAME='Novelist Workshop';const APP_VERSION='1.5.0';
+const APP_NAME='Novelist Workshop';const APP_VERSION='1.5.1';
 /* ---------- helpers ---------- */
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -625,6 +626,10 @@ const num=n=>(n||0).toLocaleString('th-TH');
 const initial=s=>((s||'?').trim()[0]||'?');
 const escRe=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
 const seg=(window.Intl&&Intl.Segmenter)?new Intl.Segmenter('th',{granularity:'word'}):null;
+function escRx(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
+let SNM={key:null,re:null};
+function storyNameRe(){const n=(typeof S!=='undefined'&&S.nid)?N():null;if(!n)return null;const ns=[...new Set([...(n.characters||[]),...(n.locations||[]),...(n.glossary||[])].map(x=>(x.name||'').trim()).filter(x=>[...x].length>=2))].sort((a,b)=>b.length-a.length);const key=ns.join('\u0001');if(key!==SNM.key)SNM={key,re:ns.length?new RegExp(ns.map(escRx).join('|'),'gi'):null};return SNM.re}
+function segStory(t){const out=[];const push=(s,off)=>{for(const g of seg.segment(s))out.push({segment:g.segment,index:g.index+off,isWordLike:g.isWordLike})};const re=storyNameRe();if(!re){push(t,0);return out}re.lastIndex=0;let last=0,m;while((m=re.exec(t))){if(!m[0]){re.lastIndex++;continue}if(m.index>last)push(t.slice(last,m.index),last);out.push({segment:m[0],index:m.index,isWordLike:true});last=m.index+m[0].length}if(last<t.length)push(t.slice(last),last);return out}
 function countWords(t){t=(t||'').trim();if(!t)return 0;if(seg){let c=0;for(const s of seg.segment(t))if(s.isWordLike)c++;return c}return t.split(/\s+/).length}
 function toast(m,act){const t=$('#toast');t.innerHTML=`<span>${esc(m)}</span>${act?`<button type="button">${esc(act.label)}</button>`:''}`;t.classList.add('show');t.style.pointerEvents=act?'auto':'none';
  if(act)t.querySelector('button').onclick=()=>{t.classList.remove('show');act.fn()};clearTimeout(t._t);t._t=setTimeout(()=>{t.classList.remove('show');t.style.pointerEvents='none'},act?7000:2400)}
@@ -904,7 +909,7 @@ function softDelete(kind,item,o){const t=trashPut(kind,item,o);save();const labe
 const app=$('#app');
 function render(){
  hideAC();
- if(!S.nid||!N()){S.nid=null;app.innerHTML=renderLibrary();labelButtons();return}
+ if(!S.nid||!N()){S.nid=null;app.innerHTML=renderLibrary();labelButtons();document.title='Novelist Workshop — โต๊ะเขียนนิยาย';return}
  app.innerHTML=renderNovel();afterRender();
 }
 function labelButtons(root=document){$$('button[title]:not([aria-label]),a[title]:not([aria-label])',root).forEach(b=>b.setAttribute('aria-label',b.title))}
@@ -976,7 +981,8 @@ function renderSection(){
 }
 function rerenderMain(){const m=$('#main');if(!m)return render();const st=m.scrollTop;hideAC();m.innerHTML=renderSection();if(S.animate){S.animate=false;const f=m.firstElementChild;if(f)f.classList.add('pg-in')}afterRender();m.scrollTop=st;
  $$('.nav a[data-act="sec"]').forEach(a=>a.classList.toggle('on',a.dataset.v===S.sec))}
-function afterRender(){updateStatus();if(S.sec==='chapters')mountEditor();if(S.sec==='locations'&&S.locView==='map')mountMap();if(S.sec==='board')mountBoard();$$('textarea.auto').forEach(autoGrow);labelButtons()}
+function updNavCnt(){const n=S.nid?N():null;if(!n)return;const cnt={chapters:n.chapters.length,characters:n.characters.length,locations:n.locations.length,glossary:n.glossary.length,ideas:n.ideas.filter(i=>!i.done).length};$$('.nav a[data-act="sec"]').forEach(a=>{const k=a.dataset.v;if(cnt[k]==null)return;let s=a.querySelector('.cnt');if(!s){s=document.createElement('span');s.className='cnt';a.appendChild(s)}s.textContent=cnt[k]});const ta=$('.nav a[data-act="trash"] .cnt');if(ta){const tc=db.trash.filter(t=>t.nid===n.id).length;ta.textContent=tc||''}}
+function afterRender(){updateStatus();updNavCnt();if(S.sec==='chapters')mountEditor();if(S.sec==='locations'&&S.locView==='map')mountMap();if(S.sec==='board')mountBoard();$$('textarea.auto').forEach(autoGrow);labelButtons()}
 function autoGrow(t){t.style.height='auto';t.style.height=t.scrollHeight+'px'}
 function avatar(c,sz=54){const fs=Math.round(sz*.42);return c.img?`<img class="avatar" src="${c.img}" alt="" style="width:${sz}px;height:${sz}px">`:`<span class="avatar" style="width:${sz}px;height:${sz}px;font-size:${fs}px;background:${c.color||COLORS[0]}">${esc(initial(c.name))}</span>`}
 
@@ -1058,14 +1064,15 @@ function secChapters(){
  <div class="ed-foot"><span id="wc">0 คำ</span><span id="cc">0 ตัวอักษร</span><span id="rt"></span><span class="sp"></span><span>พิมพ์ชื่อ 2 ตัวอักษรแรก แล้วกด <b>Tab</b> เพื่อเติมชื่อ</span></div></div>
  ${S.refOpen?renderRef():''}</div>`;
 }
-const REFTABS=[['notes','โน้ตบท'],['find','ค้นหา'],['review','คำซ้ำ'],['characters','ตัวละคร'],['locations','สถานที่'],['glossary','คำศัพท์']];
+const REFTABS=[['notes','โน้ตบท'],['find','ค้นหา'],['review','คำซ้ำ'],['spell','คำผิด'],['characters','ตัวละคร'],['locations','สถานที่'],['glossary','คำศัพท์']];
 function renderRef(){
  const t=S.refTab;
- const head=`<aside class="ref" aria-label="แผงข้อมูลอ้างอิง"><div class="ref-h"><h3>${t==='notes'?'โน้ตประจำบท':t==='find'?'ค้นหาและแทนที่':t==='review'?'ตรวจคำซ้ำ':'ข้อมูลอ้างอิง'}</h3><button class="icon-btn" data-act="toggleRef" title="ปิดแผง">${ic('x',17)}</button></div>
+ const head=`<aside class="ref" aria-label="แผงข้อมูลอ้างอิง"><div class="ref-h"><h3>${t==='notes'?'โน้ตประจำบท':t==='find'?'ค้นหาและแทนที่':t==='review'?'ตรวจคำซ้ำ':t==='spell'?'คำที่มักเขียนผิด':'ข้อมูลอ้างอิง'}</h3><button class="icon-btn" data-act="toggleRef" title="ปิดแผง">${ic('x',17)}</button></div>
  <div style="padding:0 14px 10px"><div class="seg">${REFTABS.map(([k,l])=>`<button class="${t===k?'on':''}" data-act="refTab" data-v="${k}">${l}</button>`).join('')}</div></div>`;
  if(t==='notes')return head+refNotes()+'</aside>';
  if(t==='find')return head+refFind()+'</aside>';
  if(t==='review')return head+refReview()+'</aside>';
+ if(t==='spell')return head+refSpell()+'</aside>';
  return head+`<div style="padding:0 14px 10px"><div class="search">${ic('search',15)}<input class="in" id="refQ" placeholder="ค้นหา…" value="${esc(S.refQ)}" aria-label="ค้นหาข้อมูลอ้างอิง"></div></div><div class="ref-items" id="refItems">${refItemsHtml()}</div></aside>`;
 }
 function refItemsHtml(){
@@ -1104,7 +1111,7 @@ function refFind(){const f=S.find;
 let edT,savedRange=null;
 function mountEditor(){
  const ed=$('#editor');if(!ed)return;const c=curChapter();ed.innerHTML=cleanHtml(c.html);updateWC();
- ed.addEventListener('input',()=>{clearTimeout(edT);setSaved(true);edT=setTimeout(()=>{commitEditor();if(S.refOpen&&S.refTab==='review'){const rr=$('#repRes');if(rr)rr.innerHTML=repResultsHtml()}},350);requestAnimationFrame(typewriter);if(AC.skip){AC.skip=false;hideAC()}else acCheck()});
+ ed.addEventListener('input',()=>{clearTimeout(edT);setSaved(true);edT=setTimeout(()=>{commitEditor();if(S.refOpen&&S.refTab==='review'){const rr=$('#repRes');if(rr)rr.innerHTML=repResultsHtml()}if(S.refOpen&&S.refTab==='spell'){const sr=$('#spellRes');if(sr)sr.innerHTML=spellResultsHtml()}},350);requestAnimationFrame(typewriter);if(AC.skip){AC.skip=false;hideAC()}else acCheck()});
  ed.addEventListener('keydown',acKey);
  ed.addEventListener('blur',()=>{setTimeout(hideAC,150)});
  ed.addEventListener('paste',e=>{e.preventDefault();const t=(e.clipboardData||window.clipboardData).getData('text/plain');document.execCommand('insertText',false,t)});
@@ -1261,7 +1268,7 @@ function secEntities(sec){
  }
  const head=sec==='characters'?`<button data-act="charLook" title="เปลี่ยนรูปหรือสีของตัวละคร" style="border-radius:50%">${avatar(x,54)}</button>`:(sec==='locations'&&x.img?`<img class="avatar" src="${x.img}" alt="" style="border-radius:12px">`:`<span class="avatar" style="background:var(--accent-soft);color:var(--accent-2)">${ic(sec==='locations'?'pin':'mark',24)}</span>`);
  return `<div class="split">${list}<div class="pane"><div class="pane-in">${sec==='locations'?locViewSeg():''}<div class="ent-head">${head}<input class="ent-name" data-coll="${sec}" data-id="${x.id}" data-f="name" value="${esc(x.name)}" placeholder="ชื่อ" aria-label="ชื่อ">
- <button class="btn sm" data-act="findName" data-v="${esc(x.name)}" title="ค้นหาหรือเปลี่ยนชื่อนี้ในเนื้อเรื่อง">${ic('search',14)} <span class="hide-sm">ค้นในเนื้อเรื่อง</span></button><button class="btn danger sm" data-act="delEnt">${ic('trash',15)} ลบ</button></div>
+ <button class="btn sm" data-act="findName" data-v="${esc(x.name)}" data-eid="${x.id}" title="ค้นหาหรือเปลี่ยนชื่อนี้ในเนื้อเรื่อง">${ic('search',14)} <span class="hide-sm">ค้นในเนื้อเรื่อง</span></button><button class="btn danger sm" data-act="delEnt">${ic('trash',15)} ลบ</button></div>
  <div class="ent-form">${form}${sec!=='glossary'?galleryHtml(sec,x):''}${appearanceHtml(sec,x)}</div></div></div></div><datalist id="roles">${ROLES.map(r=>`<option value="${r}">`).join('')}</datalist>`;
 }
 
@@ -1690,7 +1697,7 @@ const A={
  history:()=>historyModal(),
  toggleRef:()=>{commitEditor();S.refOpen=!S.refOpen;S.keepFocus=true;rerenderMain()},
  openFind:()=>{commitEditor();const s=getSelection();if(s&&!s.isCollapsed&&$('#editor')&&$('#editor').contains(s.anchorNode)){const t=s.toString().trim();if(t&&t.length<60)S.find.q=t}S.refOpen=true;S.refTab='find';S.focusFind=true;S.keepFocus=true;S.sec='chapters';rerenderMain()},
- refTab:el=>{commitEditor();repClear();S.refTab=el.dataset.v;S.keepFocus=true;if(el.dataset.v==='find')S.focusFind=true;rerenderMain()},
+ refTab:el=>{commitEditor();repClear();spClear();S.refTab=el.dataset.v;S.keepFocus=true;if(el.dataset.v==='find')S.focusFind=true;rerenderMain()},
  refOpen:(el,e)=>{if(e.target.closest('[data-act="insName"]'))return;el.classList.toggle('open')},
  insName:el=>{const ed=$('#editor');if(!ed)return;ed.focus();const s=getSelection();s.removeAllRanges();if(savedRange&&ed.contains(savedRange.startContainer))s.addRange(savedRange);else placeEnd(ed);document.execCommand('insertText',false,el.dataset.v);saveRange()},
  chTag:el=>{const c=curChapter(),k=el.dataset.k,id=el.dataset.id;c[k]=c[k]||[];const i=c[k].indexOf(id);if(i>=0)c[k].splice(i,1);else c[k].push(id);touch();save();el.classList.toggle('on',i<0);el.setAttribute('aria-pressed',i<0)},
@@ -1699,7 +1706,10 @@ const A={
   c.chars=[...new Set([...c.chars,...ch])];c.locs=[...new Set([...c.locs,...lo])];touch(n);save();S.keepFocus=true;rerenderMain();toast(add?`พบและเพิ่ม ${add} รายการ`:'ไม่พบชื่อใหม่ในเนื้อหา')},
  replaceAll:()=>replaceAll(),
  jump:el=>jumpTo(el.dataset.cid,+el.dataset.k),
- findName:el=>{S.find.q=el.dataset.v;S.find.r=el.dataset.v;S.find.scope='all';S.find.data=false;if(el.dataset.cid)jumpTo(el.dataset.cid,0);else{const n=N();S.sec='chapters';S.refOpen=true;S.refTab='find';S.focusFind=true;S.keepFocus=true;if(!S.sel.chapters&&n.chapters[0])S.sel.chapters=n.chapters[0].id;rerenderMain()}},
+ spellShow:el=>spShow(el.dataset.v),
+ spellFix:el=>{const w=el.dataset.v,m=MISSPELL.find(x=>x[0]===w);if(m)spFix([m])},
+ spellFixAll:()=>spFix(MISSPELL),
+ findName:el=>{let v=el.dataset.v;if(el.dataset.eid){const n=N();const e=[...n.characters,...n.locations,...n.glossary].find(o=>o.id===el.dataset.eid);if(e&&e.name)v=e.name.trim()}S.find.q=v;S.find.r=v;S.find.scope='all';S.find.data=false;if(el.dataset.cid)jumpTo(el.dataset.cid,0);else{const n=N();S.sec='chapters';S.refOpen=true;S.refTab='find';S.focusFind=true;S.keepFocus=true;if(!S.sel.chapters&&n.chapters[0])S.sel.chapters=n.chapters[0].id;rerenderMain()}},
  focus:()=>{commitEditor();S.focus=!S.focus;render();if(S.focus)toast('โหมดโฟกัส — กด Esc เพื่อออก')},
  edSize:el=>{db.settings.edSize=Math.min(30,Math.max(13,(db.settings.edSize||18)+ +el.dataset.v));save();$('#editor').style.fontSize=db.settings.edSize+'px';$('#fsz').textContent=db.settings.edSize+'px'},
  insSep:()=>{const ed=$('#editor');ed.focus();document.execCommand('insertHTML',false,'<div style="text-align:center">✻ ✻ ✻</div><div><br></div>')},
@@ -1786,8 +1796,11 @@ document.addEventListener('dragstart',e=>{const li=e.target.closest&&e.target.cl
 document.addEventListener('dragover',e=>{if(!dragCh)return;const li=e.target.closest&&e.target.closest('[data-chdrag]');$$('.drop-before,.drop-after').forEach(x=>x.classList.remove('drop-before','drop-after'));if(!li||li.dataset.chdrag===dragCh)return;e.preventDefault();const r=li.getBoundingClientRect();li.classList.add(e.clientY<r.top+r.height/2?'drop-before':'drop-after')});
 document.addEventListener('drop',e=>{if(!dragCh)return;const li=e.target.closest&&e.target.closest('[data-chdrag]');if(!li||li.dataset.chdrag===dragCh)return;e.preventDefault();const n=N(),after=li.classList.contains('drop-after');const from=n.chapters.findIndex(c=>c.id===dragCh);const [c]=n.chapters.splice(from,1);let to=n.chapters.findIndex(x=>x.id===li.dataset.chdrag);if(after)to++;n.chapters.splice(to,0,c);dragCh=null;touch(n);save();S.keepFocus=true;rerenderMain()});
 document.addEventListener('dragend',()=>{dragCh=null;$$('.dragging,.drop-before,.drop-after').forEach(x=>x.classList.remove('dragging','drop-before','drop-after'))});
+/* 1.5.1: a pulled-out book's cover overlaps its neighbours - a click where another book's spine stands opens that book */
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('.sb-hit,.sbook');if(!t)return;const own=t.closest('.sb-slot');for(const s of $$('.sb-slot')){const bk=s.querySelector('.sbook');if(s===own||!bk)continue;const r=s.getBoundingClientRect();if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom){e.preventDefault();e.stopPropagation();A.open(bk);return}}},true);
 document.addEventListener('keydown',e=>{
  const k=(e.key||'').toLowerCase(),mod=e.ctrlKey||e.metaKey,inField=/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)||e.target.isContentEditable;
+ if(e.key==='Escape'&&document.activeElement&&document.activeElement.closest&&document.activeElement.closest('.sb-slot')){document.activeElement.blur();return}
  if(e.key==='Enter'&&e.target.id==='ideaIn'){e.preventDefault();A.addIdea();return}
  if((e.key==='Enter'||e.key===' ')&&!inField&&e.target.matches&&e.target.matches('[role=button]:not(button),[data-tr],[data-h]')){e.preventDefault();e.target.click();return}
  if(mod&&k==='s'){e.preventDefault();commitEditor();save();if(e.shiftKey)fileSaveAs();else fileSave();return}
@@ -1923,10 +1936,23 @@ function typewriter(){if(!P.typewriter)return;const sc=$('.ed-scroll'),ed=$('#ed
  let rect=s.getRangeAt(0).getBoundingClientRect();if(!rect.height){const el=s.anchorNode.nodeType===1?s.anchorNode:s.anchorNode.parentElement;if(!el)return;rect=el.getBoundingClientRect()}
  const box=sc.getBoundingClientRect(),target=box.top+box.height*.45;const dy=rect.top-target;if(Math.abs(dy)>4)sc.scrollTop+=dy}
 
+/* ---------- 1.5.1: common Thai misspellings (offline list) ---------- */
+const MISSPELL=[['กงศุล','กงสุล'],['กระเพรา','กะเพรา'],['กระทันหัน','กะทันหัน'],['กระเทย','กะเทย'],['กังวาล','กังวาน'],['กาละเทศะ','กาลเทศะ'],['เกล็ดความรู้','เกร็ดความรู้'],['เกษียน','เกษียณ'],['ไข่มุกข์','ไข่มุก'],['คลินิค','คลินิก'],['คำนวน','คำนวณ'],['โควต้า','โควตา'],['จราจล','จลาจล'],['ฉนั้น','ฉะนั้น'],['ซีรี่ย์','ซีรีส์'],['ซีรีย์','ซีรีส์'],['ทรมาณ','ทรมาน'],['ธุระกิจ','ธุรกิจ'],['เนรมิตร','เนรมิต'],['บิณฑบาตร','บิณฑบาต'],['บุคคลากร','บุคลากร'],['ปฎิบัติ','ปฏิบัติ'],['ปฎิเสธ','ปฏิเสธ'],['ปฏิกริยา','ปฏิกิริยา'],['ผลัดวันประกันพรุ่ง','ผัดวันประกันพรุ่ง'],['ผาสุข','ผาสุก'],['พากษ์','พากย์'],['พิศดาร','พิสดาร'],['ฟังก์ชั่น','ฟังก์ชัน'],['มาตราฐาน','มาตรฐาน'],['มุขตลก','มุกตลก'],['รสชาด','รสชาติ'],['ลายเซ็นต์','ลายเซ็น'],['เลือกสรรค์','เลือกสรร'],['ศรีษะ','ศีรษะ'],['สังเกตุ','สังเกต'],['สัปปะรด','สับปะรด'],['สาระพัด','สารพัด'],['สีสรร','สีสัน'],['อนุญาติ','อนุญาต'],['อัฒจรรย์','อัฒจันทร์'],['อาเจียร','อาเจียน'],['อานิสงฆ์','อานิสงส์'],['โอกาศ','โอกาส'],['ไอศครีม','ไอศกรีม'],['ขมักเขม้น','ขะมักเขม้น'],['จักรยานต์','จักรยาน'],['ทะเลสาป','ทะเลสาบ'],['บรรได','บันได'],['พรรณา','พรรณนา'],['พังทะลาย','พังทลาย'],['ภาพยนต์','ภาพยนตร์'],['เยอรมันนี','เยอรมนี'],['รื่นรมณ์','รื่นรมย์'],['ลูกเกต','ลูกเกด'],['เอนกประสงค์','อเนกประสงค์'],['กฏหมาย','กฎหมาย'],['ปรากฎ','ปรากฏ'],['ผูกพันธ์','ผูกพัน'],['ปิกนิค','ปิกนิก'],['เปอร์เซนต์','เปอร์เซ็นต์'],['ลิฟท์','ลิฟต์'],['ช็อคโกแลต','ช็อกโกแลต'],['ช็อค','ช็อก'],['แอปพลิเคชั่น','แอปพลิเคชัน'],['เวอร์ชั่น','เวอร์ชัน'],['อีเมล์','อีเมล'],['โน๊ต','โน้ต'],['ออฟฟิส','ออฟฟิศ'],['คริสมาส','คริสต์มาส'],['ขาดดุลย์','ขาดดุล'],['บรรยากาส','บรรยากาศ'],['ปราณีต','ประณีต'],['เบญจเพศ','เบญจเพส'],['ใต้ฝุ่น','ไต้ฝุ่น'],['ทราบซึ้ง','ซาบซึ้ง'],['อินเตอร์เน็ต','อินเทอร์เน็ต'],['เกมส์','เกม'],['สถิตย์','สถิต'],['กิติมศักดิ์','กิตติมศักดิ์'],['อะไหร่','อะไหล่'],['ประสพการณ์','ประสบการณ์'],['ประสพ','ประสบ'],['บังคลาเทศ','บังกลาเทศ'],['มัคคุเทศน์','มัคคุเทศก์'],['เทศกาลย์','เทศกาล'],['สัญญลักษณ์','สัญลักษณ์'],['อุโมงก์','อุโมงค์'],['ปราถนา','ปรารถนา'],['โล่ห์','โล่'],['หงษ์','หงส์'],['สมดุลย์','สมดุล'],['ครุภัณท์','ครุภัณฑ์'],['ผลลัพท์','ผลลัพธ์'],['เครื่องสำอางค์','เครื่องสำอาง'],['เกณท์','เกณฑ์']].sort((a,b)=>b[0].length-a[0].length);
+function spText(){const ed=$('#editor'),c=curChapter();return ed?htmlToText(ed.innerHTML):c?htmlToText(c.html):''}
+function spellScan(){const text=spText();const hits=[];let rest=text;for(const [w,r] of MISSPELL){const k=rest.split(w).length-1;if(k>0){hits.push({w,r,k});rest=rest.split(w).join('\u0000')}}return {total:text.trim().length,hits}}
+function refSpell(){return `<div class="ref-body"><div class="muted" style="font-size:13px;line-height:1.6">ตรวจคำที่คนไทยมักเขียนผิด เทียบกับคำที่ถูกตามพจนานุกรมฉบับราชบัณฑิตยสถาน ทำงานในเครื่อง ไม่ต้องใช้อินเทอร์เน็ต — คลิกคำเพื่อดูตำแหน่ง กด “แก้” เพื่อแก้ในบทนี้</div><div id="spellRes" style="margin-top:10px">${spellResultsHtml()}</div><div class="muted" style="font-size:12px;margin-top:12px;line-height:1.5">ตรวจจากรายการ ${MISSPELL.length} คำ · เปิดตัวตรวจคำสะกดของเบราว์เซอร์เพิ่มได้ที่ ตั้งค่า › การเขียน</div></div>`}
+function spellResultsHtml(){const r=spellScan();if(!r.total)return '<div class="muted" style="font-size:13px">ยังไม่มีเนื้อหาในบทนี้</div>';if(!r.hits.length)return '<div class="muted" style="font-size:13px">ไม่พบคำที่มักเขียนผิดในบทนี้ ✨</div>';
+ return `<div class="lbl" style="margin:4px 0 6px">พบ ${r.hits.length} คำ</div><div class="rep-list">${r.hits.map(x=>`<div class="sp-it"><button class="rep-it" data-act="spellShow" data-v="${esc(x.w)}" title="ไฮไลต์ในเนื้อหา"><b class="sp-bad">${esc(x.w)}</b> → <b>${esc(x.r)}</b><span class="chip warm" style="margin-left:auto">${x.k} ครั้ง</span></button><button class="btn sm" data-act="spellFix" data-v="${esc(x.w)}">แก้</button></div>`).join('')}</div><button class="btn sm" data-act="spellFixAll" style="margin-top:12px">แก้ทั้งหมดในบทนี้</button>`}
+function spClear(){try{if(window.CSS&&CSS.highlights){CSS.highlights.delete('inksp');CSS.highlights.delete('inksp-cur')}}catch(e){}S.spW=null}
+function spShow(word){const ed=$('#editor');if(!ed)return;const ranges=[];for(const t of textNodes(ed)){const tx=t.textContent;let i=tx.indexOf(word);while(i>=0){const r=document.createRange();r.setStart(t,i);r.setEnd(t,i+word.length);ranges.push(r);i=tx.indexOf(word,i+word.length)}}
+ if(!ranges.length)return toast('ไม่พบคำนี้ในหน้าเขียน');if(S.spW===word)S.spIdx=(S.spIdx+1)%ranges.length;else{S.spW=word;S.spIdx=0}const cur=ranges[S.spIdx];
+ if(window.CSS&&CSS.highlights&&window.Highlight){CSS.highlights.set('inksp',new Highlight(...ranges));CSS.highlights.set('inksp-cur',new Highlight(cur))}const el=cur.startContainer.parentElement;if(el)el.scrollIntoView({block:'center',behavior:'smooth'});toast(`“${word}” ${ranges.length} ครั้ง · จุดที่ ${S.spIdx+1}`)}
+function spFix(list){const ed=$('#editor');if(!ed)return 0;let n=0;for(const t of textNodes(ed)){let tx=t.textContent,ch=false;for(const [w,r] of list){if(tx.includes(w)){n+=tx.split(w).length-1;tx=tx.split(w).join(r);ch=true}}if(ch)t.textContent=tx}
+ spClear();if(n){commitEditor();updateWC();setSaved(true)}const sr=$('#spellRes');if(sr)sr.innerHTML=spellResultsHtml();toast(n?`แก้แล้ว ${n} จุด — ย้อนกลับได้จากประวัติเวอร์ชัน`:'ไม่พบคำที่ต้องแก้');return n}
 /* ---------- 1.3: repeated-word checker ---------- */
 const REP_STOP=new Set(['ที่','และ','ก็','ใน','ของ','ให้','เป็น','มี','ว่า','กับ','จะ','ไม่','ได้','นี้','นั้น','the','a','an','and','of','to','in']);
 function repAnalyze(){const ed=$('#editor'),c=curChapter();const text=ed?htmlToText(ed.innerHTML):c?htmlToText(c.html):'';const W=+P.repWin||50,MIN=+P.repMin||3,ign=P.repIgnore!==false;
- const words=[];if(seg){for(const g of seg.segment(text))if(g.isWordLike){const w=g.segment.toLowerCase();if([...w].length>=2&&!/^\d+$/.test(w))words.push(w)}}else text.toLowerCase().split(/\s+/).forEach(w=>{if(w.length>=2)words.push(w)});
+ const words=[];if(seg){for(const g of segStory(text))if(g.isWordLike){const w=g.segment.toLowerCase();if([...w].length>=2&&!/^\d+$/.test(w))words.push(w)}}else text.toLowerCase().split(/\s+/).forEach(w=>{if(w.length>=2)words.push(w)});
  const pos=new Map();words.forEach((w,i)=>{if(ign&&REP_STOP.has(w))return;if(!pos.has(w))pos.set(w,[]);pos.get(w).push(i)});
  const near=[],freq=[];for(const [w,ps] of pos){freq.push([w,ps.length]);if(ps.length<MIN)continue;let best=0,j=0;for(let i=0;i<ps.length;i++){while(ps[i]-ps[j]>=W)j++;best=Math.max(best,i-j+1)}if(best>=MIN)near.push({w,best,total:ps.length})}
  near.sort((a,b)=>b.best-a.best||b.total-a.total);freq.sort((a,b)=>b[1]-a[1]);return {near:near.slice(0,40),freq:freq.slice(0,12),total:words.length}}
@@ -1939,9 +1965,9 @@ function repResultsHtml(){const r=repAnalyze();if(!r.total)return '<div class="m
  return `<div class="lbl" style="margin:4px 0 6px">คำที่ซ้ำถี่ในระยะ ${+P.repWin||50} คำ (${r.near.length})</div><div class="rep-list">${r.near.map(x=>`<button class="rep-it" data-act="repWord" data-v="${esc(x.w)}"><b>${esc(x.w)}</b><span class="chip warm">${x.best} ครั้ง</span><small>ทั้งบท ${x.total}</small></button>`).join('')||'<div class="muted" style="font-size:13px">ไม่พบคำซ้ำถี่ — เยี่ยมมาก ✨</div>'}</div>
  <div class="lbl" style="margin:14px 0 6px">คำที่ใช้บ่อยที่สุดในบท</div><div class="tagpick">${r.freq.map(([w,c])=>`<button class="chip" data-act="repWord" data-v="${esc(w)}">${esc(w)} · ${c}</button>`).join('')}</div>
  <button class="btn sm" data-act="repClear" style="margin-top:12px">ล้างไฮไลต์</button>`}
-function mountReview(){const ids=['repWin','repMin','repIgn'];if(!$('#repWin'))return;ids.forEach(id=>$('#'+id).addEventListener('change',()=>{P.repWin=+$('#repWin').value;P.repMin=+$('#repMin').value;P.repIgnore=$('#repIgn').checked;savePrefs();repClear();$('#repRes').innerHTML=repResultsHtml()}))}
+function mountReview(){const rr=$('#repRes');if(rr){repClear();rr.innerHTML=repResultsHtml()}const sr=$('#spellRes');if(sr){spClear();sr.innerHTML=spellResultsHtml()}const ids=['repWin','repMin','repIgn'];if(!$('#repWin'))return;ids.forEach(id=>$('#'+id).addEventListener('change',()=>{P.repWin=+$('#repWin').value;P.repMin=+$('#repMin').value;P.repIgnore=$('#repIgn').checked;savePrefs();repClear();$('#repRes').innerHTML=repResultsHtml()}))}
 function repHighlight(word){const ed=$('#editor');if(!ed)return;const ranges=[];
- for(const t of textNodes(ed)){const tx=t.textContent;if(seg){for(const g of seg.segment(tx))if(g.segment.toLowerCase()===word){const r=document.createRange();r.setStart(t,g.index);r.setEnd(t,g.index+g.segment.length);ranges.push(r)}}else{let i=tx.toLowerCase().indexOf(word);while(i>=0){const r=document.createRange();r.setStart(t,i);r.setEnd(t,i+word.length);ranges.push(r);i=tx.toLowerCase().indexOf(word,i+word.length)}}}
+ for(const t of textNodes(ed)){const tx=t.textContent;if(seg){for(const g of segStory(tx))if(g.segment.toLowerCase()===word){const r=document.createRange();r.setStart(t,g.index);r.setEnd(t,g.index+g.segment.length);ranges.push(r)}}else{let i=tx.toLowerCase().indexOf(word);while(i>=0){const r=document.createRange();r.setStart(t,i);r.setEnd(t,i+word.length);ranges.push(r);i=tx.toLowerCase().indexOf(word,i+word.length)}}}
  if(!ranges.length)return toast('ไม่พบคำนี้ในหน้าเขียน');
  if(S.repW===word)S.repIdx=(S.repIdx+1)%ranges.length;else{S.repW=word;S.repIdx=0}const cur=ranges[S.repIdx];
  if(window.CSS&&CSS.highlights&&window.Highlight){CSS.highlights.set('inkrep',new Highlight(...ranges));CSS.highlights.set('inkrep-cur',new Highlight(cur))}
@@ -2168,7 +2194,7 @@ async function coverPicker(title,genre,cb){
  <div class="cov-grid">${COVERS.map(c=>`<button class="cov-it" data-cv="${c.id}"><img src="${drawCover(c,title,genre||c.n,300,450)}" alt="ปกแบบ${c.n}"><span>${c.n}</span></button>`).join('')}</div></div>`;
  document.body.appendChild(ov);labelButtons(ov);
  ov.addEventListener('mousedown',e=>{if(e.target===ov)ov.remove()});
- ov.addEventListener('click',e=>{if(e.target.closest('[data-m="close"]'))return ov.remove();const b=e.target.closest('[data-cv]');if(!b)return;const c=COVERS.find(x=>x.id===b.dataset.cv);cb(drawCover(c,title,genre||c.n));ov.remove();toast('ใส่ปกแล้ว — กด “บันทึก” เพื่อยืนยัน')});
+ ov.addEventListener('click',e=>{if(e.target.closest('[data-m="close"]'))return ov.remove();const b=e.target.closest('[data-cv]');if(!b)return;const c=COVERS.find(x=>x.id===b.dataset.cv);cb(drawCover(c,title,genre||c.n));ov.remove();toast('ใส่ปกแล้ว — กด “'+((document.querySelector('#modalRoot [data-m="save"]')||{}).textContent||'บันทึก').trim()+'” เพื่อยืนยัน')});
 }
 
 /* ---------- Inkfold: illustrations + opening book animation ---------- */
